@@ -1,0 +1,463 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{sev-high}{rgb}{0.70,0.10,0.10}
+\definecolor{sev-med}{rgb}{0.80,0.45,0.00}
+\definecolor{sev-low}{rgb}{0.25,0.45,0.25}
+\definecolor{codebg}{rgb}{0.96,0.96,0.94}
+
+\newcommand{\sevhigh}{\textcolor{sev-high}{\textbf{HIGH}}}
+\newcommand{\sevmed}{\textcolor{sev-med}{\textbf{MEDIUM}}}
+\newcommand{\sevlow}{\textcolor{sev-low}{\textbf{LOW}}}
+\newcommand{\confirmed}{\textcolor{sev-low}{\textbf{CONFIRMED}}}
+\newcommand{\unverified}{\textcolor{sev-med}{\textbf{UNVERIFIED}}}
+
+\newcommand{\finding}[2]{\subsection*{#1 \hfill \normalsize #2}\addcontentsline{toc}{subsection}{#1}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{MOSIP Decode --- PS1 Findings Log}
+\rhead{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\title{\textbf{MOSIP Decode 2026 --- Problem Statement 1}\\[0.3em]
+\large Automated Conformance Testing for Inji Certify \& Inji Verify\\[0.8em]
+\normalsize Findings Log and Open Questions}
+\author{Shardul Chogale \and Mukta Varak}
+\date{Document started: 20 September 2026\\Last updated: 20 September 2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\begin{abstract}
+\noindent This document records, day by day, the conformance testing work carried out
+against the Inji stack as part of MOSIP Decode Problem Statement 1. It captures what was
+run, what failed, the evidence for each failure, and the questions we need answered by
+MOSIP mentors. Every finding is tagged as \confirmed{} or \unverified{}; we do not report
+a defect upstream until it is reproducible and the root cause is understood.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+%=========================================================
+\section{Scope and System Under Test}
+
+\subsection*{Problem statement}
+Build an automated harness that spins up Inji Certify and Inji Verify, drives the OpenID
+Foundation conformance suite's REST API programmatically to run the issuer and verifier
+test plans, and feeds the results into each module's existing \texttt{api-testrig},
+producing benchmark-gated reports with CI/CD integration.
+
+\subsection*{Components under test}
+\begin{longtable}{p{4.5cm} p{4cm} p{6cm}}
+\hline
+\textbf{Component} & \textbf{Version} & \textbf{Notes}\\
+\hline
+\endhead
+Inji Verify (service) & 0.18.2 & \texttt{injistack/inji-verify-service}\\
+Inji Verify (UI) & 0.18.2 & \texttt{injistack/inji-verify-ui}, amd64 under emulation on arm64\\
+Inji Certify & 0.14.0 & Not yet exercised (deferred, see Plan)\\
+OpenID Conformance Suite & 5.3.1 (rev 440eec8) & Local Docker deployment, prebuilt images\\
+\hline
+\end{longtable}
+
+\subsection*{Test environment}
+\begin{itemize}[nosep]
+  \item Host: Apple Silicon (arm64) macOS, Docker Desktop.
+  \item Conformance suite reachable at \texttt{https://localhost.emobix.co.uk:8443}
+        (self-signed certificate; hostname resolves publicly to 127.0.0.1).
+  \item Inji Verify exposed publicly via an ngrok HTTPS tunnel. A public hostname is
+        mandatory because Verify identifies itself with a \texttt{did:web} DID, which is
+        resolved over public HTTPS.
+  \item The conformance suite's REST API required no authentication token in the local
+        \texttt{dev} profile, consistent with the problem statement.
+\end{itemize}
+
+\subsection*{Evidence handling}
+Conformance suite logs are exported as signed JSON (\texttt{.json} plus \texttt{.json.sig})
+and stored under \texttt{logs/<date>/}. Findings below cite the exact log line
+(\texttt{src} field) and the OID4VP specification section reported by the suite.
+
+\newpage
+%=========================================================
+\section{Day Log}
+
+\subsection{Day 1 --- Saturday, 20 September 2026}
+
+\subsubsection*{Objective}
+Stand up the conformance suite and one MOSIP component, and complete one manual
+conformance test end to end to establish a baseline.
+
+\subsubsection*{Decisions taken}
+\begin{enumerate}[nosep]
+  \item \textbf{Inji Verify before Inji Certify.} Verify's Docker Compose brings up three
+        containers with no external dependencies. Certify's \texttt{docker-compose-injistack}
+        requires a PKCS12 keystore obtained through an onboarding process, a public DID
+        endpoint, an external authorisation server, and partner API keys. The verifier test
+        plan also has 12 modules against the issuer plan's 61. Verify is the cheaper path to
+        a first result, and everything learned transfers.
+  \item \textbf{Non-HAIP plan first.} The HAIP verifier plan offers only
+        \texttt{direct\_post.jwt} as a response mode. Inji Verify hardcodes
+        \texttt{direct\_post} (see F-06), so no HAIP test can complete. We ran
+        \emph{OpenID for Verifiable Presentations 1.0 Final: Test a verifier --- alpha tests}
+        instead, which offers plain \texttt{direct\_post}.
+  \item \textbf{Credential format \texttt{sd\_jwt\_vc}.} The plan offers only
+        \texttt{sd\_jwt\_vc} and \texttt{iso\_mdl}. Verify has no mdoc support whatsoever
+        (F-08), making \texttt{iso\_mdl} unusable.
+\end{enumerate}
+
+\subsubsection*{Test plan configuration}
+\begin{itemize}[nosep]
+  \item Plan: \texttt{oid4vp-1final-verifier-test-plan}, plan ID \texttt{lN7C4DH1HvYmc}
+  \item Variant: \texttt{credential\_format=sd\_jwt\_vc}, \texttt{client\_id\_prefix=redirect\_uri},
+        \texttt{request\_method=url\_query}, \texttt{vp\_profile=plain\_vp},
+        \texttt{response\_mode=direct\_post}
+  \item Alias: \texttt{injiverify-shardul}
+\end{itemize}
+
+\subsubsection*{Runs executed}
+\begin{longtable}{p{2.2cm} p{3.4cm} p{8.5cm}}
+\hline
+\textbf{Test ID} & \textbf{Outcome} & \textbf{Notes}\\
+\hline
+\endhead
+\texttt{dgeeosZpIfDK1bA} & FAILED / INTERRUPTED & First attempt. Request object had expired
+(5-minute window). Discarded as an artefact of manual timing, not a defect.\\
+\texttt{dMg4B5whxWgShIB} & FAILED / INTERRUPTED & Fresh request (2m05s old). Suite never
+dereferenced \texttt{request\_uri} because the \texttt{url\_query} variant expects inline
+parameters. Root cause understood; see F-09.\\
+\texttt{MtzpWoD2dVgtic0} & FAILED / INTERRUPTED & After switching the credential's
+\texttt{clientIdScheme} to \texttt{pre\_registered}. Reached 20+ checks; produced the
+substantive findings below. \textbf{This is the Day 1 baseline run.}\\
+\hline
+\end{longtable}
+
+\subsubsection*{Configuration change made}
+In \texttt{inji-verify/docker-compose/config/config.json}, the credential
+\emph{Mock Identity (SD JWT)} was changed from \texttt{"clientIdScheme":"did"} to
+\texttt{"clientIdScheme":"pre\_registered"}. Per Inji Verify's own README, \texttt{did}
+delivers the authorisation request \emph{by reference} via \texttt{request\_uri}, whereas
+\texttt{pre\_registered} delivers it \emph{inline}. Only the inline form matches the
+\texttt{request\_method=url\_query} variant. Backup retained at \texttt{config.json.bak}.
+
+\subsubsection*{Result of the baseline run (\texttt{MtzpWoD2dVgtic0})}
+Approximately fourteen checks passed, including nonce extraction, response type,
+response mode, absence of \texttt{client\_id\_scheme}, absence of \texttt{scope}, absence of
+\texttt{redirect\_uri}, response URI validity, and the outer parameter allow-list. Three
+checks failed and three raised warnings. The test terminated at
+\texttt{ExtractDCQLQueryFromAuthorizationRequest}.
+
+\subsubsection*{Status at end of Day 1}
+Test 01 (\texttt{happy-flow}) complete and documented. Tests 02--11 deferred to Day 2.
+
+\newpage
+%=========================================================
+\section{Findings Catalogue}
+
+Severity reflects impact on certifiability and on security, not on our convenience.
+
+%---------------------------------------------------------
+\finding{F-01 --- Nonce has insufficient entropy}{\sevhigh{} \quad \confirmed}
+
+\textbf{Component:} Inji Verify 0.18.2 \quad \textbf{Spec:} OID4VP 1.0 Final, §5.2
+
+\textbf{Observation.} The \texttt{nonce} in Verify's OID4VP authorisation request is a
+base64-encoded millisecond Unix timestamp rather than a cryptographically random value.
+
+\textbf{Evidence --- our analysis.} Three samples decoded, across both request-construction
+paths:
+\begin{longtable}{p{3.5cm} p{4.5cm} p{3cm} p{2.5cm}}
+\hline
+\textbf{clientIdScheme} & \textbf{nonce (base64)} & \textbf{decoded} & \textbf{$\Delta$ to issuedAt}\\
+\hline
+\endhead
+\texttt{did} & \texttt{MTc4OTg4MzIxMzQ5MA==} & 1789883213490 & ---\\
+\texttt{pre\_registered} & \texttt{MTc4OTg4NDUzNjY3OQ==} & 1789884536679 & 120\,ms\\
+\texttt{pre\_registered} & \texttt{MTc4OTg4NDY1NjQzNg==} & 1789884656436 & 158\,ms\\
+\hline
+\end{longtable}
+
+\textbf{Evidence --- conformance suite, independently.}
+\begin{quote}\small
+\texttt{VP1FinalEnsureMinimumNonceEntropy} --- WARNING\\
+``Nonce does not appear to have sufficient entropy (calculated Shannon entropy is below the
+threshold). Section 5.2 of OID4VP 1.0 Final requires the nonce to be a `fresh,
+cryptographically random number with sufficient entropy'; OpenID4VP PR \#722 recommends at
+least 128 bits.''\\
+\texttt{actual: 73.68} \quad \texttt{expected: 96.0}
+\end{quote}
+
+\textbf{Impact.} The nonce exists to bind a wallet's presentation to a specific request and
+prevent replay. A value derived from the current clock is predictable to within milliseconds,
+substantially weakening that guarantee. In a national identity deployment this is a
+meaningful security property, not a cosmetic issue.
+
+\textbf{Proposed action.} File upstream against \texttt{mosip/inji-verify}, recommending a
+CSPRNG-generated nonce of at least 128 bits, base64url-encoded without padding (which also
+resolves F-02).
+
+%---------------------------------------------------------
+\finding{F-02 --- Nonce contains non-URL-safe characters}{\sevmed{} \quad \confirmed}
+
+\textbf{Component:} Inji Verify 0.18.2 \quad \textbf{Spec:} OID4VP 1.0 Final, §5.2
+
+\textbf{Evidence.}
+\begin{quote}\small
+\texttt{CheckForInvalidCharsInNonce} --- FAILURE\\
+``Non URL safe characters found in nonce. This may introduce interoperability issues.''\\
+\texttt{invalid\_chars: ["="]}
+\end{quote}
+
+\textbf{Observation.} The nonce uses standard base64 with \texttt{=} padding rather than
+base64url. The \texttt{=} character is not URL-safe and requires percent-encoding when the
+nonce travels in a query string, which not all wallets handle consistently.
+
+\textbf{Impact.} Interoperability risk with third-party wallets. Same root cause as F-01 and
+fixed by the same change.
+
+%---------------------------------------------------------
+\finding{F-03 --- No DCQL support; test plan cannot proceed}{\sevhigh{} \quad \confirmed}
+
+\textbf{Component:} Inji Verify 0.18.2 \quad \textbf{Spec:} OID4VP 1.0 Final, §6
+
+\textbf{Evidence --- conformance suite.}
+\begin{quote}\small
+\texttt{ExtractDCQLQueryFromAuthorizationRequest} --- FAILURE\\
+``dcql\_query not found in authorization request parameters''
+\end{quote}
+
+\textbf{Evidence --- source.} A case-insensitive search for \texttt{dcql} across
+\texttt{verify-service/src/main} returns zero matches. Credential selection is implemented
+entirely via \texttt{presentation\_definition} with \texttt{input\_descriptors} (DIF
+Presentation Exchange), set in \texttt{VerifiablePresentationRequestServiceImpl} as the
+\texttt{presentation\_definition\_uri} claim.
+
+\textbf{Impact.} This terminates the test. Because every module in the 1.0 Final verifier
+plan requires a DCQL query, \textbf{Inji Verify 0.18.2 cannot pass any test in that plan.}
+This is the single most consequential finding of Day 1 and is not fixable by configuration.
+
+\textbf{Open question for mentors.} See Q1.
+
+%---------------------------------------------------------
+\finding{F-04 --- Uses superseded \texttt{presentation\_definition}}{\sevmed{} \quad \confirmed}
+
+\textbf{Component:} Inji Verify 0.18.2 \quad \textbf{Spec:} OID4VP 1.0 Final
+
+\textbf{Evidence.}
+\begin{quote}\small
+\texttt{CheckNoPresentationDefinitionInVpAuthorizationRequest} --- WARNING\\
+``Authorization request contains legacy `presentation\_definition'. VP1 Final uses
+`dcql\_query' for credential selection, so sending both is unnecessary and may indicate
+draft and final request formats are being mixed.''
+\end{quote}
+
+\textbf{Relationship to F-03.} Two faces of the same gap: Verify implements the earlier
+draft's query model. Recorded separately because a maintainer may address them
+independently (e.g.\ support both during a transition period).
+
+%---------------------------------------------------------
+\finding{F-05 --- \texttt{client\_metadata} absent in inline mode}{\sevmed{} \quad \unverified}
+
+\textbf{Component:} Inji Verify 0.18.2 \quad \textbf{Spec:} OID4VP 1.0 Final, §5.1; Annex B.2.2, B.3.4
+
+\textbf{Evidence.}
+\begin{quote}\small
+\texttt{VP1FinalValidateVpFormatsSupportedInClientMetadata} --- FAILURE\\
+``client\_metadata is missing or not a JSON object''\\[0.4em]
+\texttt{VP1FinalCheckForUnexpectedParametersInVpClientMetadata} --- WARNING\\
+``client\_metadata not present in request but it is mandatory to include vp\_formats in it''
+\end{quote}
+
+\textbf{Why this is not yet confirmed.} In the \texttt{did} (by-reference) path, Verify's
+signed request object \emph{did} contain \texttt{client\_metadata} with a full
+\texttt{vp\_formats} block advertising \texttt{ldp\_vp} and \texttt{vc+sd-jwt}. In the
+\texttt{pre\_registered} (inline) path, the \texttt{/vp-session-request} API response
+contained no \texttt{client\_metadata} field, so the URI we constructed could not include
+one. It is not yet established whether Verify omits it in inline mode, or whether the UI
+adds it when building the QR code and our reconstruction simply dropped it.
+
+\textbf{Action required before reporting.} Inspect the QR payload the Verify UI actually
+produces in \texttt{pre\_registered} mode and compare against the API response.
+
+%---------------------------------------------------------
+\finding{F-06 --- No \texttt{direct\_post.jwt}; HAIP certification impossible}{\sevhigh{} \quad \confirmed}
+
+\textbf{Component:} Inji Verify 0.18.2 \quad \textbf{Spec:} OID4VP 1.0 Final / HAIP
+
+\textbf{Evidence --- source.}
+\begin{quote}\small
+\texttt{verify-service/src/main/java/io/inji/verify/shared/Constants.java}\\
+\texttt{public static final String RESPONSE\_MODE = "direct\_post";}
+\end{quote}
+This is a \texttt{static final} constant, not a configuration property or environment
+variable. No code path produces the encrypted \texttt{direct\_post.jwt} variant.
+
+\textbf{Evidence --- conformance suite.} The HAIP verifier plan
+(\emph{OpenID for Verifiable Presentations 1.0 Final/HAIP: Test a verifier}) offers only
+\texttt{direct\_post.jwt} in its Response Mode variant.
+
+\textbf{Impact.} Inji Verify cannot be submitted for HAIP self-certification in its current
+state. HAIP is the profile relevant to high-assurance national identity deployments, which
+is MOSIP's own domain.
+
+\textbf{Open question for mentors.} See Q2.
+
+%---------------------------------------------------------
+\finding{F-07 --- DID document verification method identifier inconsistency}{\sevmed{} \quad \confirmed}
+
+\textbf{Component:} Inji Verify 0.18.2 \quad \textbf{Spec:} W3C DID Core
+
+\textbf{Evidence.} Retrieved from
+\texttt{https://<host>/v1/verify/did.json}:
+\begin{quote}\small
+\texttt{"id": "did:web:<host>:v1:verify"} \quad (document subject)\\
+\texttt{"verificationMethod[0].id": "did:web:<host>:verify\#key-0"} \quad (no \texttt{:v1:})\\
+\texttt{"assertionMethod[0]": "did:web:<host>:verify\#key-0"} \quad (no \texttt{:v1:})
+\end{quote}
+
+\textbf{Origin.} The default Docker Compose environment variables differ:
+\texttt{INJI\_DID\_VERIFY\_URI} includes the \texttt{v1} path segment while
+\texttt{INJI\_DID\_VERIFY\_PUBLIC\_KEY\_URI} does not.
+
+\textbf{Impact.} Under \texttt{did:web} resolution rules, the key's identifier resolves to
+\texttt{https://<host>/verify/did.json}, a path that does not exist on the deployment. A
+strict relying party resolving the verification method by its own identifier would fail.
+
+%---------------------------------------------------------
+\finding{F-08 --- No mdoc / ISO 18013-5 support}{\sevlow{} \quad \confirmed}
+
+\textbf{Component:} Inji Verify 0.18.2
+
+\textbf{Evidence.} Searches for \texttt{mso\_mdoc}, \texttt{iso\_mdl} and \texttt{mdoc}
+across \texttt{verify-service/src/main} return zero matches.
+
+\textbf{Impact.} The \texttt{iso\_mdl} credential format variant of the verifier plan cannot
+be exercised. Recorded for completeness; likely a deliberate scope decision rather than a
+defect.
+
+%---------------------------------------------------------
+\finding{F-09 --- Client identifier prefix has no overlap with 1.0 Final}{\sevmed{} \quad \confirmed}
+
+\textbf{Component:} Inji Verify 0.18.2 \quad \textbf{Spec:} OID4VP 1.0 Final, §5.9.2
+
+\textbf{Evidence.}
+\begin{quote}\small
+\texttt{EnsureClientIdMatchesResponseUri} --- FAILURE\\
+``For redirect\_uri client\_id prefix, the client\_id (without prefix) must equal
+response\_uri''\\
+\texttt{client\_id: "inji-verify-ui"} \quad
+\texttt{response\_uri: "https://<host>/v1/verify/vp-submission/direct-post"}
+\end{quote}
+
+\textbf{Observation.} Inji Verify supports two client identifier schemes, \texttt{did} and
+\texttt{pre\_registered}. The 1.0 Final verifier plan offers three prefixes:
+\texttt{redirect\_uri}, \texttt{x509\_san\_dns}, \texttt{x509\_hash}. Verify has no X.509
+material configured, so the two X.509 options are unreachable, and \texttt{redirect\_uri}
+requires a client identifier Verify does not produce. \textbf{No variant combination in the
+plan matches Verify's client identification model.}
+
+\textbf{Caveat.} This failure is partly a consequence of the variant we selected. The
+reportable observation is the absence of overlap, not that any single value is ``wrong''.
+
+\textbf{Open question for mentors.} See Q3.
+
+\newpage
+%=========================================================
+\section{Open Questions for Mentors}
+
+These are the questions we would like to put to MOSIP mentors on the community forum or in
+a Weekly Connect session. Each is phrased to be answerable without our setup in front of them.
+
+\begin{description}[style=nextline,leftmargin=1.2cm]
+
+\item[\textbf{Q1 --- Target specification version.}]
+Inji Verify 0.18.2 implements OID4VP credential selection via \texttt{presentation\_definition}
+(Presentation Exchange), whereas OID4VP 1.0 Final requires \texttt{dcql\_query}. Consequently
+no test in the 1.0 Final verifier plan can complete. Which specification version should our
+harness target as the benchmark: 1.0 Final (accepting that the current baseline is a full
+set of failures), or the ID2 draft that the shipped implementation appears to target? Is
+DCQL support on the Inji roadmap, and if so for which release?
+
+\item[\textbf{Q2 --- HAIP certification intent.}]
+The problem statement asks us to document ``how to submit for self-certification''. The HAIP
+verifier plan mandates \texttt{direct\_post.jwt}, but \texttt{RESPONSE\_MODE} is a
+\texttt{static final} constant set to \texttt{direct\_post} in \texttt{Constants.java}. Is
+encrypted response mode planned? Should our harness include the HAIP plan as a
+known-failing suite to track progress toward certification, or exclude it until the
+capability exists?
+
+\item[\textbf{Q3 --- Client identifier scheme.}]
+Verify supports \texttt{did} and \texttt{pre\_registered} client identifier schemes; the 1.0
+Final plan offers \texttt{redirect\_uri}, \texttt{x509\_san\_dns} and \texttt{x509\_hash}.
+Is there a supported configuration that allows an Inji Verify deployment to present a
+client identifier the 1.0 Final conformance plan can validate, or is this a known gap?
+
+\item[\textbf{Q4 --- Benchmark semantics for \texttt{api-testrig}.}]
+The problem statement asks for results ``gated against a conformance benchmark''. Given that
+the honest current baseline is ``all modules fail at DCQL extraction'', should the benchmark
+be (a) a frozen snapshot of today's pass/fail set, so the gate catches regressions only, or
+(b) an aspirational target that the build fails against until conformance improves? Our
+current design assumes (a), with an expected-failures file under version control.
+
+\item[\textbf{Q5 --- Sample configuration shipped with Inji Verify.}]
+The default \texttt{config.json} ships five credential types, four of which use
+\texttt{ldp\_vc} with \texttt{clientIdScheme: did}. That combination cannot be exercised by
+the 1.0 Final plan at all. Is the shipped sample configuration intended to be
+certification-representative, or purely a demonstration fixture? This affects whether we
+report the configuration itself as a finding.
+
+\item[\textbf{Q6 --- Interactive tests and automation.}]
+Every module in the verifier plan is interactive: it waits for a human to trigger a flow in
+the verifier and paste the resulting authorisation request, and the happy-flow module also
+requires a screenshot upload before it reaches REVIEW status. Our harness can drive request
+generation via Verify's own API, but the screenshot-upload requirement appears to need
+\texttt{POST /api/log/\{id\}/images}. Is a fully unattended run of the verifier plan
+considered achievable, or is a documented semi-automated flow the expected deliverable?
+
+\item[\textbf{Q7 --- Scope of Inji Certify work.}]
+The \texttt{docker-compose-injistack} setup requires a PKCS12 keystore obtained through
+Mimoto onboarding, a publicly resolvable DID endpoint, and an external authorisation server.
+For a two-person team on a four-week timeline, is there a lighter-weight Certify
+configuration suitable for conformance testing, or is the Collab sandbox the intended target
+for the issuer plan?
+
+\end{description}
+
+\newpage
+%=========================================================
+\section{Reproduction}
+
+To reproduce the Day 1 baseline run:
+
+\begin{enumerate}[nosep]
+  \item Follow \texttt{docs/SETUP.md} to install prerequisites and clone the repositories.
+  \item Follow \texttt{docs/RUNBOOK.md} to start the conformance suite, Inji Verify, and ngrok.
+  \item In \texttt{inji-verify/docker-compose/config/config.json}, ensure the
+        \emph{Mock Identity (SD JWT)} entry has \texttt{"clientIdScheme":"pre\_registered"}.
+  \item In the conformance suite, create the plan
+        \emph{OpenID for Verifiable Presentations 1.0 Final: Test a verifier --- alpha tests}
+        with the variant recorded in Section 2.
+  \item Run module 01, \texttt{oid4vp-1final-verifier-happy-flow}.
+  \item In the Verify UI, request the \emph{Mock Identity (SD JWT)} credential; capture the
+        \texttt{/v1/verify/vp-session-request} response.
+  \item Run \texttt{python3 scripts/build-oid4vp-uri.py} on that response and paste the
+        resulting URI into the suite. The request expires 300 seconds after issue.
+  \item Export the signed log and store it under \texttt{logs/<date>/}.
+\end{enumerate}
+
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}\\[0.3em]
+\small\textit{Day 2 section to be appended after tests 02--11 are executed.}
+
+\end{document}

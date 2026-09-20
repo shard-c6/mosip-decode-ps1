@@ -1,0 +1,29 @@
+# LaTeX build artefacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local environment — ngrok domains and hostnames are per-developer
+.env
+*.local
+scratch/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
