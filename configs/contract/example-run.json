@@ -1,0 +1,289 @@
+{
+  "schemaVersion": "1.0",
+  "_comment": "REAL EXAMPLE, not invented: generated from the Day 1 baseline log MtzpWoD2dVgtic0. Use as the fixture for the Java side while the runner is being built. The run/gate wrappers are what the runner will add.",
+  "run": {
+    "runId": "verify-2026-09-20T06:13:23Z",
+    "mode": "verify",
+    "startedAt": "2026-09-20T06:13:09Z",
+    "finishedAt": "2026-09-20T06:13:23Z",
+    "durationMs": 14000,
+    "harnessVersion": "0.1.0-dev",
+    "conformanceSuite": {
+      "version": "5.3.1",
+      "revision": "440eec8",
+      "baseUrl": "https://localhost.emobix.co.uk:8443"
+    }
+  },
+  "components": [
+    {
+      "component": "inji-verify",
+      "role": "verifier",
+      "version": "0.18.2",
+      "endpoint": "https://sphere-dust-sandlot.ngrok-free.dev/v1/verify",
+      "plan": {
+        "planId": "lN7C4DH1HvYmc",
+        "planName": "oid4vp-1final-verifier-test-plan",
+        "alias": "injiverify-shardul",
+        "specification": "OID4VP 1.0 Final (alpha verifier tests)",
+        "variant": {
+          "credential_format": "sd_jwt_vc",
+          "client_id_prefix": "redirect_uri",
+          "request_method": "url_query",
+          "vp_profile": "plain_vp",
+          "response_mode": "direct_post"
+        },
+        "planUrl": "https://localhost.emobix.co.uk:8443/plan-detail.html?plan=lN7C4DH1HvYmc"
+      },
+      "summary": {
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "warning": 0,
+        "skipped": 0,
+        "expectedFailures": 1,
+        "unexpectedFailures": 0,
+        "newPasses": 0,
+        "_comment": "Only module 01 was run on Day 1. The full plan has 12 modules."
+      },
+      "modules": [
+        {
+          "moduleName": "oid4vp-1final-verifier-happy-flow",
+          "testId": "MtzpWoD2dVgtic0",
+          "variant": {
+            "credential_format": "sd_jwt_vc",
+            "client_id_prefix": "redirect_uri",
+            "request_method": "url_query",
+            "vp_profile": "plain_vp",
+            "response_mode": "direct_post"
+          },
+          "status": "INTERRUPTED",
+          "result": "FAILED",
+          "verdict": "PASS",
+          "expected": "FAILED",
+          "regression": false,
+          "improvement": false,
+          "counts": {
+            "success": 15,
+            "failure": 4,
+            "warning": 3,
+            "info": 7
+          },
+          "checks": [
+            {
+              "src": "TEST-RUNNER",
+              "result": "INFO",
+              "msg": "Test instance MtzpWoD2dVgtic0 created",
+              "requirements": [],
+              "detail": {},
+              "findingRef": null
+            },
+            {
+              "src": "CheckForInvalidCharsInNonce",
+              "result": "FAILURE",
+              "msg": "Non URL safe characters found in nonce. This may introduce interoperability issues.",
+              "requirements": [
+                "OID4VP-1FINAL-5.2"
+              ],
+              "detail": {
+                "blockId": "c4c410",
+                "nonce": "MTc4OTg4NDY1NjQzNg==",
+                "invalid_chars": [
+                  "="
+                ]
+              },
+              "findingRef": "F-02"
+            },
+            {
+              "src": "VP1FinalEnsureMinimumNonceEntropy",
+              "result": "WARNING",
+              "msg": "Nonce does not appear to have sufficient entropy (calculated Shannon entropy is below the threshold). Section 5.2 of OID4VP 1.0 Final requires the nonce to be a \"fresh, cryptographically random number with sufficient entropy\"; OpenID4VP PR #722 (https://github.com/openid/OpenID4VP/pull/722/changes) recommends at least 128 bits.",
+              "requirements": [
+                "OID4VP-1FINAL-5.2"
+              ],
+              "detail": {
+                "blockId": "c4c410",
+                "actual": 73.68367439558376,
+                "expected": 96.0,
+                "value": "MTc4OTg4NDY1NjQzNg=="
+              },
+              "findingRef": "F-01"
+            },
+            {
+              "src": "EnsureAuthorizationRequestContainsPkceCodeChallenge",
+              "result": "INFO",
+              "msg": "Skipped evaluation due to missing required element: effective_authorization_endpoint_request code_challenge",
+              "requirements": [
+                "RFC7636-4.3"
+              ],
+              "detail": {
+                "blockId": "c4c410",
+                "path": "code_challenge",
+                "mapped": null,
+                "object": "effective_authorization_endpoint_request"
+              },
+              "findingRef": null
+            },
+            {
+              "src": "WarnIfRequestUriMethodInRequestObject",
+              "result": "INFO",
+              "msg": "Skipped evaluation due to missing required string: authorization_request_object",
+              "requirements": [
+                "OID4VP-1FINAL-5.1"
+              ],
+              "detail": {
+                "blockId": "c4c410",
+                "expected": "authorization_request_object"
+              },
+              "findingRef": null
+            },
+            {
+              "src": "EnsureNoWalletNonceInRequestObject",
+              "result": "INFO",
+              "msg": "Skipped evaluation due to missing required string: authorization_request_object",
+              "requirements": [
+                "OID4VP-1FINAL-5.10"
+              ],
+              "detail": {
+                "blockId": "c4c410",
+                "expected": "authorization_request_object"
+              },
+              "findingRef": null
+            },
+            {
+              "src": "ExtractVerifierInfoFromAuthorizationRequest",
+              "result": "INFO",
+              "msg": "Skipped evaluation due to missing required element: effective_authorization_endpoint_request verifier_info",
+              "requirements": [
+                "OID4VP-1FINAL-5.1"
+              ],
+              "detail": {
+                "blockId": "c4c410",
+                "path": "verifier_info",
+                "mapped": null,
+                "object": "effective_authorization_endpoint_request"
+              },
+              "findingRef": null
+            },
+            {
+              "src": "ValidateVerifierInfo",
+              "result": "INFO",
+              "msg": "Skipped evaluation due to missing required element: effective_authorization_endpoint_request verifier_info",
+              "requirements": [
+                "OID4VP-1FINAL-5.1"
+              ],
+              "detail": {
+                "blockId": "c4c410",
+                "path": "verifier_info",
+                "mapped": null,
+                "object": "effective_authorization_endpoint_request"
+              },
+              "findingRef": null
+            },
+            {
+              "src": "CheckForUnexpectedParametersInVerifierInfo",
+              "result": "INFO",
+              "msg": "Skipped evaluation due to missing required element: effective_authorization_endpoint_request verifier_info",
+              "requirements": [
+                "OID4VP-1FINAL-5.1"
+              ],
+              "detail": {
+                "blockId": "c4c410",
+                "path": "verifier_info",
+                "mapped": null,
+                "object": "effective_authorization_endpoint_request"
+              },
+              "findingRef": null
+            },
+            {
+              "src": "EnsureClientIdMatchesResponseUri",
+              "result": "FAILURE",
+              "msg": "For redirect_uri client_id prefix, the client_id (without prefix) must equal response_uri",
+              "requirements": [
+                "OID4VP-1FINAL-5.9.2"
+              ],
+              "detail": {
+                "response_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/verify/vp-submission/direct-post",
+                "blockId": "c4c410",
+                "orig_client_id": "inji-verify-ui",
+                "client_id": "inji-verify-ui"
+              },
+              "findingRef": "F-09"
+            },
+            {
+              "src": "CheckNoPresentationDefinitionInVpAuthorizationRequest",
+              "result": "WARNING",
+              "msg": "Authorization request contains legacy 'presentation_definition'. VP1 Final uses 'dcql_query' for credential selection, so sending both is unnecessary and may indicate draft and final request formats are being mixed.",
+              "requirements": [],
+              "detail": {
+                "blockId": "c4c410",
+                "presentation_definition": "{\"id\":\"c4822b58-7fb4-454e-b827-f8758fe27f9a\",\"input_descriptors\":[{\"id\":\"Mock Identity card credential\",\"format\":{\"vc+sd-jwt\":{\"sd-jwt_alg_values\":[\"ES256\"]}},\"constraints\":{\"fields\":[{\"path\":[\"$.vct\"],\"filter\":{\"type\":\"string\",\"pattern\":\"MockVerifiableCredential_SD_JWT\"}}]}}],\"purpose\":\"Relying party is requesting your digital ID for the purpose of Self-Authentication\"}"
+              },
+              "findingRef": "F-04"
+            },
+            {
+              "src": "VP1FinalCheckForUnexpectedParametersInVpClientMetadata",
+              "result": "WARNING",
+              "msg": "client_metadata not present in request but it is mandatory to include vp_formats in it",
+              "requirements": [
+                "OID4VP-1FINAL-5.1"
+              ],
+              "detail": {
+                "blockId": "c4c410"
+              },
+              "findingRef": "F-05"
+            },
+            {
+              "src": "VP1FinalValidateVpFormatsSupportedInClientMetadata",
+              "result": "FAILURE",
+              "msg": "client_metadata is missing or not a JSON object",
+              "requirements": [
+                "OID4VP-1FINALA-B.2.2",
+                "OID4VP-1FINALA-B.3.4"
+              ],
+              "detail": {
+                "blockId": "c4c410"
+              },
+              "findingRef": "F-05"
+            },
+            {
+              "src": "ExtractDCQLQueryFromAuthorizationRequest",
+              "result": "FAILURE",
+              "msg": "dcql_query not found in authorization request parameters",
+              "requirements": [
+                "OID4VP-1FINAL-6"
+              ],
+              "detail": {
+                "blockId": "c4c410"
+              },
+              "findingRef": "F-03"
+            },
+            {
+              "src": "oid4vp-1final-verifier-happy-flow",
+              "result": "INTERRUPTED",
+              "msg": "Test was interrupted before it could complete. The failure 'ExtractDCQLQueryFromAuthorizationRequest: dcql_query not found in authorization request parameters' means the test cannot continue.",
+              "requirements": [],
+              "detail": {
+                "blockId": "c4c410"
+              },
+              "findingRef": null
+            }
+          ],
+          "startedAt": "2026-09-20T06:13:09.320085375Z",
+          "durationMs": 14000,
+          "logUrl": "https://localhost.emobix.co.uk:8443/log-detail.html?log=MtzpWoD2dVgtic0",
+          "logFile": "logs/2026-09-20/test-log-oid4vp-1final-verifier-happy-flow-sd_jwt_vc-redirect_uri-url_query-plain_vp-direct_post-MtzpWoD2dVgtic0/test-log-oid4vp-1final-verifier-happy-flow-MtzpWoD2dVgtic0.json",
+          "logSignatureFile": "logs/2026-09-20/test-log-oid4vp-1final-verifier-happy-flow-sd_jwt_vc-redirect_uri-url_query-plain_vp-direct_post-MtzpWoD2dVgtic0/test-log-oid4vp-1final-verifier-happy-flow-MtzpWoD2dVgtic0.json.sig"
+        }
+      ]
+    }
+  ],
+  "gate": {
+    "policy": "regression-from-baseline",
+    "baselineFile": "configs/contract/expected-failures.json",
+    "baselineUpdatedAt": "2026-09-20T06:13:23Z",
+    "passed": true,
+    "regressions": [],
+    "improvements": [],
+    "unknownModules": []
+  }
+}

@@ -26,9 +26,13 @@ cloned locally — use them.
 can't be certified" and "you haven't implemented this part of the spec" are different
 claims with different fixes. Maintainers take you seriously when you distinguish them.
 
-**4. Git is the user's job.** The sandbox this assistant runs in cannot delete files inside
-`.git`, so `git commit` fails on lock files. Write and edit freely; hand git commands to
-the user to run in their own terminal.
+**4. Check the assistant's environment before assuming what it can do.** This varies
+between sessions and has already been documented wrongly once. As of 23 September the
+assistant runs **natively on Shardul's Mac**, not in a separate VM: `gh` is authenticated
+as `shard-c6`, `git`, `ngrok`, `mvn`, `pdflatex` and the `docker` CLI are all on PATH, and
+files here are the real files. Two caveats remain — **Docker Desktop is usually not
+running**, so the daemon must be started before any container work, and anything that
+pushes, opens a PR or spends someone's quota is confirmed with the user first.
 
 ---
 
@@ -41,7 +45,7 @@ the user to run in their own terminal.
 | Conformance suite | `https://localhost.emobix.co.uk:8443` (v5.3.1) — self-signed cert, use `curl -k` |
 | Inji Verify | UI `:3000`, API `:8080`, context path `/v1/verify` |
 | Test plan ID | `lN7C4DH1HvYmc` · alias `injiverify-shardul` |
-| Versions | Inji Verify 0.18.2 · Inji Certify 0.14.0 (not yet run) |
+| Versions | Inji Verify 0.18.2 · Inji Certify 0.14.0 (not yet run) · Java 21 · Maven 3.9.16 |
 
 Sibling clones: `inji-verify` · `inji-certify` · `mosip-functional-tests` ·
 `conformance-suite` · `conformance-suite-automated-testing-tutorial`
@@ -129,7 +133,10 @@ components don't pass everything.
 | `docs/findings/findings.tex` | Findings catalogue + 7 open questions for mentors |
 | `docs/SETUP.md` | First-time setup, macOS and Windows |
 | `docs/RUNBOOK.md` | Start / access / shutdown / troubleshooting |
-| `docs/PLAN.md` | Four-week plan, tentative role split |
+| `docs/PLAN.md` | Four-week plan (re-anchored to the 23 Sep kickoff), proposed role split |
+| `docs/CONTRACT.md` | The runner→testrig JSON contract — the one interface between the two halves |
+| `docs/WEEK2.md` | Day-by-day build plan for the conformance runner |
+| `configs/contract/` | Contract fixture (real Day 1 data) and the expected-failures baseline |
 
 Commands available: `/stack-up`, `/stack-down`, `/health-check`, `/run-test`,
 `/analyse-log`, `/log-day`.

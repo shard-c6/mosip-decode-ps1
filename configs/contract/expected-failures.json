@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0",
+  "updatedAt": "2026-09-20T06:13:23Z",
+  "note": "Baseline recorded from the Day 1 evidenced run against Inji Verify 0.18.2. Only module 01 has been executed; the remaining 11 modules of the plan are absent deliberately rather than guessed, and the gate treats an absent module as SKIP with a warning. Add each one as it is run, with its own evidence path. Every entry must carry a reason and evidence: an expected failure without a documented reason is a silenced test.",
+  "components": {
+    "inji-verify": {
+      "oid4vp-1final-verifier-test-plan": {
+        "oid4vp-1final-verifier-happy-flow": {
+          "expected": "FAILED",
+          "reason": "F-03 - Inji Verify 0.18.2 sends presentation_definition (Presentation Exchange) rather than dcql_query, so the module terminates at ExtractDCQLQueryFromAuthorizationRequest. Structural gap, not a regression.",
+          "alsoObserved": ["F-01", "F-02", "F-04", "F-05", "F-09"],
+          "evidence": "logs/2026-09-20/test-log-oid4vp-1final-verifier-happy-flow-sd_jwt_vc-redirect_uri-url_query-plain_vp-direct_post-MtzpWoD2dVgtic0/test-log-oid4vp-1final-verifier-happy-flow-MtzpWoD2dVgtic0.json",
+          "recordedAt": "2026-09-20"
+        }
+      }
+    },
+    "inji-certify": {
+      "_comment": "Not yet exercised. Certify's issuer plan has 61 modules and its docker-compose-injistack needs a PKCS12 keystore, a public DID endpoint, an external authorisation server and partner API keys. See Q7."
+    }
+  }
+}

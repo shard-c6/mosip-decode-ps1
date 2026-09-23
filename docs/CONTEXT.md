@@ -1,6 +1,6 @@
 # Project context — state of play
 
-**Last updated**: 20 September 2026, end of Day 1
+**Last updated**: 23 September 2026 — official event kickoff
 **Purpose**: everything established so far, in one place. Read this first if you're picking
 the project up after a break, joining it, or continuing in a new assistant session.
 
@@ -190,38 +190,60 @@ job through Verify's API rather than the clipboard.
 
 ## 9. Where things stand
 
-**Done**: environment; test 01 executed three times (two discarded as artefacts, one
-baseline); findings catalogued; repo scaffolded with SETUP, RUNBOOK, PLAN, findings and
-this file; first commit made locally.
+**Important calendar correction.** The 20 September session happened **three days before
+the event officially started**. MOSIP Decode kicked off on **23 September 2026**; the
+planned kickoff seminar and mentor AMA did not take place. Nothing was done between 20 and
+23 September, so the "Day 2" list written on Day 1 is still entirely outstanding — it has
+simply moved into Week 1 proper. `docs/PLAN.md` has been re-anchored to the real calendar.
 
-**Immediately next (Day 2)**
-1. Tests 02–11 of the 1.0 Final alpha verifier plan. Expect all to interrupt at
+**Done** (all of it pre-kickoff): environment; module 01 executed three times (two
+discarded as artefacts, one baseline); nine findings catalogued; repo scaffolded with
+SETUP, RUNBOOK, PLAN, findings and this file; forks of all three MOSIP repos created.
+
+**Outstanding, carried into Week 1 (23–28 September)**
+1. Modules 02–11 of the 1.0 Final alpha verifier plan. Expect all to interrupt at
    `ExtractDCQLQueryFromAuthorizationRequest` — that uniformity *is* the result.
 2. The **ID2 verifier plan** (1 module) — the draft generation Verify appears to target,
    and the most likely source of an actually-passing test. The harness needs at least one.
 3. Resolve F-05 one way or the other.
 4. Mukta: get `api-test/` running in both repos; document the existing TestNG result shape.
+5. Role split agreed 23 September (see PLAN.md). Contract drafted in `docs/CONTRACT.md`;
+   awaiting Mukta's review of the four open points at the end of it.
 
 **Outstanding admin**
-- Push to GitHub (`gh repo create`) — done by Shardul on his Mac
-- Fork the three MOSIP repos; fill the `### Our forks` placeholder in README.md
+- Push the local commit — the repo exists at `shard-c6/mosip-decode-ps1` on branch
+  `master`, and local is **one commit ahead** (`d7dede0`)
+- Fill the `### Our forks` placeholder in README.md — the forks already exist
 - Add Mukta as collaborator; she adds Shardul on hers
-- Confirm the role split in PLAN.md with Mukta — currently a proposal
-- Move Day 1 log exports from `~/Downloads` into `logs/2026-09-20/` (commit `.json` and `.sig` both)
+- Share the agreed role split (PLAN.md) and `docs/CONTRACT.md` with Mukta so she can start
+- Move Day 1 log exports into `logs/2026-09-20/` (commit `.json` and `.sig` both)
+- **Confirm the real submission deadline on Unstop.** PLAN.md currently assumes ~21 October
+  and says so explicitly; every week boundary depends on it
 
 **Questions waiting on mentors**: Q1–Q7 in the findings document. Q1 (which spec version to
-benchmark against) is the one that most shapes the rest of the build.
+benchmark against) is the one that most shapes the rest of the build. With no AMA, the
+community forum is the only channel — and no answer may arrive, so the runner is being
+designed so plan name and variants are configuration rather than code.
 
 ---
 
 ## 10. Note for future assistant sessions
 
-Claude's shell runs in a Linux VM beside these files, not in the user's macOS Terminal.
-Consequences: `gh` and the user's GitHub auth are **not** reachable — repo creation, pushes
-and collaborator invites must be handed to the user as commands. Docker is not available in
-that VM either; all container work is the user's to run. The VM's network is restricted —
-GitHub clones work, GitLab and ngrok hostnames are blocked, so anything needing those must
-go through the user.
+**This section was wrong before 23 September and is worth reading carefully, because it
+changes between sessions.** The earlier version claimed Claude ran in a separate Linux VM
+with no Docker, no `gh`, and a network that blocked GitLab and ngrok. That was true of that
+session's harness; it is not true now.
 
-Files written into `~/projects/MOSIP` from that VM *are* the real files on the Mac — it's a
-live mount, not a copy.
+As of 23 September 2026 the assistant runs **natively on Shardul's Mac**:
+
+- `gh` is authenticated as `shard-c6`; `git`, `ngrok`, `mvn` (3.9.16), `pdflatex` and the
+  `docker` CLI are all on PATH. Java is **21**, not 11.
+- Git operations work directly. Still confirm before anything that pushes or opens a PR.
+- **Docker Desktop is usually not running.** The CLI is present but the daemon is not, so
+  any container work needs Docker Desktop started first — and the containers are heavy, so
+  start them deliberately rather than as a side effect.
+- Files under `~/projects/MOSIP` are the real files.
+
+**Verify this rather than trusting it.** A quick `docker ps`, `gh auth status` and
+`java -version` at the start of a session costs seconds and has already caught one
+wrong assumption.
