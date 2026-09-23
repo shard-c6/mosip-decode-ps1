@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(docker compose:*)",
+      "Bash(docker ps:*)",
+      "Bash(docker logs:*)",
+      "Bash(docker system df:*)",
+      "Bash(curl -k https://localhost.emobix.co.uk:8443/api/*)",
+      "Bash(curl https://*.ngrok-free.dev/v1/verify/*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(python3 scripts/*)",
+      "Bash(pdflatex:*)",
+      "Read(//Users/shard/projects/MOSIP/**)"
+    ],
+    "deny": [
+      "Bash(docker compose down -v:*)",
+      "Bash(docker system prune -a --volumes:*)",
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git reset --hard:*)",
+      "Read(./**/.env)",
+      "Read(./**/*.p12)",
+      "Read(./**/*.pem)"
+    ]
+  }
+}

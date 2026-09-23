@@ -1,0 +1,227 @@
+# Project context — state of play
+
+**Last updated**: 20 September 2026, end of Day 1
+**Purpose**: everything established so far, in one place. Read this first if you're picking
+the project up after a break, joining it, or continuing in a new assistant session.
+
+---
+
+## 1. The one-paragraph version
+
+We are building an automated conformance-testing harness for MOSIP's Inji stack (PS1,
+MOSIP Decode 2026). On Day 1 we stood up the OpenID Foundation conformance suite and Inji
+Verify locally, drove one verifier test (`oid4vp-1final-verifier-happy-flow`) end to end by
+hand, and catalogued nine findings — eight of them confirmed with evidence from the OpenID
+Foundation's own tooling. The headline result: **Inji Verify 0.18.2 implements the
+superseded Presentation Exchange query model rather than DCQL, so no module in the OID4VP
+1.0 Final verifier plan can pass.** That is not a blocker for our deliverable; it is the
+baseline our harness will gate against.
+
+---
+
+## 2. Concrete environment values
+
+Keep these to hand — most of them appear in commands.
+
+| Thing | Value |
+|---|---|
+| Working root | `~/projects/MOSIP` (macOS, Apple Silicon arm64, Docker Desktop) |
+| Our repo | `~/projects/MOSIP/mosip-decode-ps1` |
+| GitHub (Shardul) | `shard-c6` |
+| ngrok static domain | `sphere-dust-sandlot.ngrok-free.dev` — **Shardul's only; Mukta needs her own** |
+| Conformance suite | `https://localhost.emobix.co.uk:8443` — v5.3.1, rev `440eec8` |
+| Inji Verify UI | `http://localhost:3000` |
+| Inji Verify API | `http://localhost:8080`, context path `/v1/verify` |
+| Verify DID document | `https://sphere-dust-sandlot.ngrok-free.dev/v1/verify/did.json` |
+| Test plan ID | `lN7C4DH1HvYmc` |
+| Suite alias | `injiverify-shardul` |
+
+### Component versions
+Inji Verify service & UI 0.18.2 · Inji Certify 0.14.0 (not yet run) · conformance suite 5.3.1
+
+### Sibling clones under `~/projects/MOSIP`
+`inji-verify` · `inji-certify` · `mosip-functional-tests` (GitHub) ·
+`conformance-suite` · `conformance-suite-automated-testing-tutorial` (GitLab)
+
+---
+
+## 3. Local modifications to upstream code
+
+**These are not committed anywhere.** A fresh clone will not have them. Both are documented
+in SETUP.md, but record them here because forgetting either produces confusing failures.
+
+**1. `inji-verify/docker-compose/docker-compose.yml`**
+The literal placeholder `VERIFY_SERVICE_PROXY_FOR_LOCALHOST` appears in five environment
+variables and is substituted by nothing. Replaced with the ngrok hostname.
+Revert: `git checkout docker-compose.yml`
+
+**2. `inji-verify/docker-compose/config/config.json`**
+The *Mock Identity (SD JWT)* credential changed from `"clientIdScheme":"did"` to
+`"pre_registered"`. Backup at `config/config.json.bak`.
+Why: `did` delivers the authorisation request **by reference** via `request_uri`;
+`pre_registered` delivers it **inline**. Only inline matches the plan's
+`request_method=url_query` variant.
+
+### What's in `config.json` by default
+| # | Name | clientIdScheme | Format |
+|---|---|---|---|
+| 0 | MOSIP ID | did | ldp_vc |
+| 1 | Life Insurance | did | ldp_vc |
+| 2 | Health Insurance | pre_registered | ldp_vc |
+| 3 | **Mock Identity (SD JWT)** | **pre_registered** *(we changed this)* | **vc+sd-jwt** |
+| 4 | Land Registry | did | ldp_vc |
+
+Entry 3 is the only one usable with the `sd_jwt_vc` plan variant.
+
+---
+
+## 4. Decisions taken, and why
+
+**Inji Verify before Inji Certify.** Verify is three containers with no external
+dependencies. Certify's `docker-compose-injistack` needs a PKCS12 keystore from Mimoto
+onboarding, a public DID endpoint, an external authorisation server and partner API keys.
+The verifier plan is 12 modules against the issuer plan's 61. Verify was roughly five times
+less setup for a first real result, and everything learned transfers.
+
+**Non-HAIP plan.** The HAIP verifier plan offers only `direct_post.jwt`. Verify hardcodes
+`direct_post`. We used *OpenID for Verifiable Presentations 1.0 Final: Test a verifier —
+alpha tests* instead, which offers plain `direct_post`.
+
+**Credential format `sd_jwt_vc`.** The only two options are `sd_jwt_vc` and `iso_mdl`, and
+Verify has no mdoc code at all.
+
+**Variant actually used:**
+`credential_format=sd_jwt_vc, client_id_prefix=redirect_uri, request_method=url_query,
+vp_profile=plain_vp, response_mode=direct_post`
+
+---
+
+## 5. Findings summary
+
+Full catalogue with evidence in `docs/findings/findings.tex`. Short form:
+
+| ID | Finding | Severity | Status |
+|---|---|---|---|
+| F-01 | Nonce is a base64 timestamp — insufficient entropy (73.68 vs 96 bits) | HIGH | Confirmed |
+| F-02 | Nonce contains `=` padding, not URL-safe | MEDIUM | Confirmed |
+| F-03 | No DCQL support; terminates every 1.0 Final test | HIGH | Confirmed |
+| F-04 | Uses superseded `presentation_definition` | MEDIUM | Confirmed |
+| F-05 | `client_metadata` absent in inline mode | MEDIUM | **Unverified** |
+| F-06 | No `direct_post.jwt`; HAIP certification impossible | HIGH | Confirmed |
+| F-07 | DID document verification method id missing `:v1:` segment | MEDIUM | Confirmed |
+| F-08 | No mdoc / ISO 18013-5 support | LOW | Confirmed |
+| F-09 | Client identifier prefixes have no overlap with 1.0 Final | MEDIUM | Confirmed |
+
+**F-05 must not be reported upstream yet.** Verify *did* send `client_metadata` with full
+`vp_formats` in the `did` (signed JWT) path. In the `pre_registered` path its API response
+contained none, so our reconstructed URI couldn't include one. Whether Verify omits it or
+the UI adds it at QR-build time is unresolved. Check the actual QR payload before deciding.
+
+---
+
+## 6. Gotchas learned the hard way
+
+**Authorisation requests expire after 300 seconds.** `Constants.DEFAULT_EXPIRY = 300`.
+Check liveness before pasting:
+`curl -s -o /dev/null -w "%{http_code}\n" $VERIFY/v1/verify/vp-request/$RID` → want `200`.
+
+**Environment variables are read when a container is created, not when the file changes.**
+After editing `docker-compose.yml` you must `down` then `up -d`. A `restart` is not enough.
+This cost us one confusing round trip.
+
+**Stopping the conformance suite needs the file flag.**
+`docker compose -f docker-compose-prebuilt.yml down`. A plain `docker compose down` in that
+folder targets the default compose file, reports success, and leaves everything running.
+
+**`did:web` path resolution has two forms.** `did:web:host` → `https://host/.well-known/did.json`;
+`did:web:host:v1:verify` → `https://host/v1/verify/did.json`. Ours has path segments, so
+**no `.well-known`**.
+
+**ngrok is mandatory, not convenience.** Verify's identity is a `did:web` DID resolved over
+public HTTPS. Nothing can resolve a DID pointing at localhost. Using ngrok also sidesteps
+the separate problem that the suite and Verify run in different Docker Compose projects and
+can't see each other's `localhost`.
+
+**The conformance suite's local dev profile needs no API token.** `/api/currentuser`
+answers unauthenticated. The Swagger page describes the hosted deployment's auth, which
+doesn't apply. Admin users can't mint tokens anyway — that page will refuse you.
+
+**Self-signed certificate warnings are expected** on `localhost.emobix.co.uk:8443`. The
+hostname is a real domain that resolves to 127.0.0.1. Use `curl -k` and click through in
+the browser. This reasoning applies only because the destination is your own machine.
+
+**`sed -i` differs by platform.** macOS needs `sed -i ''`; Windows has no sed — use
+PowerShell's `-replace`.
+
+---
+
+## 7. Corrections made during Day 1
+
+Recorded because the same mistakes are easy to repeat, and because a couple nearly became
+bogus upstream reports.
+
+- ngrok domain was assumed `.ngrok-free.app`; it is actually `.ngrok-free.dev`. Five
+  compose lines pointed at a nonexistent host until corrected.
+- DID document path was assumed `/v1/verify/.well-known/did.json`; correct is
+  `/v1/verify/did.json`. Resolved by reading `DidWebController.java` rather than guessing again.
+- The first `ExtractNonceFromAuthorizationRequest` failure was nearly filed as "Verify
+  omits the nonce." It does not. The suite never dereferenced `request_uri` because the
+  `url_query` variant doesn't fetch request objects. **Confirming before claiming is the
+  rule that saved this one.**
+- We were told to create an API token; it turned out to be unnecessary locally.
+
+---
+
+## 8. Tooling built so far
+
+`scripts/build-oid4vp-uri.py` — takes Inji Verify's `/vp-session-request` response
+(pre_registered/inline mode) and emits a paste-ready `openid4vp://` URI with correct
+URL-encoding, plus an expiry countdown on stderr.
+
+```bash
+pbpaste | python3 scripts/build-oid4vp-uri.py        # macOS
+Get-Clipboard | python scripts/build-oid4vp-uri.py   # Windows
+```
+
+This is the first reusable component of the harness — the Week 2 runner will do the same
+job through Verify's API rather than the clipboard.
+
+---
+
+## 9. Where things stand
+
+**Done**: environment; test 01 executed three times (two discarded as artefacts, one
+baseline); findings catalogued; repo scaffolded with SETUP, RUNBOOK, PLAN, findings and
+this file; first commit made locally.
+
+**Immediately next (Day 2)**
+1. Tests 02–11 of the 1.0 Final alpha verifier plan. Expect all to interrupt at
+   `ExtractDCQLQueryFromAuthorizationRequest` — that uniformity *is* the result.
+2. The **ID2 verifier plan** (1 module) — the draft generation Verify appears to target,
+   and the most likely source of an actually-passing test. The harness needs at least one.
+3. Resolve F-05 one way or the other.
+4. Mukta: get `api-test/` running in both repos; document the existing TestNG result shape.
+
+**Outstanding admin**
+- Push to GitHub (`gh repo create`) — done by Shardul on his Mac
+- Fork the three MOSIP repos; fill the `### Our forks` placeholder in README.md
+- Add Mukta as collaborator; she adds Shardul on hers
+- Confirm the role split in PLAN.md with Mukta — currently a proposal
+- Move Day 1 log exports from `~/Downloads` into `logs/2026-09-20/` (commit `.json` and `.sig` both)
+
+**Questions waiting on mentors**: Q1–Q7 in the findings document. Q1 (which spec version to
+benchmark against) is the one that most shapes the rest of the build.
+
+---
+
+## 10. Note for future assistant sessions
+
+Claude's shell runs in a Linux VM beside these files, not in the user's macOS Terminal.
+Consequences: `gh` and the user's GitHub auth are **not** reachable — repo creation, pushes
+and collaborator invites must be handed to the user as commands. Docker is not available in
+that VM either; all container work is the user's to run. The VM's network is restricted —
+GitHub clones work, GitLab and ngrok hostnames are blocked, so anything needing those must
+go through the user.
+
+Files written into `~/projects/MOSIP` from that VM *are* the real files on the Mac — it's a
+live mount, not a copy.
