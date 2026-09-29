@@ -69,6 +69,18 @@ Java side builds against.
 
 No runs. Planning and documentation only.
 
+### 2026-09-29 — Day 4 (first automated runs)
+
+Produced by `./run-conformance.sh`, not the suite UI. These are the JSON the runner fetched
+from `/api/log/{id}` — **unsigned**. They are working evidence for the harness; anything
+reported upstream still needs the suite's signed export.
+
+| Test ID | Module | Result | Notes |
+|---|---|---|---|
+| — | happy-flow | HARNESS ERROR | Run 1. Our request to Verify lacked the definition `id`; HTTP 400. No module result, no log |
+| `hcuWEvxGbvRgt7e` | happy-flow | FAILED | Run 2, `nonceMode=sdk`. **First unattended run.** Matches `MtzpWoD2dVgtic0` check-for-check |
+| `Q9MaDZyfpJhjiDp` | happy-flow | FAILED | Run 3, `nonceMode=service`. Nonce checks pass; nothing else changes. Confirms F-01/F-02 root cause |
+
 ---
 
 ## Outstanding

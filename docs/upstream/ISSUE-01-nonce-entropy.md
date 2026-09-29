@@ -92,6 +92,18 @@ the moment it was made:
 | `MTc4OTg4NDUzNjY3OQ==` | 1789884536679 | 120 ms |
 | `MTc4OTg4NDY1NjQzNg==` | 1789884656436 | 158 ms |
 
+We also checked that the SDK is the cause and not the service, by running the same test
+twice and changing only where the nonce came from:
+
+| | SDK nonce (what the UI sends) | No nonce sent (service makes its own) |
+|---|---|---|
+| Nonce entropy check | Warning — 71.68 bits | Pass |
+| URL-safe characters check | Fail — contains `=` | Pass |
+| Example nonce | `MTc5MDY5NjY0NTQzNw==` | `78cb380cda818ebc189b80704e6f17a3` |
+
+Only those two checks changed. So when the service picks the nonce, it is fine; the problem
+appears only when the SDK supplies one.
+
 Signed conformance suite logs are available if useful — test ID `MtzpWoD2dVgtic0`.
 
 ### Suggested fix

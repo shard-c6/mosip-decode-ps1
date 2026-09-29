@@ -34,7 +34,7 @@
 \large Automated Conformance Testing for Inji Certify \& Inji Verify\\[0.8em]
 \normalsize Findings Log and Open Questions}
 \author{Shardul Chogale \and Mukta Varak}
-\date{Document started: 20 September 2026\\Last updated: 24 September 2026}
+\date{Document started: 20 September 2026\\Last updated: 29 September 2026}
 
 \begin{document}
 \maketitle
@@ -280,6 +280,125 @@ source-derived expectations rather than confirmed behaviour.
 
 No new findings against Inji Verify; no conformance modules were executed.
 
+\subsection{Day 4 --- Monday, 29 September 2026}
+
+\subsubsection*{Objective}
+First execution of the harness against a live conformance suite. The Day 3 runner had been
+unit-tested only, and every claim about the handoff was source-derived. Today's question was
+whether the automated run measures the same thing as the manual Day 1 run --- not merely
+whether it completes.
+
+\subsubsection*{Environment}
+Conformance suite 5.3.1 (prebuilt images), Inji Verify 0.18.2, ngrok 3.39.11 on the static
+domain. Both uncommitted local modifications (the ngrok host in \texttt{docker-compose.yml},
+\texttt{pre\_registered} for \emph{Mock Identity (SD JWT)}) confirmed intact after five days.
+Same variant as Day 1.
+
+\subsubsection*{Runs executed}
+\begin{longtable}{p{2.6cm} p{2.4cm} p{9.2cm}}
+\hline
+\textbf{Test ID} & \textbf{Outcome} & \textbf{Notes}\\
+\hline
+\endhead
+\emph{(none)} & HARNESS ERROR & Run 1. Suite side worked; Inji Verify returned HTTP 400 to
+\texttt{/vp-session-request}. Our defect, not Verify's --- see below. No module result.\\
+\texttt{hcuWEvxGbvRgt7e} & FAILED / INTERRUPTED & Run 2, \texttt{nonceMode=sdk}. \textbf{First
+fully unattended run.} Reproduces the Day 1 manual baseline exactly.\\
+\texttt{Q9MaDZyfpJhjiDp} & FAILED / INTERRUPTED & Run 3, \texttt{nonceMode=service}. Controlled
+experiment; differs from run 2 in the nonce source only.\\
+\hline
+\end{longtable}
+
+\subsubsection*{Result 1 --- the automated run reproduces the manual baseline exactly}
+Run 2 and the Day 1 manual baseline (\texttt{MtzpWoD2dVgtic0}) produced identical counts
+--- 15 success, 4 failure, 3 warning, 7 info --- and the identical set of seven non-success
+checks, terminating at the same place, \texttt{ExtractDCQLQueryFromAuthorizationRequest}. No
+check appears in one run and not the other. The handoff delivered with the full 300 seconds
+remaining, and the suite answered its \texttt{/authorize} endpoint with HTTP 302.
+
+This is the result that validates the harness. Completing is not enough; a harness that
+completed while measuring something different from what a tester would observe by hand
+would be worse than none. The Day 3 expectation that delivery is an ordinary HTTP GET to
+the exposed \texttt{authorization\_endpoint} is now confirmed behaviour, not inference.
+
+\subsubsection*{Result 2 --- controlled experiment confirms the F-01/F-02 root cause}
+On Day 2 the weak nonce was traced to \texttt{btoa(Date.now())} in the SDK, with
+\texttt{verify-service}'s own \texttt{SecureRandom} generator reached only as a fallback. That
+was a reading of the source. Runs 2 and 3 test it: they differ in one variable --- whether
+the harness supplies the SDK-shaped nonce or lets \texttt{verify-service} generate one.
+
+\begin{longtable}{p{5.4cm} p{4.2cm} p{4.2cm}}
+\hline
+\textbf{Check} & \textbf{sdk (run 2)} & \textbf{service (run 3)}\\
+\hline
+\endhead
+\texttt{VP1FinalEnsureMinimumNonceEntropy} & WARNING, 71.68 bits & SUCCESS\\
+\texttt{CheckForInvalidCharsInNonce} & FAILURE (\texttt{=}) & SUCCESS\\
+Nonce sent & \texttt{MTc5MDY5NjY0NTQzNw==} & \texttt{78cb380cda818ebc189b80704e6f17a3}\\
+Counts (success / failure / warning) & 15 / 4 / 3 & 17 / 3 / 2\\
+\hline
+\end{longtable}
+
+Exactly the two nonce checks move; every other check is unchanged and both runs still
+terminate at DCQL extraction. F-01 and F-02 are therefore confirmed by three independent
+routes: the suite flags them, the source locates them in the SDK, and removing only the
+SDK's nonce clears them. The service-generated nonce is 32 hexadecimal characters --- the
+16 \texttt{SecureRandom} bytes of \texttt{SecurityUtils.generateNonce()}, as the source
+predicted. This materially strengthens the upstream report.
+
+\subsubsection*{Measurement decision recorded: the nonce source}
+Driving \texttt{verify-service} directly rather than through the UI changes what is measured.
+If the harness sends no nonce, the service generates a sound one and the nonce findings
+silently vanish --- not because anything was fixed, but because the harness bypassed the
+component that causes them. The runner therefore makes the nonce source explicit
+(\texttt{nonceMode}), defaults to \texttt{sdk} so that runs measure what the shipped product
+sends a wallet, and records the mode on every module's output. The SDK-shaped nonce is a
+deliberate, documented reproduction of the SDK line, verified against the three Day 1
+nonces by a unit test.
+
+\subsubsection*{Defects found in our own code}
+Four, all fixed today. Recorded because each would have produced wrong evidence.
+\begin{enumerate}\tightlist
+  \item \textbf{The harness sent no presentation definition.} \texttt{VPRequestCreateDto} takes it
+        inline. Found by reading the DTO before the first run.
+  \item \textbf{The harness sent the raw config definition, which has no \texttt{id}.}
+        \texttt{VPDefinitionResponseDto} requires one, so \texttt{verify-service} answered with
+        a bare 400 (run 1). The UI wraps selected credentials in an envelope in
+        \texttt{vpVerificationState.ts} (lines 58--63, 82--83): a fixed id, a fixed purpose,
+        and \emph{only} the credentials' \texttt{input\_descriptors}. The harness now builds
+        the same envelope.
+  \item \textbf{The gate passed a run that measured nothing.} Run 1's harness error had no
+        result; the severity ordering read that as FAILED, equal to the FAILED baseline, and
+        the gate reported PASSED. A harness error now always fails the gate while the module
+        itself stays SKIP, so the fault is never recorded against MOSIP. \emph{This is the
+        most serious of the four}: with the current baseline, the harness could have broken
+        completely and CI would have stayed green.
+  \item \textbf{A refactor deleted an exception class}, breaking the CLI while all unit tests
+        passed --- none imported the modules that used it. An import test now covers every
+        runner module.
+\end{enumerate}
+
+\subsubsection*{Observation --- not a finding}
+The presentation definition id is a hard-coded constant in
+\texttt{vpVerificationState.ts:59}: every request from every deployment of this UI carries
+\texttt{c4822b58-7fb4-454e-b827-f8758fe27f9a}. Presentation Exchange describes the id as
+identifying the definition, and a constant is arguably fine for an unchanging definition ---
+but here the definition's contents vary with which credentials are selected while the id
+does not. Not catalogued: we have not established that anything relies on the id being
+unique, and without a consequence it is not a defect. Raised as a question instead.
+
+\subsubsection*{Status at end of Day 4}
+The harness runs unattended end to end and reproduces the manual baseline check-for-check.
+Carried-forward Week 1 items remaining: modules 02--11 and the ID2 verifier plan (now a
+single command each), and F-05, which today's runs cannot settle --- the harness forwards
+\texttt{client\_metadata} only when Verify supplies it, and in the \texttt{pre\_registered}
+path it does not, so the open question of whether the UI adds it at QR-build time still
+needs the UI's QR payload. The screenshot mechanism is not yet exercised: both runs
+terminated at DCQL before reaching it.
+
+Automated logs are archived unsigned under \texttt{logs/2026-09-29/}; anything reported
+upstream still needs the suite's signed export.
+
 \newpage
 %=========================================================
 \section{Findings Catalogue}
@@ -346,6 +465,11 @@ than a design change --- and a much more actionable report for a maintainer. Our
 write-up attributed it to Inji Verify generally, which was imprecise. Recorded as a
 reminder that the ``read the source, don't guess'' rule applies to root causes as much as
 to behaviour.
+
+\textbf{Confirmed experimentally --- 29 September.} Two automated runs differing only in
+the nonce source (\texttt{hcuWEvxGbvRgt7e}, SDK-shaped; \texttt{Q9MaDZyfpJhjiDp}, service-generated):
+this check and F-02's move from WARNING/FAILURE to SUCCESS, and nothing else changes. See
+the Day 4 entry.
 
 \textbf{Impact.} The nonce exists to bind a wallet's presentation to a specific request and
 prevent replay. A value derived from the current clock is predictable to within milliseconds,
@@ -598,6 +722,13 @@ For a two-person team on a four-week timeline, is there a lighter-weight Certify
 configuration suitable for conformance testing, or is the Collab sandbox the intended target
 for the issuer plan?
 
+\item[\textbf{Q8 --- Presentation definition id (raised 29 September).}]\mbox{}\\
+\texttt{verify-ui} sends every presentation definition with the same hard-coded id
+(\texttt{vpVerificationState.ts:59}), while the definition's contents vary with the credentials
+selected. Is anything on the Inji side --- or in Inji Wallet --- expected to rely on that id
+distinguishing definitions? We have not treated this as a defect, because we have found no
+consequence of it.
+
 \end{description}
 
 \newpage
@@ -624,6 +755,8 @@ To reproduce the Day 1 baseline run:
 
 \vspace{1em}
 \noindent\rule{\textwidth}{0.4pt}\\[0.3em]
-\small\textit{Findings from modules 02--11 and the ID2 verifier plan to be appended as they are executed.}
+\small\textit{Since Day 4 the whole reproduction above is one command:}
+\texttt{./run-conformance.sh --component verify}.
+\textit{Findings from modules 02--11 and the ID2 verifier plan to be appended as they are executed.}
 
 \end{document}

@@ -1,0 +1,863 @@
+[
+  {
+    "_id": "Q9MaDZyfpJhjiDp-S91en5AwjOEyj83OKjZXp013RuIMzABD",
+    "msg": "Test instance Q9MaDZyfpJhjiDp created",
+    "result": "INFO",
+    "baseUrl": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul",
+    "variant": {
+      "credential_format": "sd_jwt_vc",
+      "request_method": "url_query",
+      "vp_profile": "plain_vp",
+      "client_id_prefix": "redirect_uri",
+      "response_mode": "direct_post"
+    },
+    "alias": "injiverify-shardul",
+    "description": "Inji Verify 0.18.2 - OID4VP 1.0 Final alpha verifier - automated run",
+    "planId": "WWgyKcc5yqHey",
+    "config": {
+      "_comment_browser": "The happy-flow module wants a screenshot of the verifier's verification-result page before it reaches REVIEW. AbstractVP1FinalVerifierTest serves an HTML stand-in at the verification-evidence path and fills the placeholder through browser automation when a matching entry exists, so this block is what makes an unattended run possible. Confirm the match pattern against a live run before trusting it.",
+      "browser": [
+        {
+          "match": "*/verification-evidence*",
+          "tasks": [
+            {
+              "task": "Capture verification evidence",
+              "match": "*/verification-evidence*",
+              "commands": [
+                [
+                  "wait",
+                  "xpath",
+                  "//*",
+                  10,
+                  "Verification evidence",
+                  "update-image-placeholder"
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "alias": "injiverify-shardul",
+      "description": "Inji Verify 0.18.2 - OID4VP 1.0 Final alpha verifier - automated run"
+    },
+    "baseMtlsUrl": "https://localhost.emobix.co.uk:8444/test-mtls/a/injiverify-shardul",
+    "testName": "oid4vp-1final-verifier-happy-flow",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "TEST-RUNNER",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668754
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-O0j1gR9b1JIPoCJJDHLug5lJBKcTuxYQ",
+    "server_configuration": {
+      "issuer": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul/",
+      "authorization_endpoint": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul/authorize",
+      "token_endpoint": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul/token",
+      "jwks_uri": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul/jwks",
+      "userinfo_endpoint": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul/userinfo",
+      "registration_endpoint": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul/register",
+      "scopes_supported": [
+        "openid",
+        "phone",
+        "profile",
+        "email",
+        "address",
+        "offline_access"
+      ],
+      "response_types_supported": [
+        "code",
+        "id_token code",
+        "token code id_token",
+        "id_token",
+        "token id_token",
+        "token code",
+        "token"
+      ],
+      "response_modes_supported": [
+        "query",
+        "fragment",
+        "form_post"
+      ],
+      "token_endpoint_auth_methods_supported": [
+        "client_secret_basic",
+        "client_secret_post",
+        "client_secret_jwt",
+        "private_key_jwt"
+      ],
+      "token_endpoint_auth_signing_alg_values_supported": [
+        "HS256",
+        "HS384",
+        "HS512",
+        "RS256",
+        "RS384",
+        "RS512",
+        "PS256",
+        "PS384",
+        "PS512",
+        "ES256",
+        "ES256K",
+        "ES384",
+        "ES512",
+        "EdDSA",
+        "Ed25519",
+        "Ed448"
+      ],
+      "grant_types_supported": [
+        "authorization_code",
+        "implicit"
+      ],
+      "claims_parameter_supported": true,
+      "acr_values_supported": [
+        "PASSWORD"
+      ],
+      "subject_types_supported": [
+        "public",
+        "pairwise"
+      ],
+      "claim_types_supported": [
+        "normal",
+        "aggregated",
+        "distributed"
+      ],
+      "claims_supported": [
+        "sub",
+        "name",
+        "given_name",
+        "family_name",
+        "middle_name",
+        "nickname",
+        "preferred_username",
+        "gender",
+        "birthdate",
+        "address",
+        "zoneinfo",
+        "locale",
+        "phone_number",
+        "phone_number_verified",
+        "email",
+        "email_verified",
+        "website",
+        "profile",
+        "updated_at",
+        "txn"
+      ],
+      "id_token_signing_alg_values_supported": [
+        "none",
+        "RS256",
+        "RS384",
+        "RS512",
+        "PS256",
+        "PS384",
+        "PS512",
+        "ES256",
+        "ES256K",
+        "ES384",
+        "ES512",
+        "EdDSA",
+        "Ed25519",
+        "Ed448"
+      ],
+      "id_token_encryption_alg_values_supported": [
+        "RSA1_5",
+        "RSA-OAEP",
+        "RSA-OAEP-256",
+        "RSA-OAEP-384",
+        "RSA-OAEP-512",
+        "ECDH-ES",
+        "ECDH-ES+A128KW",
+        "ECDH-ES+A192KW",
+        "ECDH-ES+A256KW",
+        "A128KW",
+        "A192KW",
+        "A256KW",
+        "A128GCMKW",
+        "A192GCMKW",
+        "A256GCMKW",
+        "dir"
+      ],
+      "id_token_encryption_enc_values_supported": [
+        "A128CBC-HS256",
+        "A192CBC-HS384",
+        "A256CBC-HS512",
+        "A128GCM",
+        "A192GCM",
+        "A256GCM"
+      ],
+      "request_object_signing_alg_values_supported": [
+        "none",
+        "RS256",
+        "RS384",
+        "RS512",
+        "PS256",
+        "PS384",
+        "PS512",
+        "ES256",
+        "ES256K",
+        "ES384",
+        "ES512",
+        "EdDSA",
+        "Ed25519",
+        "Ed448"
+      ],
+      "request_object_encryption_alg_values_supported": [
+        "RSA1_5",
+        "RSA-OAEP",
+        "RSA-OAEP-256",
+        "RSA-OAEP-384",
+        "RSA-OAEP-512",
+        "ECDH-ES",
+        "ECDH-ES+A128KW",
+        "ECDH-ES+A192KW",
+        "ECDH-ES+A256KW",
+        "A128KW",
+        "A192KW",
+        "A256KW",
+        "A128GCMKW",
+        "A192GCMKW",
+        "A256GCMKW",
+        "dir"
+      ],
+      "request_object_encryption_enc_values_supported": [
+        "A128CBC-HS256",
+        "A192CBC-HS384",
+        "A256CBC-HS512",
+        "A128GCM",
+        "A192GCM",
+        "A256GCM"
+      ],
+      "userinfo_signing_alg_values_supported": [
+        "RS256",
+        "RS384",
+        "RS512",
+        "PS256",
+        "PS384",
+        "PS512",
+        "ES256",
+        "ES256K",
+        "ES384",
+        "ES512",
+        "EdDSA",
+        "Ed25519",
+        "Ed448"
+      ],
+      "userinfo_encryption_alg_values_supported": [
+        "RSA1_5",
+        "RSA-OAEP",
+        "RSA-OAEP-256",
+        "RSA-OAEP-384",
+        "RSA-OAEP-512",
+        "ECDH-ES",
+        "ECDH-ES+A128KW",
+        "ECDH-ES+A192KW",
+        "ECDH-ES+A256KW",
+        "A128KW",
+        "A192KW",
+        "A256KW",
+        "A128GCMKW",
+        "A192GCMKW",
+        "A256GCMKW",
+        "dir"
+      ],
+      "userinfo_encryption_enc_values_supported": [
+        "A128CBC-HS256",
+        "A192CBC-HS384",
+        "A256CBC-HS512",
+        "A128GCM",
+        "A192GCM",
+        "A256GCM"
+      ]
+    },
+    "msg": "Generated default server configuration",
+    "result": "SUCCESS",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "OIDCCGenerateServerConfiguration",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668755
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-PRG8ViM8G9xIByaehIms9qjdazTdSkY5",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "RegisterClientRequestObjectTrustAnchor",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668756,
+    "msg": "No client request object trust anchor configured, skipping registration"
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-AdtCZZWee99qZjo9poKAauDGjvzMMyrv",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "oid4vp-1final-verifier-happy-flow",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668758,
+    "msg": "Setup Done"
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-CU81HlxhsqBux5FjrU4aLAPagx2IIGVl",
+    "msg": "Incoming HTTP request to /test/a/injiverify-shardul/authorize",
+    "incoming_headers": {
+      "host": "localhost.emobix.co.uk",
+      "x-forwarded-uri": "/test/a/injiverify-shardul/authorize?client_id=inji-verify-ui&response_type=vp_token&response_mode=direct_post&response_uri=https%3A%2F%2Fsphere-dust-sandlot.ngrok-free.dev%2Fv1%2Fverify%2Fvp-submission%2Fdirect-post&nonce=78cb380cda818ebc189b80704e6f17a3&presentation_definition=%7B%22id%22%3A%22c4822b58-7fb4-454e-b827-f8758fe27f9a%22%2C%22input_descriptors%22%3A%5B%7B%22id%22%3A%22Mock+Identity+card+credential%22%2C%22format%22%3A%7B%22vc%2Bsd-jwt%22%3A%7B%22sd-jwt_alg_values%22%3A%5B%22ES256%22%5D%7D%7D%2C%22constraints%22%3A%7B%22fields%22%3A%5B%7B%22path%22%3A%5B%22%24.vct%22%5D%2C%22filter%22%3A%7B%22type%22%3A%22string%22%2C%22pattern%22%3A%22MockVerifiableCredential_SD_JWT%22%7D%7D%5D%7D%7D%5D%2C%22purpose%22%3A%22Relying+party+is+requesting+your+digital+ID+for+the+purpose+of+Self-Authentication%22%7D&state=req_00e55805-ab67-48c7-86e6-fae6aee7e8a5",
+      "forwarded": "by=172.18.0.4;for=172.65.251.78;host=localhost.emobix.co.uk;proto=https",
+      "connection": "close",
+      "accept": "*/*",
+      "accept-encoding": "gzip, deflate, br",
+      "user-agent": "python-httpx/0.28.1",
+      "content-type": "application/json"
+    },
+    "incoming_path": "/test/a/injiverify-shardul/authorize",
+    "incoming_body_form_params": null,
+    "incoming_method": "GET",
+    "incoming_tls_version": "TLSv1.3",
+    "incoming_tls_cert": null,
+    "incoming_query_string_params": {
+      "client_id": "inji-verify-ui",
+      "response_type": "vp_token",
+      "response_mode": "direct_post",
+      "response_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/verify/vp-submission/direct-post",
+      "nonce": "78cb380cda818ebc189b80704e6f17a3",
+      "presentation_definition": "{\"id\":\"c4822b58-7fb4-454e-b827-f8758fe27f9a\",\"input_descriptors\":[{\"id\":\"Mock Identity card credential\",\"format\":{\"vc+sd-jwt\":{\"sd-jwt_alg_values\":[\"ES256\"]}},\"constraints\":{\"fields\":[{\"path\":[\"$.vct\"],\"filter\":{\"type\":\"string\",\"pattern\":\"MockVerifiableCredential_SD_JWT\"}}]}}],\"purpose\":\"Relying party is requesting your digital ID for the purpose of Self-Authentication\"}",
+      "state": "req_00e55805-ab67-48c7-86e6-fae6aee7e8a5"
+    },
+    "incoming_body": null,
+    "incoming_tls_chain": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "http": "incoming",
+    "incoming_body_json_parse_error": null,
+    "incoming_tls_cipher": "TLS_AES_256_GCM_SHA384",
+    "incoming_body_json": null,
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "oid4vp-1final-verifier-happy-flow",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668796
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-Y9sU3bftm4GlJujOFfk1dGoLV1NVvhJM",
+    "msg": "Authorization endpoint",
+    "startBlock": true,
+    "blockId": "4421b2",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "-START-BLOCK-",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668798
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-sxCHRhVxIp96sCU0d66uabro7XBblfe9",
+    "msg": "HTTP authorization request does not use request or request_uri; raw outer-parameter check is not applicable",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "CheckForUnexpectedParametersInVpAuthorizationEndpointHttpRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668798
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-Jfe3QeP93XYyzH1NCRLSr8YYjFgFvdAz",
+    "msg": "Merged http request parameters with request object claims",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "requirements": [
+      "OIDCC-6.2",
+      "OIDCC-6.1"
+    ],
+    "effective_authorization_endpoint_request": {
+      "client_id": "inji-verify-ui",
+      "response_type": "vp_token",
+      "response_mode": "direct_post",
+      "response_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/verify/vp-submission/direct-post",
+      "nonce": "78cb380cda818ebc189b80704e6f17a3",
+      "presentation_definition": "{\"id\":\"c4822b58-7fb4-454e-b827-f8758fe27f9a\",\"input_descriptors\":[{\"id\":\"Mock Identity card credential\",\"format\":{\"vc+sd-jwt\":{\"sd-jwt_alg_values\":[\"ES256\"]}},\"constraints\":{\"fields\":[{\"path\":[\"$.vct\"],\"filter\":{\"type\":\"string\",\"pattern\":\"MockVerifiableCredential_SD_JWT\"}}]}}],\"purpose\":\"Relying party is requesting your digital ID for the purpose of Self-Authentication\"}",
+      "state": "req_00e55805-ab67-48c7-86e6-fae6aee7e8a5"
+    },
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "CreateEffectiveAuthorizationRequestParameters",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668799
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-Kck7JiAtCA8PFDK9o5ldWsuDGGq6fd9D",
+    "msg": "Extracted nonce",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-5.2"
+    ],
+    "nonce": "78cb380cda818ebc189b80704e6f17a3",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "ExtractNonceFromAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668800
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-Fa3KKsnXXGab5Qd9kv9qChVRQL7WXX2i",
+    "msg": "Nonce contains only URL safe characters",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-5.2"
+    ],
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "CheckForInvalidCharsInNonce",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668800
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-SyENeoXpTuctxvLCvb5SafiHWb7DcAcv",
+    "msg": "Nonce is at least 16 characters. Section 5.2 of OID4VP 1.0 Final does not impose a minimum length; this check flags obviously-too-short nonces that cannot plausibly satisfy the spec's \"sufficient entropy\" requirement.",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-5.2"
+    ],
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "VP1FinalCheckNonceMinimumLength",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668801
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-3ERnkSqiBW1KBvJk0SZ7zdwh3yFiCzdx",
+    "length": 32,
+    "msg": "Nonce does not exceed 43 characters. Section 5.2 of OID4VP 1.0 Final requires the nonce to be a \"fresh, cryptographically random number with sufficient entropy\" but does not specify its length. To promote interoperability we expect nonces no longer than 43 characters (the longest the conformance suite itself generates as a verifier when testing a wallet); longer values may not be accepted by all wallets.",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-5.2"
+    ],
+    "nonce": "78cb380cda818ebc189b80704e6f17a3",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "VP1FinalCheckNonceMaximumLength",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668802
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-uhny8RrmxUx6K9CiNu4KtjhiON3zvmgB",
+    "msg": "Nonce appears to have sufficient entropy. Section 5.2 of OID4VP 1.0 Final requires the nonce to be a \"fresh, cryptographically random number with sufficient entropy\"; OpenID4VP PR #722 (https://github.com/openid/OpenID4VP/pull/722/changes) recommends at least 128 bits.",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "actual": 114.71578748485571,
+    "requirements": [
+      "OID4VP-1FINAL-5.2"
+    ],
+    "expected": 96.0,
+    "value": "78cb380cda818ebc189b80704e6f17a3",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "VP1FinalEnsureMinimumNonceEntropy",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668802
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-gUIJqg9YEhfYj9bTABDXu2SfA1cTId4a",
+    "msg": "Skipped evaluation due to missing required element: effective_authorization_endpoint_request code_challenge",
+    "result": "INFO",
+    "blockId": "4421b2",
+    "path": "code_challenge",
+    "requirements": [
+      "RFC7636-4.3"
+    ],
+    "mapped": null,
+    "object": "effective_authorization_endpoint_request",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "EnsureAuthorizationRequestContainsPkceCodeChallenge",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668803
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-6uHCtWPQr6AGuqjxcpkUSPPa1Guj9GT7",
+    "msg": "Response type is expected value",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "expected": "vp_token",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "EnsureResponseTypeIsVpToken",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668803
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-2niOKw2ggccHriopeirB8FfNJTKi1gPw",
+    "msg": "response_mode is direct_post",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "ValidateResponseMode",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668804
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-EGLyKbgFMgMQsBFmcq5f0YVjc4X557Dy",
+    "msg": "client_id_scheme parameter is not present, as expected.",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "CheckNoClientIdSchemeParameter",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668804
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-UZH4m8u3ZATiyQgJxsfcHgzLNw0cE4wd",
+    "msg": "scope parameter is not present, as expected.",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "CheckNoScopeParameter",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668805
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-II8ETmvayDMsYgec42i7G3WCG3K5GArA",
+    "msg": "request_uri_method parameter is not present.",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "CheckRequestUriMethodParameter",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668806
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-WQi6o7LLZSRWRMEhnNhTOiAmfcesaO3c",
+    "msg": "Skipped evaluation due to missing required string: authorization_request_object",
+    "result": "INFO",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "expected": "authorization_request_object",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "WarnIfRequestUriMethodInRequestObject",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668806
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-ur7gvOzOUPcqtx8bo1do9KbxuVoJvilB",
+    "msg": "Skipped evaluation due to missing required string: authorization_request_object",
+    "result": "INFO",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-5.10"
+    ],
+    "expected": "authorization_request_object",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "EnsureNoWalletNonceInRequestObject",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668807
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-yT08b4soTVR8GbHuRYMiAqnUBv5wWWko",
+    "msg": "All authorization parameters are expected",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "known_params": [
+      "presentation_definition",
+      "dcql_query",
+      "client_id",
+      "client_id_scheme",
+      "response_uri",
+      "client_metadata",
+      "nonce",
+      "state",
+      "response_type",
+      "response_mode",
+      "verifier_info",
+      "scope",
+      "request_uri_method",
+      "wallet_nonce",
+      "aud",
+      "iss",
+      "iat",
+      "nbf",
+      "exp",
+      "jti"
+    ],
+    "parameters": [
+      "client_id",
+      "response_type",
+      "response_mode",
+      "response_uri",
+      "nonce",
+      "presentation_definition",
+      "state"
+    ],
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "CheckForUnexpectedParametersInVpAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668807
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-PJrEiM83qUFAzsBazf5OY1DfwuwueCUZ",
+    "msg": "Authorization request does not contain transaction_data",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-5",
+      "OID4VP-1FINAL-5.1",
+      "OID4VP-1FINAL-8.4"
+    ],
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "CheckNoTransactionDataInVpAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668808
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-3kQJjMrF6iQOId8buWT8jQoBpLAY9qcz",
+    "msg": "Skipped evaluation due to missing required element: effective_authorization_endpoint_request verifier_info",
+    "result": "INFO",
+    "blockId": "4421b2",
+    "path": "verifier_info",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "mapped": null,
+    "object": "effective_authorization_endpoint_request",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "ExtractVerifierInfoFromAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668808
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-KwkvSiG0ZOEEGWUzAxU3Ocs9X7ZW1SVG",
+    "msg": "Skipped evaluation due to missing required element: effective_authorization_endpoint_request verifier_info",
+    "result": "INFO",
+    "blockId": "4421b2",
+    "path": "verifier_info",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "mapped": null,
+    "object": "effective_authorization_endpoint_request",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "ValidateVerifierInfo",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668809
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-XeijeGbA2oV72rYDtJM7WTksh5pNPNrT",
+    "msg": "Skipped evaluation due to missing required element: effective_authorization_endpoint_request verifier_info",
+    "result": "INFO",
+    "blockId": "4421b2",
+    "path": "verifier_info",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "mapped": null,
+    "object": "effective_authorization_endpoint_request",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "CheckForUnexpectedParametersInVerifierInfo",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668809
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-Ilws7rOr1dOgp7DMh2Qfom0SnLqMeLtN",
+    "response_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/verify/vp-submission/direct-post",
+    "msg": "For redirect_uri client_id prefix, the client_id (without prefix) must equal response_uri",
+    "result": "FAILURE",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-5.9.2"
+    ],
+    "orig_client_id": "inji-verify-ui",
+    "client_id": "inji-verify-ui",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "EnsureClientIdMatchesResponseUri",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668810
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-xUvN6GIR4O9C6vO5ovuSW3tJmEZUyQXL",
+    "msg": "response_uri is valid https url with no fragment",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "actual": "https://sphere-dust-sandlot.ngrok-free.dev/v1/verify/vp-submission/direct-post",
+    "requirements": [
+      "OID4VP-1FINAL-8.2"
+    ],
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "EnsureValidResponseUriForAuthorizationEndpointRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668811
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-bAZol6Nqzhmq4ZBy6dRTc3fzpC6WJLHi",
+    "msg": "Authorization request does not contain 'redirect_uri'",
+    "result": "SUCCESS",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-8.2"
+    ],
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "CheckNoRedirectUriInVpAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668811
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-O6YIrl9uoQ2pHdtyT5g7tcUlLpFeE77s",
+    "msg": "Authorization request contains legacy 'presentation_definition'. VP1 Final uses 'dcql_query' for credential selection, so sending both is unnecessary and may indicate draft and final request formats are being mixed.",
+    "result": "WARNING",
+    "blockId": "4421b2",
+    "presentation_definition": "{\"id\":\"c4822b58-7fb4-454e-b827-f8758fe27f9a\",\"input_descriptors\":[{\"id\":\"Mock Identity card credential\",\"format\":{\"vc+sd-jwt\":{\"sd-jwt_alg_values\":[\"ES256\"]}},\"constraints\":{\"fields\":[{\"path\":[\"$.vct\"],\"filter\":{\"type\":\"string\",\"pattern\":\"MockVerifiableCredential_SD_JWT\"}}]}}],\"purpose\":\"Relying party is requesting your digital ID for the purpose of Self-Authentication\"}",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "CheckNoPresentationDefinitionInVpAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668812
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-fxSpLxXYYJhuj97ndsNyMmZf7F4afYAL",
+    "msg": "client_metadata not present in request but it is mandatory to include vp_formats in it",
+    "result": "WARNING",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "VP1FinalCheckForUnexpectedParametersInVpClientMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668812
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-NCGj4Cmf8jS21Glqfa2XIBFDJaBjlkGX",
+    "msg": "client_metadata is missing or not a JSON object",
+    "result": "FAILURE",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINALA-B.2.2",
+      "OID4VP-1FINALA-B.3.4"
+    ],
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "VP1FinalValidateVpFormatsSupportedInClientMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668812
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-Pb1hjjvIyulN4II82dnECYtUrfg3B6FW",
+    "msg": "dcql_query not found in authorization request parameters",
+    "result": "FAILURE",
+    "blockId": "4421b2",
+    "requirements": [
+      "OID4VP-1FINAL-6"
+    ],
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "ExtractDCQLQueryFromAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668813
+  },
+  {
+    "_id": "Q9MaDZyfpJhjiDp-sInPxNhR0EVUDF57IfQ3QSUwBfrnihfQ",
+    "msg": "Test was interrupted before it could complete. The failure 'ExtractDCQLQueryFromAuthorizationRequest: dcql_query not found in authorization request parameters' means the test cannot continue.",
+    "result": "INTERRUPTED",
+    "blockId": "4421b2",
+    "testId": "Q9MaDZyfpJhjiDp",
+    "src": "oid4vp-1final-verifier-happy-flow",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790696668816
+  }
+]
