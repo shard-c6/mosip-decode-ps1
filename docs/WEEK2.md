@@ -53,28 +53,36 @@ after issue (`Constants.DEFAULT_EXPIRY`). Generating the request before the modu
 listening burns part of that budget for nothing, and on Day 1 it produced a failure
 (`dgeeosZpIfDK1bA`) that was nearly filed as a defect. Generate late, submit immediately.
 
-### The unknown in step 5
+### Step 5 — RESOLVED 24 September, from source
 
-How the URI reaches a WAITING module programmatically is **the one thing to resolve first**,
-because the week's shape depends on it. The manual path is a form in the suite's web UI;
-the API equivalent needs confirming against the suite's own source, which is cloned locally
-at `conformance-suite/`.
+**The handoff needs no browser.** `AbstractVP1FinalVerifierTest.start()`:
 
-**Do this on day one of the week, before writing anything else.** Read the suite's
-controllers for the endpoint the browser form posts to, and confirm it against the running
-instance. Grepping the local clone for the relevant controller is a ten-minute answer to a
-question that otherwise shapes five days of work.
+```java
+getBrowser().requestUriInput(env.getString("authorization_endpoint"),
+    "Paste the openid4vp:// authorization request produced by the verifier under test;
+     its query string will be delivered to this test's authorization endpoint.");
+```
 
-If no API path exists, the fallback is a documented semi-automated flow — and that needs to
-be known on Monday, not Friday.
+and `handleHttp()` dispatches on `path.equals("authorize")`. The test publishes
+`authorization_endpoint` through `exposeEnvString`, readable at `GET /api/runner/{id}`.
 
-### The second unknown: the screenshot gate
+So delivery is an ordinary HTTP GET to that endpoint with the verifier's query parameters.
+The suite's paste box is a convenience wrapper over exactly that call. Implemented in
+`runner/handoff.py`; the fallback plan is not needed.
 
-`oid4vp-1final-verifier-happy-flow` wants a screenshot uploaded before it reaches REVIEW.
-That looks like `POST /api/log/{id}/images`. It affects one module, not the plan, so it is
-strictly lower priority than the handoff — but it is the difference between claiming "fully
-unattended" and "unattended except for one upload" in the submission. Confirm which is true
-before writing the README, and say whichever it is plainly.
+**Still unconfirmed against a live suite.** This is read from source, not observed.
+
+### The screenshot gate — RESOLVED 24 September, from source
+
+The suite has a purpose-built automated path. `handleVerificationEvidenceRequest()` serves
+an HTML stand-in page, and `fillScreenshotPlaceholderViaBrowserAutomationIfConfigured()`
+fills the placeholder when the plan config carries a `browser` entry matching the evidence
+URL. The source comment says why it exists: *"in automated runs there is no verifier UI a
+human could take a real screenshot of."*
+
+A `browser` block is in `configs/runner.json`. **The match pattern is an educated guess at
+the evidence URL and must be validated on a live run** before the submission claims
+"fully unattended".
 
 ---
 
@@ -82,16 +90,18 @@ before writing the README, and say whichever it is plainly.
 
 Fixed points first, then the parts that can absorb slippage.
 
-### Day 1 (Mon 29 Sep) — resolve the unknowns before building
+### Day 1 (Mon 29 Sep) — DONE EARLY, 24 September
 
-- [ ] Read `conformance-suite/` for the endpoint behind the manual paste form. Confirm
-      against the running instance with `curl -k`
-- [ ] Same for the screenshot upload path
-- [ ] Write both answers into this file. If the handoff has no API, **stop and re-plan the
-      week** around a semi-automated flow rather than discovering it on Thursday
-- [ ] Scaffold `runner/` with a dependency on the suite's `conformance.py`
+- [x] Read `conformance-suite/` for the endpoint behind the manual paste form
+- [x] Same for the screenshot path
+- [x] Both answers written into this file
+- [x] `runner/` scaffolded
+- [ ] **Confirm both against a running instance with `curl -k`** — carried forward; Docker
+      was not running when the code was written
 
-**Exit condition**: it is known, not assumed, whether a fully unattended run is possible.
+Brought forward from Week 2 into Week 1 because the answers were cheap to obtain and
+everything else depended on them. The scaffolding and most of Days 2–5 followed on the same
+day; what remains is the live validation, which is the real exit condition.
 
 ### Day 2 (Tue 30 Sep) — Verify's side
 

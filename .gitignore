@@ -10,12 +10,14 @@
 # Python
 __pycache__/
 *.pyc
+.pytest_cache/
 .venv/
 venv/
 
 # Local environment — ngrok domains and hostnames are per-developer
 .env
 *.local
+*.local.json
 scratch/
 
 # OS

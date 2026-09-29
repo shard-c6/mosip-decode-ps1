@@ -49,13 +49,36 @@ cd docs/findings && pdflatex findings.tex && pdflatex findings.tex
 
 ---
 
+## Running the harness
+
+```bash
+python3 -m pip install -r requirements.txt
+./run-conformance.sh --component verify
+```
+
+Also `--component certify` and `--combined`. Exit status is the gate's verdict: `0` when
+nothing regressed against the recorded baseline, `1` on a regression, `2` on a configuration
+error — which is what CI should key on.
+
+The stack must be up first (see [docs/RUNBOOK.md](docs/RUNBOOK.md)), and `configs/runner.json`
+carries a per-developer ngrok hostname you will need to change.
+
+> **Status**: unit-tested but **not yet run against a live conformance suite**. The handoff
+> and screenshot mechanisms are derived from the suite's source, not yet observed working.
+
+```bash
+python3 -m pytest tests/ -q
+```
+
 ## Repository layout
 
 ```
-docs/          setup, runbook, plan, findings (LaTeX)
+runner/        the conformance runner — suite client, handoff, gate, orchestrator
+tests/         unit tests (run without Docker; normalisation uses the real Day 1 log)
+docs/          setup, runbook, plan, contract, week plan, findings (LaTeX)
 logs/          exported conformance suite logs, by date — our evidence
-scripts/       harness tooling
-configs/       captured test plan configurations
+scripts/       standalone harness tooling
+configs/       runner config, test plan configurations, the contract fixture and baseline
 ```
 
 This repo holds **our** work. The upstream code lives in sibling clones — see SETUP.md.

@@ -1,0 +1,5 @@
+# Runtime
+httpx>=0.27
+
+# Development
+pytest>=8.0

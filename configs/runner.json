@@ -1,0 +1,54 @@
+{
+  "_comment": "Runner configuration. Plan names and variants are data, not code: whichever way Q1 is answered (OID4VP 1.0 Final vs the ID2 draft), switching target is an edit here rather than a change to the runner. The ngrok host is per-developer, so override `endpoint` locally or via configs/runner.local.json.",
+
+  "suite": {
+    "baseUrl": "https://localhost.emobix.co.uk:8443",
+    "verifySsl": false,
+    "apiToken": null,
+    "timeoutSeconds": 30
+  },
+
+  "baselineFile": "configs/contract/expected-failures.json",
+  "logDir": "logs",
+  "moduleTimeoutSeconds": 300,
+
+  "components": [
+    {
+      "component": "inji-verify",
+      "role": "verifier",
+      "version": "0.18.2",
+      "endpoint": "https://sphere-dust-sandlot.ngrok-free.dev/v1/verify",
+      "planName": "oid4vp-1final-verifier-test-plan",
+      "specification": "OID4VP 1.0 Final (alpha verifier tests)",
+      "alias": "injiverify-shardul",
+      "description": "Inji Verify 0.18.2 - OID4VP 1.0 Final alpha verifier - automated run",
+      "variant": {
+        "credential_format": "sd_jwt_vc",
+        "client_id_prefix": "redirect_uri",
+        "request_method": "url_query",
+        "vp_profile": "plain_vp",
+        "response_mode": "direct_post"
+      },
+      "planConfig": {
+        "clientId": "inji-verify-ui",
+        "_comment_browser": "The happy-flow module wants a screenshot of the verifier's verification-result page before it reaches REVIEW. AbstractVP1FinalVerifierTest serves an HTML stand-in at the verification-evidence path and fills the placeholder through browser automation when a matching entry exists, so this block is what makes an unattended run possible. Confirm the match pattern against a live run before trusting it.",
+        "browser": [
+          {
+            "match": "*/verification-evidence*",
+            "tasks": [
+              {
+                "task": "Capture verification evidence",
+                "match": "*/verification-evidence*",
+                "commands": [
+                  ["wait", "xpath", "//*", 10, "Verification evidence", "update-image-placeholder"]
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+
+  "_certify_note": "Inji Certify is absent deliberately rather than stubbed. Its docker-compose-injistack needs a PKCS12 keystore from Mimoto onboarding, a public DID endpoint, an external authorisation server and partner API keys; Mukta owns standing that up (see docs/PLAN.md). A stub here would make --combined appear to work when it cannot."
+}

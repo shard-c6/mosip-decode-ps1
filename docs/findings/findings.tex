@@ -34,7 +34,7 @@
 \large Automated Conformance Testing for Inji Certify \& Inji Verify\\[0.8em]
 \normalsize Findings Log and Open Questions}
 \author{Shardul Chogale \and Mukta Varak}
-\date{Document started: 20 September 2026\\Last updated: 23 September 2026}
+\date{Document started: 20 September 2026\\Last updated: 24 September 2026}
 
 \begin{document}
 \maketitle
@@ -202,6 +202,83 @@ added or amended in this entry.
 \subsubsection*{Status at end of Day 2}
 No change to the findings catalogue. Modules 02--11, the ID2 verifier plan, and the
 resolution of F-05 remain outstanding and are scheduled within Week 1.
+
+\subsection{Day 3 --- Wednesday, 24 September 2026}
+
+\subsubsection*{Objective}
+Build the Week 2 conformance runner, and before writing any of it, settle the two
+unknowns that \texttt{docs/WEEK2.md} identified as determining the week's shape. Both were
+resolved by reading the conformance suite's source in the local clone rather than by
+experiment.
+
+\subsubsection*{Unknown 1 resolved --- the verifier handoff needs no browser}
+
+The verifier plans are inverted relative to the issuer plans: the suite plays the wallet and
+waits passively for the verifier to initiate. Its web UI presents this as a box into which a
+tester pastes an \texttt{openid4vp://} URI, which is why every run so far has been manual.
+The open question was whether that paste has an API equivalent, because if it did not, the
+entire week would have had to be re-planned around a semi-automated flow.
+
+It does. \texttt{AbstractVP1FinalVerifierTest.start()} reads:
+
+\begin{quote}\small
+\texttt{getBrowser().requestUriInput(env.getString("authorization\_endpoint"),}\\
+\texttt{\ \ "Paste the openid4vp:// authorization request produced by the verifier under}\\
+\texttt{\ \ test; its query string will be delivered to this test's authorization endpoint.");}
+\end{quote}
+
+\noindent and \texttt{handleHttp()} dispatches on \texttt{path.equals("authorize")}. The test
+exposes \texttt{authorization\_endpoint} via \texttt{exposeEnvString}, readable through
+\texttt{GET /api/runner/\{id\}}. Delivering an authorisation request is therefore an ordinary
+HTTP GET to that endpoint carrying the verifier's query parameters. The paste box is a
+convenience wrapper over exactly that call.
+
+\textbf{Consequence.} A fully unattended verifier run is achievable. This substantially
+answers Q6, which we had expected to need a mentor.
+
+\subsubsection*{Unknown 2 resolved --- the screenshot gate is configuration, not manual work}
+
+The happy-flow module requires a screenshot of the verifier's verification-result page before
+reaching REVIEW. \texttt{AbstractVP1FinalVerifierTest} carries a purpose-built path for
+automated runs: \texttt{handleVerificationEvidenceRequest()} serves an HTML stand-in page,
+and \texttt{fillScreenshotPlaceholderViaBrowserAutomationIfConfigured()} fills the placeholder
+when the test configuration contains a \texttt{browser} automation entry matching the
+evidence URL. The source comment is explicit that this exists because ``in automated runs
+there is no verifier UI a human could take a real screenshot of''.
+
+A \texttt{browser} block has been added to \texttt{configs/runner.json} accordingly.
+\textbf{This is unconfirmed against a live run} --- the match pattern in particular is a
+reasonable guess at the evidence URL and must be validated before it is relied upon.
+
+\subsubsection*{Work completed}
+\begin{itemize}\tightlist
+  \item \texttt{runner/} package: configuration loading, a conformance suite API client, an
+        Inji Verify client, the handoff, result normalisation, the benchmark gate, an
+        orchestrator and a CLI entry point.
+  \item \texttt{run-conformance.sh} providing \texttt{--component verify | --component
+        certify | --combined}, as the problem statement requires.
+  \item 24 unit tests, all passing, covering normalisation against the real Day 1 log and
+        the gate's behaviour --- including its failure path, since a gate that cannot fail
+        is decoration.
+\end{itemize}
+
+\subsubsection*{Defect found in our own code}
+The gate initially set \texttt{regression} and \texttt{improvement} only on the branches
+that made them true, relying on the normalisation layer having pre-populated the defaults.
+Applied to any module assembled by another path this raised \texttt{KeyError} rather than
+reporting ``no regression''. Caught by \texttt{test\_gate.py} before any live run and fixed
+by setting both unconditionally. Recorded because it is the argument for writing the gate's
+failure-path tests first: the bug lived in the success path and only the absent-key case
+exposed it.
+
+\subsubsection*{Status at end of Day 3}
+Runner complete and unit-tested, but \textbf{not yet executed against a live conformance
+suite} --- Docker was not running on the development machine during this session. Nothing in
+this entry should be read as evidence that the harness works end to end. The first live run
+is the next task, and until it happens the handoff and screenshot mechanisms are
+source-derived expectations rather than confirmed behaviour.
+
+No new findings against Inji Verify; no conformance modules were executed.
 
 \newpage
 %=========================================================
@@ -507,6 +584,12 @@ requires a screenshot upload before it reaches REVIEW status. Our harness can dr
 generation via Verify's own API, but the screenshot-upload requirement appears to need
 \texttt{POST /api/log/\{id\}/images}. Is a fully unattended run of the verifier plan
 considered achievable, or is a documented semi-automated flow the expected deliverable?
+
+\textbf{Substantially answered by our own investigation on Day 3}, and retained here only
+for confirmation. The authorisation request is delivered by an HTTP GET to the test's exposed
+\texttt{authorization\_endpoint}, and the screenshot placeholder is filled by the suite's own
+\texttt{browser} automation against an HTML stand-in page it serves itself. Both are
+source-derived and await confirmation against a live run.
 
 \item[\textbf{Q7 --- Scope of Inji Certify work.}]\mbox{}\\
 The \texttt{docker-compose-injistack} setup requires a PKCS12 keystore obtained through
