@@ -108,6 +108,7 @@ The unit that becomes one TestNG test.
 | `startedAt` / `durationMs` | | |
 | `logUrl` | string | Deep link into the local suite, for a human |
 | `logFile` / `logSignatureFile` | string | Repo-relative paths to the archived evidence |
+| `handoff` | object | Verifier modules only (added 29 Sep): `delivered`, `httpStatus`, `requestId`, `secondsRemaining`, `nonceMode`. How the authorization request was produced — the nonce findings mean nothing without `nonceMode` |
 
 ### `components[].modules[].checks[]`
 
@@ -139,6 +140,7 @@ running system rather than drifting into a separate artefact.
 | `regressions` | Array of `{component, moduleName, expected, actual}` |
 | `improvements` | Same shape. Reported, never fatal |
 | `unknownModules` | In the run but not in the baseline. Policy: warn, don't fail |
+| `harnessErrors` | Modules the harness could not execute. **Always fails the gate** (added 29 Sep, see below) |
 
 ---
 
@@ -153,6 +155,7 @@ Given the suite's `result` and the baseline's `expected`:
 | `FAILED` | `FAILED` | `PASS` | no | Known, documented failure — no worse than baseline |
 | `FAILED` | `PASSED` | `PASS` | no | Improvement; flagged so the baseline gets updated |
 | absent | anything | `SKIP` | no | Unknown module — surfaced, not fatal |
+| any | *harness error* | `SKIP` | no | We failed to ask. Module is not blamed on the component, **but the gate fails** |
 
 **The third row is the one that needs explaining in the submission.** Reporting a known
 conformance failure as a TestNG pass looks wrong until you see the alternative: with
@@ -165,6 +168,18 @@ This is Q4 to mentors. If MOSIP wants the absolute reading instead, `gate.policy
 and nothing else moves.
 
 ---
+
+### Why a harness error fails the gate
+
+Added 29 September after the first live run. A module the harness could not execute has
+no result, and the severity ordering read that as `FAILED` — equal to a `FAILED`
+baseline, so the gate reported **PASSED having measured nothing**. With Inji Verify's
+current baseline that would be true of every module: the harness could break completely
+and CI would stay green.
+
+The module itself is still `SKIP`, so a harness fault is never recorded against MOSIP's
+component. But "no regression" is a claim about a measurement, and without one the gate
+cannot make it.
 
 ## The expected-failures file
 

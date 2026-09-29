@@ -15,7 +15,12 @@ from . import __version__, gate, normalise
 from .config import ComponentConfig, RunnerConfig
 from .handoff import HandoffError, deliver
 from .suite import ConformanceSuite, SuiteError
-from .verify_client import InjiVerifyClient, RequestExpired, VerifyError
+from .verify_client import (
+    InjiVerifyClient,
+    RequestExpired,
+    VerifyError,
+    load_presentation_definition,
+)
 
 log = logging.getLogger(__name__)
 
@@ -96,6 +101,7 @@ def _run_module(
 ) -> dict[str, Any]:
     started_wall = time.monotonic()
     started_at = _utc_now()
+    handoff_result = None
 
     log.info("--- %s", module_name)
     instance = suite.create_test_from_plan(plan_id, module_name, variant)
@@ -113,11 +119,20 @@ def _run_module(
                 "authorization request; nothing was delivered."
             )
 
+        request = component.verifier_request
+        presentation_definition = load_presentation_definition(
+            request["uiConfigFile"], request["credential"]
+        )
         with InjiVerifyClient(component.endpoint) as verify:
-            client_id = component.plan_config.get("clientId", "inji-verify-ui")
-            presentation_definition_id = component.plan_config.get("presentationDefinitionId")
             try:
-                deliver(suite, verify, module_id, client_id, presentation_definition_id)
+                handoff_result = deliver(
+                    suite,
+                    verify,
+                    module_id,
+                    client_id=request.get("clientId", "inji-verify-ui"),
+                    presentation_definition=presentation_definition,
+                    nonce_mode=request.get("nonceMode", "sdk"),
+                )
             except RequestExpired as exc:
                 raise ModuleFailure(str(exc)) from exc
 
@@ -131,7 +146,7 @@ def _run_module(
     raw_log = suite.get_test_log(module_id)
     log_path = _archive_log(config.log_dir, module_name, module_id, raw_log)
 
-    return normalise.normalise_module(
+    module = normalise.normalise_module(
         module_name=module_name,
         module_id=module_id,
         variant=variant,
@@ -143,6 +158,11 @@ def _run_module(
         started_at=started_at,
         duration_ms=int((time.monotonic() - started_wall) * 1000),
     )
+    if handoff_result is not None:
+        # Additive contract field: how the request was produced. A result means
+        # little without it -- the nonce findings depend entirely on nonceMode.
+        module["handoff"] = handoff_result.as_contract()
+    return module
 
 
 def _archive_log(log_dir: Path, module_name: str, module_id: str, raw_log: Any) -> Path | None:

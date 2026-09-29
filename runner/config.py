@@ -50,6 +50,10 @@ class ComponentConfig:
     plan_config: dict[str, Any] = field(default_factory=dict)
     # Modules to run. Empty means every module the plan returns.
     only_modules: list[str] = field(default_factory=list)
+    # Verifier components only: how to ask the component for an authorization request.
+    # Kept separate from plan_config, which is sent to the conformance suite -- these
+    # values are for Inji Verify, and mixing the two would leak them into the suite.
+    verifier_request: dict[str, Any] = field(default_factory=dict)
 
     @property
     def is_verifier(self) -> bool:
@@ -79,7 +83,47 @@ def _component_from_dict(raw: dict[str, Any]) -> ComponentConfig:
         description=raw.get("description", ""),
         plan_config=raw.get("planConfig", {}),
         only_modules=raw.get("onlyModules", []),
+        verifier_request=_resolve_request_paths(raw.get("verifierRequest", {})),
     )
+
+
+def _resolve_request_paths(request: dict[str, Any]) -> dict[str, Any]:
+    request = dict(request)
+    if "uiConfigFile" in request:
+        request["uiConfigFile"] = str(_resolve(request["uiConfigFile"]))
+    return request
+
+
+def _deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+    merged = dict(base)
+    for key, value in override.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = _deep_merge(merged[key], value)
+        else:
+            merged[key] = value
+    return merged
+
+
+def _apply_local_overrides(raw: dict[str, Any], config_path: Path) -> dict[str, Any]:
+    """
+    Merge `<name>.local.json` over the committed config, if present.
+
+    Each developer's ngrok hostname differs and must not be committed, so the
+    shared file carries one default and a gitignored local file overrides it.
+    Components are matched by their `component` name; top-level keys merge deeply.
+    """
+    local_path = config_path.with_name(config_path.stem + ".local.json")
+    if not local_path.exists():
+        return raw
+    local = json.loads(local_path.read_text())
+
+    merged = _deep_merge({k: v for k, v in raw.items() if k != "components"},
+                         {k: v for k, v in local.items() if k != "components"})
+    overrides = {c["component"]: c for c in local.get("components", [])}
+    merged["components"] = [
+        _deep_merge(c, overrides.get(c["component"], {})) for c in raw["components"]
+    ]
+    return merged
 
 
 def load(path: Path | str, components: list[str] | None = None) -> RunnerConfig:
@@ -89,7 +133,7 @@ def load(path: Path | str, components: list[str] | None = None) -> RunnerConfig:
     `components` filters to a subset by name, which is what --component does.
     """
     path = Path(path)
-    raw = json.loads(path.read_text())
+    raw = _apply_local_overrides(json.loads(path.read_text()), path)
 
     suite_raw = raw.get("suite", {})
     suite = SuiteConfig(

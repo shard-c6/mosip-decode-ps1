@@ -1,23 +1,20 @@
 {
-  "_comment": "Runner configuration. Plan names and variants are data, not code: whichever way Q1 is answered (OID4VP 1.0 Final vs the ID2 draft), switching target is an edit here rather than a change to the runner. The ngrok host is per-developer, so override `endpoint` locally or via configs/runner.local.json.",
-
+  "_comment": "Runner configuration. Plan names and variants are data, not code: whichever way Q1 is answered (OID4VP 1.0 Final vs the ID2 draft), switching target is an edit here rather than a change to the runner. Per-developer values -- above all the ngrok hostname baked into Verify's own docker-compose.yml -- belong in a gitignored configs/runner.local.json, which is deep-merged over this file with components matched by name.",
   "suite": {
     "baseUrl": "https://localhost.emobix.co.uk:8443",
     "verifySsl": false,
     "apiToken": null,
     "timeoutSeconds": 30
   },
-
   "baselineFile": "configs/contract/expected-failures.json",
   "logDir": "logs",
   "moduleTimeoutSeconds": 300,
-
   "components": [
     {
       "component": "inji-verify",
       "role": "verifier",
       "version": "0.18.2",
-      "endpoint": "https://sphere-dust-sandlot.ngrok-free.dev/v1/verify",
+      "endpoint": "http://localhost:8080/v1/verify",
       "planName": "oid4vp-1final-verifier-test-plan",
       "specification": "OID4VP 1.0 Final (alpha verifier tests)",
       "alias": "injiverify-shardul",
@@ -30,7 +27,6 @@
         "response_mode": "direct_post"
       },
       "planConfig": {
-        "clientId": "inji-verify-ui",
         "_comment_browser": "The happy-flow module wants a screenshot of the verifier's verification-result page before it reaches REVIEW. AbstractVP1FinalVerifierTest serves an HTML stand-in at the verification-evidence path and fills the placeholder through browser automation when a matching entry exists, so this block is what makes an unattended run possible. Confirm the match pattern against a live run before trusting it.",
         "browser": [
           {
@@ -40,15 +36,29 @@
                 "task": "Capture verification evidence",
                 "match": "*/verification-evidence*",
                 "commands": [
-                  ["wait", "xpath", "//*", 10, "Verification evidence", "update-image-placeholder"]
+                  [
+                    "wait",
+                    "xpath",
+                    "//*",
+                    10,
+                    "Verification evidence",
+                    "update-image-placeholder"
+                  ]
                 ]
               }
             ]
           }
         ]
+      },
+      "_comment_endpoint": "The runner calls Verify's API directly on localhost. The public ngrok host is still mandatory, but for a different reason: it is baked into the response_uri and did:web values Verify issues, which the conformance suite must reach from inside its own container.",
+      "verifierRequest": {
+        "clientId": "inji-verify-ui",
+        "credential": "Mock Identity (SD JWT)",
+        "uiConfigFile": "../inji-verify/docker-compose/config/config.json",
+        "nonceMode": "sdk",
+        "_comment": "credential is read from Inji Verify's own UI config so the harness asks for exactly what the shipped UI asks for. nonceMode 'sdk' reproduces the nonce the shipped UI sends (the deployed product); 'service' omits it so verify-service generates its own. See runner/verify_client.py."
       }
     }
   ],
-
   "_certify_note": "Inji Certify is absent deliberately rather than stubbed. Its docker-compose-injistack needs a PKCS12 keystore from Mimoto onboarding, a public DID endpoint, an external authorisation server and partner API keys; Mukta owns standing that up (see docs/PLAN.md). A stub here would make --combined appear to work when it cannot."
 }

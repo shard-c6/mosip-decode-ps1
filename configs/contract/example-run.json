@@ -284,6 +284,7 @@
     "passed": true,
     "regressions": [],
     "improvements": [],
-    "unknownModules": []
+    "unknownModules": [],
+    "harnessErrors": []
   }
 }

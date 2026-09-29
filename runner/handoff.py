@@ -30,6 +30,7 @@ from typing import Any
 
 from .suite import ConformanceSuite
 from .verify_client import (
+    NONCE_SDK,
     InjiVerifyClient,
     RequestExpired,
     build_authorization_request_params,
@@ -55,7 +56,18 @@ class HandoffResult:
     http_status: int | None
     request_id: str | None
     seconds_remaining: float | None
+    nonce_mode: str = NONCE_SDK
     detail: str = ""
+
+    def as_contract(self) -> dict[str, Any]:
+        """The `handoff` block recorded on each verifier module."""
+        return {
+            "delivered": self.delivered,
+            "httpStatus": self.http_status,
+            "requestId": self.request_id,
+            "secondsRemaining": round(self.seconds_remaining) if self.seconds_remaining is not None else None,
+            "nonceMode": self.nonce_mode,
+        }
 
 
 def deliver(
@@ -63,7 +75,9 @@ def deliver(
     verify: InjiVerifyClient,
     module_id: str,
     client_id: str,
+    presentation_definition: dict[str, Any] | None = None,
     presentation_definition_id: str | None = None,
+    nonce_mode: str = NONCE_SDK,
 ) -> HandoffResult:
     """
     Generate an authorization request and deliver it to a WAITING module.
@@ -82,7 +96,10 @@ def deliver(
         )
 
     session = verify.create_vp_session_request(
-        client_id=client_id, presentation_definition_id=presentation_definition_id
+        client_id=client_id,
+        presentation_definition=presentation_definition,
+        presentation_definition_id=presentation_definition_id,
+        nonce_mode=nonce_mode,
     )
     request_id = session.get("requestId")
     remaining = seconds_until_expiry(session)
@@ -110,4 +127,5 @@ def deliver(
         http_status=status,
         request_id=request_id,
         seconds_remaining=remaining,
+        nonce_mode=nonce_mode,
     )

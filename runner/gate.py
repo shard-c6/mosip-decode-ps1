@@ -84,6 +84,7 @@ def apply(
     regressions: list[dict[str, Any]] = []
     improvements: list[dict[str, Any]] = []
     unknown: list[dict[str, Any]] = []
+    harness_errors: list[dict[str, Any]] = []
 
     for component in components:
         name = component["component"]
@@ -102,6 +103,16 @@ def apply(
             module["improvement"] = False
             module["expected"] = expected
             module["expectedReason"] = baseline.reason_for(name, plan_name, module_name)
+
+            if module.get("status") == "HARNESS_ERROR":
+                # We failed to ask the component, so there is no result to compare.
+                # SKIP keeps MOSIP's component from being blamed for our breakage --
+                # but the gate as a whole must not pass, because "no regression" is a
+                # claim we cannot make about a module we never measured. Found on the
+                # first live run, where a harness error sailed through as PASSED.
+                module["verdict"] = "SKIP"
+                harness_errors.append(_entry(name, module_name, expected, None))
+                continue
 
             if policy == POLICY_ABSOLUTE:
                 module["verdict"] = "PASS" if actual == "PASSED" else "FAIL"
@@ -132,10 +143,11 @@ def apply(
         "policy": policy,
         "baselineFile": str(baseline.path) if baseline.path else None,
         "baselineUpdatedAt": baseline.updated_at,
-        "passed": not regressions,
+        "passed": not regressions and not harness_errors,
         "regressions": regressions,
         "improvements": improvements,
         "unknownModules": unknown,
+        "harnessErrors": harness_errors,
     }
 
 
@@ -151,9 +163,17 @@ def _entry(component: str, module_name: str, expected: str | None, actual: str |
 def summarise_for_humans(gate: dict[str, Any]) -> str:
     """One-screen explanation, for CI output where nobody will open the JSON."""
     lines: list[str] = []
+    errors = gate.get("harnessErrors", [])
+    if errors:
+        lines.append(
+            f"GATE FAILED - the harness could not execute {len(errors)} module(s). "
+            "This is a fault in the harness or its environment, not a conformance result:"
+        )
+        for e in errors:
+            lines.append(f"  {e['component']} / {e['moduleName']}")
     if gate["passed"]:
         lines.append("GATE PASSED - no regressions against the recorded baseline.")
-    else:
+    elif gate["regressions"]:
         lines.append(f"GATE FAILED - {len(gate['regressions'])} regression(s):")
         for r in gate["regressions"]:
             lines.append(

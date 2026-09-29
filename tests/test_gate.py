@@ -126,3 +126,22 @@ def test_human_summary_names_the_failing_module():
     text = gate.summarise_for_humans(result)
     assert "GATE FAILED" in text
     assert MODULE in text
+
+
+def test_harness_error_fails_the_gate_even_when_the_baseline_expects_failure():
+    """
+    Regression test for a defect found on the first live run (29 September): a module
+    the harness could not execute has result None, which the severity ordering reads
+    as FAILED -- equal to a FAILED baseline, so the gate reported PASSED having
+    measured nothing.
+    """
+    components = [{
+        "component": "inji-verify",
+        "plan": {"planName": PLAN},
+        "modules": [{"moduleName": MODULE, "status": "HARNESS_ERROR", "result": None}],
+    }]
+    result = gate.apply(components, baseline_with("FAILED"))
+    assert result["passed"] is False
+    assert components[0]["modules"][0]["verdict"] == "SKIP"  # not blamed on MOSIP
+    assert result["harnessErrors"][0]["moduleName"] == MODULE
+    assert "could not execute" in gate.summarise_for_humans(result)
