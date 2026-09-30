@@ -1,11 +1,15 @@
-# Four-week plan — MOSIP Decode PS1
+# Plan — MOSIP Decode PS1
 
 **Team**: Shardul Chogale (`shard-c6`), Mukta Varak
 **Official kickoff**: 23 September 2026 — Day 2 of the event as this plan is written
-**Assumed deadline**: ~21 October 2026 — **ASSUMPTION, not confirmed.** The kickoff seminar
-and mentor AMA did not take place, so no dates were announced. Confirm on the Unstop
-submission page and correct this file the moment the real date is known. Every week
-boundary below hangs off it.
+**Deadline**: **26 October 2026, 11:59 PM IST** — confirmed 30 September on the official
+event page ("Final Submission Deadline"). Earlier versions of this file assumed ~21 October;
+the real date adds five days, used as a fifth week for finishing and submitting.
+**Weekly Connect** (mentors): Wednesdays 5:00–6:00 PM IST — 30 Sep, 7, 14, 21 Oct.
+
+> **The day-by-day schedule for both of us now lives in the Project Handbook, Part 4
+> (`docs/handbook/handbook.tex`).** It supersedes the week sections below wherever they
+> differ. This file keeps the reasoning — the split, where the code lives, the risks.
 **Deliverable**: automated conformance-testing harness for Inji Certify and Inji Verify
 
 ---

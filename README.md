@@ -32,8 +32,13 @@ module's existing `api-testrig` so conformance becomes a gate on every release.
 
 ## Documentation
 
+**Start with the [Project Handbook](docs/handbook/handbook.pdf)** — the clean guide to
+running everything from a fresh machine to shutdown, a record of every step taken, and
+the day-by-day planner to the 26 October deadline. Source: `docs/handbook/handbook.tex`.
+
 | Document | What it covers |
 |---|---|
+| [docs/handbook/handbook.pdf](docs/handbook/handbook.pdf) | **Start here.** Mentor brief, start-to-end guide, record of steps, planner |
 | [docs/SETUP.md](docs/SETUP.md) | First-time setup, macOS and Windows |
 | [docs/RUNBOOK.md](docs/RUNBOOK.md) | Starting, accessing and cleanly shutting down the stacks |
 | [docs/PLAN.md](docs/PLAN.md) | Four-week plan and role split |

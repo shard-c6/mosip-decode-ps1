@@ -3,7 +3,7 @@
 Harness that drives the OpenID Foundation conformance suite against MOSIP's Inji Certify
 and Inji Verify, and feeds results into each module's existing `api-testrig`.
 
-Team: Shardul (`shard-c6`) and Mukta. Four-week hackathon. Deep detail lives in `docs/` —
+Team: Shardul (`shard-c6`) and Mukta. Final submission 26 Oct 2026, 11:59 PM IST. Deep detail lives in `docs/` —
 this file is the always-loaded summary.
 
 ---
@@ -129,6 +129,7 @@ components don't pass everything.
 
 | File | Contents |
 |---|---|
+| `docs/handbook/handbook.tex` | **Start here.** Start-to-end guide, record of every step, day-by-day planner to 26 Oct. One font (LM Mono) throughout |
 | `docs/CONTEXT.md` | Full state, decisions and rationale, corrections made |
 | `docs/findings/findings.tex` | Findings catalogue + 7 open questions for mentors |
 | `docs/SETUP.md` | First-time setup, macOS and Windows |

@@ -1,6 +1,6 @@
 # Week 2 build plan — the programmatic conformance runner
 
-**Dates**: 29 September – 5 October 2026 (assumes the ~21 October deadline; see PLAN.md)
+**Dates**: 29 September – 5 October 2026 (deadline confirmed as 26 October; day-by-day schedule in docs/handbook Part 4)
 **Owner**: Shardul
 **Goal**: one command produces a structured pass/fail result for the Inji Verify verifier
 plan with zero manual UI interaction.

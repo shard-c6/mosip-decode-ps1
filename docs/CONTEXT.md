@@ -217,10 +217,10 @@ SETUP, RUNBOOK, PLAN, findings and this file; forks of all three MOSIP repos cre
 - Add Mukta as collaborator; she adds Shardul on hers
 - Share the agreed role split (PLAN.md) and `docs/CONTRACT.md` with Mukta so she can start
 - Move Day 1 log exports into `logs/2026-09-20/` (commit `.json` and `.sig` both)
-- **Confirm the real submission deadline on Unstop.** PLAN.md currently assumes ~21 October
-  and says so explicitly; every week boundary depends on it
+- ~~Confirm the real submission deadline~~ — **done 30 Sep: 26 October 2026, 11:59 PM IST.**
+  Planner in `docs/handbook/handbook.tex`, Part 4
 
-**Questions waiting on mentors**: Q1–Q7 in the findings document. Q1 (which spec version to
+**Questions waiting on mentors**: Q1–Q8 in the findings document. Q1 (which spec version to
 benchmark against) is the one that most shapes the rest of the build. With no AMA, the
 community forum is the only channel — and no answer may arrive, so the runner is being
 designed so plan name and variants are configuration rather than code.
