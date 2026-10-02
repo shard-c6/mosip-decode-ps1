@@ -29,3 +29,6 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
+
+# Test signing keys for the conformance suite (private key material - never commit)
+configs/keys/

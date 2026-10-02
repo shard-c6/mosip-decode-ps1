@@ -86,7 +86,7 @@ def test_runner_output_matches_the_fixture_shape():
          "modules": [module]}
     ]
     gate_result = gate.apply(
-        components, gate.Baseline.load(REPO_ROOT / "configs/contract/expected-failures.json")
+        components, gate.Baseline.load(REPO_ROOT / "configs/contract/expected-failures-0.18.json")
     )
 
     assert REQUIRED_MODULE_FIELDS <= set(module)

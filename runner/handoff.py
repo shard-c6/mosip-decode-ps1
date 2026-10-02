@@ -30,6 +30,7 @@ from typing import Any
 
 from .suite import ConformanceSuite
 from .verify_client import (
+    API_0_18,
     NONCE_SDK,
     InjiVerifyClient,
     RequestExpired,
@@ -57,6 +58,7 @@ class HandoffResult:
     request_id: str | None
     seconds_remaining: float | None
     nonce_mode: str = NONCE_SDK
+    api_version: str = API_0_18
     detail: str = ""
 
     def as_contract(self) -> dict[str, Any]:
@@ -67,6 +69,7 @@ class HandoffResult:
             "requestId": self.request_id,
             "secondsRemaining": round(self.seconds_remaining) if self.seconds_remaining is not None else None,
             "nonceMode": self.nonce_mode,
+            "apiVersion": self.api_version,
         }
 
 
@@ -78,6 +81,8 @@ def deliver(
     presentation_definition: dict[str, Any] | None = None,
     presentation_definition_id: str | None = None,
     nonce_mode: str = NONCE_SDK,
+    api_version: str = API_0_18,
+    dcql_query: dict[str, Any] | None = None,
 ) -> HandoffResult:
     """
     Generate an authorization request and deliver it to a WAITING module.
@@ -100,6 +105,8 @@ def deliver(
         presentation_definition=presentation_definition,
         presentation_definition_id=presentation_definition_id,
         nonce_mode=nonce_mode,
+        api_version=api_version,
+        dcql_query=dcql_query,
     )
     request_id = session.get("requestId")
     remaining = seconds_until_expiry(session)
@@ -111,7 +118,7 @@ def deliver(
             "here would look like a component defect rather than a timing artefact."
         )
 
-    params = build_authorization_request_params(session)
+    params = build_authorization_request_params(session, client_id=client_id, api_version=api_version)
     status = suite.deliver_authorization_request(authorization_endpoint, params)
 
     log.info(
@@ -128,4 +135,5 @@ def deliver(
         request_id=request_id,
         seconds_remaining=remaining,
         nonce_mode=nonce_mode,
+        api_version=api_version,
     )

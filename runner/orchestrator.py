@@ -12,14 +12,17 @@ from pathlib import Path
 from typing import Any
 
 from . import __version__, gate, normalise
+from .redact import redact
 from .config import ComponentConfig, RunnerConfig
 from .handoff import HandoffError, deliver
 from .suite import ConformanceSuite, SuiteError
 from .verify_client import (
     InjiVerifyClient,
     RequestExpired,
+    API_0_18,
+    API_1_0,
     VerifyError,
-    load_presentation_definition,
+    load_query,
 )
 
 log = logging.getLogger(__name__)
@@ -42,13 +45,49 @@ class ModuleFailure(RuntimeError):
     """
 
 
+def _strip_comments(value: Any) -> Any:
+    """Drop our `_comment...` annotations: they document the config, not the suite's input."""
+    if isinstance(value, dict):
+        return {k: _strip_comments(v) for k, v in value.items() if not k.startswith("_comment")}
+    if isinstance(value, list):
+        return [_strip_comments(v) for v in value]
+    return value
+
+
+def resolve_plan_config(plan_config: dict[str, Any], repo_root: Path) -> dict[str, Any]:
+    """
+    Turn file references in the plan configuration into their contents.
+
+    The suite needs `credential.signing_jwk` -- the private key it signs the test
+    credential with -- inline in the plan configuration. Private key material must not
+    sit in a committed file, so the committed config names a file instead
+    (`signing_jwk_file`, repo-relative, under the gitignored configs/keys/) and it is
+    read here, at run time. Shape copied from the suite's own CI config,
+    scripts/test-configs-rp-against-op/vp-verifier-test-config.json.
+    """
+    resolved = _strip_comments(json.loads(json.dumps(plan_config)))  # deep copy; the dataclass is frozen
+    credential = resolved.get("credential")
+    if isinstance(credential, dict) and "signing_jwk_file" in credential:
+        path = Path(credential.pop("signing_jwk_file"))
+        path = path if path.is_absolute() else repo_root / path
+        if not path.exists():
+            raise ModuleFailure(
+                f"signing key not found at {path}. Generate a test key with:\n"
+                "  python3 ../conformance-suite/scripts/generate-vp-test-cert.py "
+                "--hostname <your-ngrok-domain> --output configs/keys/vp-signing-jwk.json "
+                "--ca-output configs/keys/vp-test-ca.pem"
+            )
+        credential["signing_jwk"] = json.loads(path.read_text())
+    return resolved
+
+
 def run_component(
     suite: ConformanceSuite,
     component: ComponentConfig,
     config: RunnerConfig,
 ) -> dict[str, Any]:
     """Create the plan, run every module, and return one contract `components[]` entry."""
-    plan_config = dict(component.plan_config)
+    plan_config = resolve_plan_config(component.plan_config, config.log_dir.parent)
     plan_config.setdefault("alias", component.alias)
     plan_config.setdefault("description", component.description or f"{component.component} {component.version}")
 
@@ -120,9 +159,11 @@ def _run_module(
             )
 
         request = component.verifier_request
-        presentation_definition = load_presentation_definition(
-            request["uiConfigFile"], request["credential"]
-        )
+        # Which Inji Verify API generation the component speaks. It decides the
+        # endpoint, the query language and how the SDK's behaviour is reproduced; see
+        # runner/verify_client.py. 0.18 is the default only because it was first.
+        api_version = request.get("apiVersion", API_0_18)
+        query = load_query(api_version, request["uiConfigFile"], request["credential"])
         with InjiVerifyClient(component.endpoint) as verify:
             try:
                 handoff_result = deliver(
@@ -130,8 +171,10 @@ def _run_module(
                     verify,
                     module_id,
                     client_id=request.get("clientId", "inji-verify-ui"),
-                    presentation_definition=presentation_definition,
+                    presentation_definition=query if api_version == API_0_18 else None,
+                    dcql_query=query if api_version == API_1_0 else None,
                     nonce_mode=request.get("nonceMode", "sdk"),
+                    api_version=api_version,
                 )
             except RequestExpired as exc:
                 raise ModuleFailure(str(exc)) from exc
@@ -178,7 +221,9 @@ def _archive_log(log_dir: Path, module_name: str, module_id: str, raw_log: Any) 
         target_dir = log_dir / day
         target_dir.mkdir(parents=True, exist_ok=True)
         path = target_dir / f"{module_name}-{module_id}.json"
-        path.write_text(json.dumps(raw_log, indent=2))
+        # The suite echoes the plan configuration -- including the private signing key
+        # -- into its log entries. Never write it to disk unredacted. See runner/redact.py.
+        path.write_text(json.dumps(redact(raw_log), indent=2))
         return path
     except OSError as exc:
         log.warning("could not archive log for %s: %s", module_id, exc)

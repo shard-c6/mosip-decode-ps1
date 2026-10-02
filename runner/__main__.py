@@ -19,6 +19,7 @@ from pathlib import Path
 
 from . import __version__, config as config_module, gate
 from .orchestrator import run
+from .redact import redact
 
 DEFAULT_CONFIG = config_module.REPO_ROOT / "configs" / "runner.json"
 
@@ -98,7 +99,7 @@ def main(argv: list[str] | None = None) -> int:
 
     document = run(cfg, mode)
 
-    payload = json.dumps(document, indent=2)
+    payload = json.dumps(redact(document), indent=2)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(payload + "\n")

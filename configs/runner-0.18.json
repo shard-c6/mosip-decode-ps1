@@ -1,24 +1,24 @@
 {
-  "_comment": "Runner configuration. Plan names and variants are data, not code: whichever way Q1 is answered (OID4VP 1.0 Final vs the ID2 draft), switching target is an edit here rather than a change to the runner. Per-developer values -- above all the ngrok hostname baked into Verify's own docker-compose.yml -- belong in a gitignored configs/runner.local.json, which is deep-merged over this file with components matched by name.",
+  "_comment": "Inji Verify 0.18.2 profile, kept so the Day 1-4 evidence can be reproduced. Not the target: the problem statement means the 1.0 line (configs/runner.json). Needs the 0.18.2 stack from ../inji-verify. Run with: ./run-conformance.sh --component verify --config configs/runner-0.18.json",
   "suite": {
     "baseUrl": "https://localhost.emobix.co.uk:8443",
     "verifySsl": false,
     "apiToken": null,
     "timeoutSeconds": 30
   },
-  "baselineFile": "configs/contract/expected-failures.json",
+  "baselineFile": "configs/contract/expected-failures-0.18.json",
   "logDir": "logs",
   "moduleTimeoutSeconds": 300,
   "components": [
     {
       "component": "inji-verify",
       "role": "verifier",
-      "version": "1.0.0-alpha.1",
+      "version": "0.18.2",
       "endpoint": "http://localhost:8080/v1/verify",
       "planName": "oid4vp-1final-verifier-test-plan",
       "specification": "OID4VP 1.0 Final (alpha verifier tests)",
       "alias": "injiverify-shardul",
-      "description": "Inji Verify 1.0.0-alpha.1 - OID4VP 1.0 Final alpha verifier - automated run",
+      "description": "Inji Verify 0.18.2 - OID4VP 1.0 Final alpha verifier - automated run",
       "variant": {
         "credential_format": "sd_jwt_vc",
         "client_id_prefix": "redirect_uri",
@@ -56,13 +56,12 @@
       },
       "_comment_endpoint": "The runner calls Verify's API directly on localhost. The public ngrok host is still mandatory, but for a different reason: it is baked into the response_uri and did:web values Verify issues, which the conformance suite must reach from inside its own container.",
       "verifierRequest": {
-        "apiVersion": "1.0",
         "clientId": "inji-verify-ui",
-        "credential": "OIDF Conformance PID (SD JWT)",
-        "uiConfigFile": "../inji-verify-1.0/docker-compose/config/config.json",
+        "credential": "Mock Identity (SD JWT)",
+        "uiConfigFile": "../inji-verify/docker-compose/config/config.json",
         "nonceMode": "sdk",
-        "_comment": "Target: the Inji 1.0 line, run from a worktree of inji-verify at tag v1.0.0-alpha.1 (../inji-verify-1.0; see docs/SETUP.md). apiVersion '1.0' means DCQL, /v2/vp-session-request, and a reproduction of the 1.0 SDK. The credential's clientIdPrefix is locally set to pre_registered so the request is delivered inline, matching the url_query variant.",
-        "_comment_credential": "The suite's verifier tests always present a credential with vct urn:eudi:pid:1 (hard-coded in CreateSdJwtKbCredential.java:17) in the 1.0 Final format dc+sd-jwt. A verifier must ask for that, or it will -- correctly -- reject the presentation. This entry is added locally to Inji Verify's config.json; the shipped 'Mock Identity (SD JWT)' asks for a different vct in the superseded vc+sd-jwt format."
+        "_comment": "credential is read from Inji Verify's own UI config so the harness asks for exactly what the shipped UI asks for. nonceMode 'sdk' reproduces the nonce the shipped UI sends (the deployed product); 'service' omits it so verify-service generates its own. See runner/verify_client.py.",
+        "apiVersion": "0.18"
       }
     }
   ],

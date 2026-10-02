@@ -114,7 +114,7 @@ def test_missing_baseline_file_is_not_fatal():
 
 def test_committed_baseline_parses_and_covers_the_day1_module():
     """Guards against the baseline and the runner drifting apart."""
-    path = Path(__file__).resolve().parent.parent / "configs/contract/expected-failures.json"
+    path = Path(__file__).resolve().parent.parent / "configs/contract/expected-failures-0.18.json"
     b = gate.Baseline.load(path)
     assert b.expected_for("inji-verify", PLAN, MODULE) == "FAILED"
     assert "F-03" in (b.reason_for("inji-verify", PLAN, MODULE) or "")
@@ -145,3 +145,14 @@ def test_harness_error_fails_the_gate_even_when_the_baseline_expects_failure():
     assert components[0]["modules"][0]["verdict"] == "SKIP"  # not blamed on MOSIP
     assert result["harnessErrors"][0]["moduleName"] == MODULE
     assert "could not execute" in gate.summarise_for_humans(result)
+
+
+def test_committed_1_0_baseline_records_the_first_passing_run():
+    """The target-version baseline: happy-flow passes all checks on 1.0.0-alpha.1 (2 Oct)."""
+    path = Path(__file__).resolve().parent.parent / "configs/contract/expected-failures.json"
+    b = gate.Baseline.load(path)
+    assert b.data.get("componentVersions", {}).get("inji-verify") == "1.0.0-alpha.1"
+    assert b.expected_for("inji-verify", PLAN, MODULE) == "REVIEW"
+    # A return to FAILED on the target version must now fail the build.
+    components = components_with("FAILED")
+    assert gate.apply(components, b)["passed"] is False
