@@ -141,6 +141,7 @@ def _run_module(
     started_wall = time.monotonic()
     started_at = _utc_now()
     handoff_result = None
+    verdict = None
 
     log.info("--- %s", module_name)
     instance = suite.create_test_from_plan(plan_id, module_name, variant)
@@ -164,7 +165,8 @@ def _run_module(
         # runner/verify_client.py. 0.18 is the default only because it was first.
         api_version = request.get("apiVersion", API_0_18)
         query = load_query(api_version, request["uiConfigFile"], request["credential"])
-        with InjiVerifyClient(component.endpoint) as verify:
+        verify = InjiVerifyClient(component.endpoint)
+        try:
             try:
                 handoff_result = deliver(
                     suite,
@@ -178,10 +180,19 @@ def _run_module(
                 )
             except RequestExpired as exc:
                 raise ModuleFailure(str(exc)) from exc
-
-    final_state = suite.wait_for_state(
-        module_id, TERMINAL_STATES, timeout=config.module_timeout_seconds
-    )
+            final_state = suite.wait_for_state(
+                module_id, TERMINAL_STATES, timeout=config.module_timeout_seconds
+            )
+            # The verdict exists only on the verifier side; fetch it while this client
+            # still holds the session. 1.0 only -- 0.18 has no session-results endpoint.
+            if api_version == API_1_0:
+                verdict = verify.get_vp_session_results(handoff_result.session_cookie)
+        finally:
+            verify.close()
+    else:
+        final_state = suite.wait_for_state(
+            module_id, TERMINAL_STATES, timeout=config.module_timeout_seconds
+        )
     info = suite.get_module_info(module_id)
     result = info.get("result")
     log.info("%s -> %s / %s", module_name, final_state, result)
@@ -205,7 +216,25 @@ def _run_module(
         # Additive contract field: how the request was produced. A result means
         # little without it -- the nonce findings depend entirely on nonceMode.
         module["handoff"] = handoff_result.as_contract()
+    if verdict is not None:
+        module["verifierVerdict"] = summarise_verdict(verdict)
+        module["reviewResolution"] = normalise.resolve_review(module)
     return module
+
+
+def summarise_verdict(verdict: dict[str, Any]) -> dict[str, Any]:
+    """The parts of Verify's verdict worth recording; never the presented credential."""
+    body = verdict.get("body") or {}
+    summary: dict[str, Any] = {"httpStatus": verdict.get("httpStatus")}
+    if "allChecksSuccessful" in body:
+        summary["allChecksSuccessful"] = body["allChecksSuccessful"]
+        summary["credentialStatuses"] = [
+            c.get("verificationStatus") or c.get("status") for c in body.get("credentialResults") or []
+        ]
+    for key in ("errorCode", "errorMessage", "error"):
+        if key in body:
+            summary[key] = body[key]
+    return summary
 
 
 def _archive_log(log_dir: Path, module_name: str, module_id: str, raw_log: Any) -> Path | None:

@@ -27,7 +27,7 @@ REQUIRED_MODULE_FIELDS = {
 REQUIRED_CHECK_FIELDS = {"src", "result", "msg", "requirements", "detail", "findingRef"}
 REQUIRED_GATE_FIELDS = {
     "policy", "baselineFile", "baselineUpdatedAt", "passed", "regressions",
-    "improvements", "unknownModules", "harnessErrors",
+    "improvements", "unknownModules", "harnessErrors", "reviewMismatches",
 }
 
 

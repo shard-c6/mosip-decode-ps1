@@ -85,6 +85,7 @@ def apply(
     improvements: list[dict[str, Any]] = []
     unknown: list[dict[str, Any]] = []
     harness_errors: list[dict[str, Any]] = []
+    review_mismatches: list[dict[str, Any]] = []
 
     for component in components:
         name = component["component"]
@@ -128,6 +129,19 @@ def apply(
                 unknown.append(_entry(name, module_name, expected, actual))
                 continue
 
+            resolution = module.get("reviewResolution") or {}
+            if resolution.get("consistent") is False:
+                # The suite left this for a human; the verifier's own verdict contradicts
+                # what the test required -- e.g. a forged credential accepted. That is a
+                # conformance failure whatever the baseline says, so it always fails.
+                module["verdict"] = "FAIL"
+                review_mismatches.append({
+                    **_entry(name, module_name, expected, actual),
+                    "required": resolution.get("expected"),
+                    "verifier": resolution.get("verifier"),
+                })
+                continue
+
             if _severity(actual) > _severity(expected):
                 module["regression"] = True
                 module["verdict"] = "FAIL"
@@ -143,11 +157,12 @@ def apply(
         "policy": policy,
         "baselineFile": str(baseline.path) if baseline.path else None,
         "baselineUpdatedAt": baseline.updated_at,
-        "passed": not regressions and not harness_errors,
+        "passed": not regressions and not harness_errors and not review_mismatches,
         "regressions": regressions,
         "improvements": improvements,
         "unknownModules": unknown,
         "harnessErrors": harness_errors,
+        "reviewMismatches": review_mismatches,
     }
 
 
@@ -171,6 +186,17 @@ def summarise_for_humans(gate: dict[str, Any]) -> str:
         )
         for e in errors:
             lines.append(f"  {e['component']} / {e['moduleName']}")
+    mismatches = gate.get("reviewMismatches", [])
+    if mismatches:
+        lines.append(
+            f"GATE FAILED - {len(mismatches)} module(s) where the verifier's own verdict "
+            "contradicts what the test required:"
+        )
+        for m in mismatches:
+            lines.append(
+                f"  {m['component']} / {m['moduleName']}: required '{m['required']}', "
+                f"verifier {m['verifier']}"
+            )
     if gate["passed"]:
         lines.append("GATE PASSED - no regressions against the recorded baseline.")
     elif gate["regressions"]:

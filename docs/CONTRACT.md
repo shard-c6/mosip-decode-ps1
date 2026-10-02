@@ -108,6 +108,8 @@ The unit that becomes one TestNG test.
 | `startedAt` / `durationMs` | | |
 | `logUrl` | string | Deep link into the local suite, for a human |
 | `logFile` / `logSignatureFile` | string | Repo-relative paths to the archived evidence |
+| `verifierVerdict` | object | 1.0 verifier modules (added 2 Oct): Verify's own verdict from `/vp-session-results` — `httpStatus`, `allChecksSuccessful`, `credentialStatuses` |
+| `reviewResolution` | object/null | For REVIEW modules (added 2 Oct): `expected` (accept/reject, from the suite's REVIEW message), `verifier` (accepted/rejected/unknown), `consistent` |
 | `handoff` | object | Verifier modules only (added 29 Sep): `delivered`, `httpStatus`, `requestId`, `secondsRemaining`, `nonceMode`. How the authorization request was produced — the nonce findings mean nothing without `nonceMode` |
 
 ### `components[].modules[].checks[]`
@@ -141,6 +143,7 @@ running system rather than drifting into a separate artefact.
 | `improvements` | Same shape. Reported, never fatal |
 | `unknownModules` | In the run but not in the baseline. Policy: warn, don't fail |
 | `harnessErrors` | Modules the harness could not execute. **Always fails the gate** (added 29 Sep, see below) |
+| `reviewMismatches` | REVIEW modules where the verifier's own verdict contradicts what the test required. **Always fails the gate** (added 2 Oct) |
 
 ---
 

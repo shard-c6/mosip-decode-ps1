@@ -33,7 +33,7 @@ _PROMOTED_FIELDS = {
     "requirements", "description",
 }
 
-_INTERESTING_RESULTS = {"FAILURE", "WARNING", "INFO", "INTERRUPTED"}
+_INTERESTING_RESULTS = {"FAILURE", "WARNING", "INFO", "INTERRUPTED", "REVIEW"}
 
 
 def split_log(log: Any) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -123,6 +123,49 @@ def normalise_module(
         "logFile": log_file,
         "logSignatureFile": f"{log_file}.sig" if log_file else None,
     }
+
+
+def review_expectation(module: dict[str, Any]) -> str | None:
+    """
+    What a REVIEW-state module is waiting for a human to confirm: that the verifier
+    accepted the presentation ("accept") or rejected it ("reject"). Read from the suite's
+    own REVIEW message, e.g. "...the verifier successfully verified the presented
+    credential" versus "...reported the presented credential as invalid / rejected...".
+    """
+    for check in module.get("checks", []):
+        if check.get("result") != "REVIEW":
+            continue
+        msg = (check.get("msg") or "").lower()
+        if "invalid" in msg or "rejected" in msg:
+            return "reject"
+        if "successfully verified" in msg:
+            return "accept"
+    return None
+
+
+def resolve_review(module: dict[str, Any]) -> dict[str, Any] | None:
+    """
+    Settle a REVIEW with evidence the suite cannot see: the verifier's own verdict.
+
+    The suite stops at REVIEW because OID4VP 1.0 Final lets a verifier accept a
+    submission and verify it afterwards, so whether a forged credential was rejected is
+    invisible to it. The harness controls the verifier side and can fetch the verdict
+    (verifierVerdict). Without this, a verifier that accepted forged credentials would
+    report "REVIEW, 0 failures".
+
+    Returns None for modules not in REVIEW. `consistent` is None when the verdict could
+    not be obtained -- unknown, never assumed either way.
+    """
+    expected = review_expectation(module)
+    if expected is None:
+        return None
+    verdict = module.get("verifierVerdict") or {}
+    ok = verdict.get("allChecksSuccessful")
+    verifier = "accepted" if ok is True else "rejected" if ok is False else "unknown"
+    consistent = None if verifier == "unknown" else (
+        (expected == "accept") == (verifier == "accepted")
+    )
+    return {"expected": expected, "verifier": verifier, "consistent": consistent}
 
 
 def summarise(modules: list[dict[str, Any]]) -> dict[str, int]:

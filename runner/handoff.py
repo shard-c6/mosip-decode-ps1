@@ -60,6 +60,9 @@ class HandoffResult:
     nonce_mode: str = NONCE_SDK
     api_version: str = API_0_18
     detail: str = ""
+    # Binds this session to its verdict. Deliberately not in as_contract(): it is a
+    # session credential, and the verdict itself is what gets recorded.
+    session_cookie: str | None = None
 
     def as_contract(self) -> dict[str, Any]:
         """The `handoff` block recorded on each verifier module."""
@@ -136,4 +139,5 @@ def deliver(
         seconds_remaining=remaining,
         nonce_mode=nonce_mode,
         api_version=api_version,
+        session_cookie=verify.session_cookie,
     )

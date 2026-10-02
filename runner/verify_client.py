@@ -225,10 +225,26 @@ def _compact(value: Any) -> str:
 # The client
 # --------------------------------------------------------------------------------------
 
+# verify-service binds a VP session to its result with this HttpOnly cookie
+# (Constants.COOKIE_NAME). It is marked Secure in the default profile, so an HTTP client
+# talking to localhost will not send it back on its own; the harness sends it explicitly.
+SESSION_COOKIE = "transaction_id"
+
+
+def _session_cookie(response: httpx.Response) -> str | None:
+    for header in response.headers.get_list("set-cookie"):
+        name, _, rest = header.partition("=")
+        if name.strip() == SESSION_COOKIE:
+            return rest.split(";", 1)[0].strip() or None
+    return None
+
+
 class InjiVerifyClient:
     def __init__(self, endpoint: str, timeout: int = 30, verify_ssl: bool = True) -> None:
         self._endpoint = endpoint.rstrip("/")
         self._client = httpx.Client(timeout=timeout, verify=verify_ssl, follow_redirects=True)
+        # Set by create_vp_session_request; needed to fetch that session's verdict.
+        self.session_cookie: str | None = None
 
     def create_vp_session_request(
         self,
@@ -280,7 +296,32 @@ class InjiVerifyClient:
                 f"{SESSION_REQUEST_PATH[api_version]} returned HTTP {response.status_code}: "
                 f"{response.text[:400]}"
             )
+        self.session_cookie = _session_cookie(response)
         return response.json()
+
+    def get_vp_session_results(self, session_cookie: str | None = None) -> dict[str, Any]:
+        """
+        Inji Verify's own verdict on a submitted presentation (1.0: POST /vp-session-results,
+        VPResultController). This is what the verifier UI shows the user.
+
+        It is the only place the verdict exists. OID4VP 1.0 Final lets a verifier accept the
+        direct_post submission (HTTP 200) and verify afterwards, which Inji Verify does for
+        credential-level checks -- so for negative tests the suite cannot see whether the
+        forged credential was rejected, and stops at REVIEW. The harness can ask.
+        """
+        cookie = session_cookie or self.session_cookie
+        if not cookie:
+            return {"httpStatus": None, "error": "no session cookie; cannot fetch the verdict"}
+        response = self._client.post(
+            f"{self._endpoint}/vp-session-results",
+            json={"skipStatusChecks": False, "statusCheckFilters": [], "includeClaims": False},
+            headers={"Cookie": f"{SESSION_COOKIE}={cookie}"},
+        )
+        try:
+            body = response.json()
+        except ValueError:
+            body = {"raw": response.text[:400]}
+        return {"httpStatus": response.status_code, "body": body}
 
     def is_request_alive(self, request_id: str) -> bool:
         """

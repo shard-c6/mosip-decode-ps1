@@ -142,8 +142,8 @@ components don't pass everything.
   Update the index table in `logs/README.md`.
 - **Day entries** → a dated subsection in `findings.tex` §2, recording objective, decisions
   with reasoning, runs executed, and status.
-- **Commits** → imperative subject, body explaining *why*. Attribute co-authorship when
-  written with an assistant.
+- **Commits** → imperative subject, body explaining *why*. Made under our own names, with
+  **no assistant attribution lines of any kind** (no `Co-Authored-By`).
 
 ---
 
