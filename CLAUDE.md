@@ -45,7 +45,7 @@ pushes, opens a PR or spends someone's quota is confirmed with the user first.
 | Conformance suite | `https://localhost.emobix.co.uk:8443` (v5.3.1) — self-signed cert, use `curl -k` |
 | Inji Verify | UI `:3000`, API `:8080`, context path `/v1/verify` |
 | Test plan ID | `lN7C4DH1HvYmc` · alias `injiverify-shardul` |
-| Versions | Inji Verify 0.18.2 · Inji Certify 0.14.0 (not yet run) · Java 21 · Maven 3.9.16 |
+| Versions | **Target: Inji 1.0 line** (`1.0.0-alpha.1` published; `release-1.0.x` branch). Tested so far: Verify 0.18.2 · Certify not yet run · Java 21 · Maven 3.9.16 |
 
 Sibling clones: `inji-verify` · `inji-certify` · `mosip-functional-tests` ·
 `conformance-suite` · `conformance-suite-automated-testing-tutorial`
@@ -70,6 +70,11 @@ Not in any repo. A fresh clone lacks both; either one missing produces confusing
 ---
 
 ## What we know about Inji Verify 0.18.2
+
+> **Scope warning (2 Oct).** Everything in this section is true of 0.18.2 and is *not* the
+> target. The problem statement means the Inji **1.0 line**; on `1.0.0-alpha.1` and
+> `release-1.0.x`, DCQL exists and the nonce is random. Re-check any claim here against the
+> 1.0 line before acting on it, and never report one upstream without that check.
 
 Confirmed against the OpenID Foundation's own suite. Full catalogue in
 `docs/findings/findings.tex`.

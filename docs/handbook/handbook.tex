@@ -59,10 +59,10 @@
 {\LARGE\bfseries Project Handbook}\\[2em]
 Shardul Chogale (conformance engine and evidence)\\
 Mukta Varak (platform and delivery)\\[2em]
-Written: 30 September 2026\\
+Written: 30 September 2026; updated 2 October 2026\\
 Final submission deadline: \textbf{26 October 2026, 11:59 PM IST}\\[3em]
 \begin{tabular}{@{}ll@{}}
-Part 1 & Mentor session brief --- Weekly Connect, 30 September\\
+Part 1 & Mentor session brief --- Weekly Connect, 7 October\\
 Part 2 & Start to end: the clean guide to running the project\\
 Part 3 & Record of every step taken so far\\
 Part 4 & Planner, 30 September to 26 October, for both of us\\
@@ -83,7 +83,7 @@ docs/findings/findings.tex.}
 
 \begin{tabular}{@{}ll@{}}
 Session & MOSIP Decode Weekly Connect\\
-When & Wednesday 30 September 2026, 5:00--6:00 PM IST\\
+When & Wednesday 7 October 2026, 5:00--6:00 PM IST\\
 Where & \url{https://mosip.zoom.us/j/89100675963}\\
 Attending & Shardul (and Mukta, if available)\\
 \end{tabular}
@@ -99,6 +99,13 @@ first unattended run reproduced our Day 1 manual run \textbf{check for check}: 1
 passing checks, 4 failures, 3 warnings, the identical set of seven non-passing checks, and
 the same point of termination. Versions tested: Inji Verify 0.18.2, conformance suite
 5.3.1. Inji Certify is not yet running.
+
+\textbf{Since then (2 October):} we found that upstream has an Inji \textbf{1.0 line}
+(\texttt{release-1.0.x}, published as \texttt{1.0.0-alpha.1}) --- which is what the problem
+statement means by ``on 1.0''. On it, DCQL is implemented and the nonce is random, so our
+three headline findings do not apply there. We are moving the baseline to
+\texttt{1.0.0-alpha.1}; the findings stand for 0.18.2 and are on hold for upstream
+reporting.
 
 \subsection{Three things to show if asked}
 
@@ -130,16 +137,16 @@ the session. The top three are the ones worth the time.
 Presentation Exchange; OID4VP 1.0 Final requires DCQL.
 & Decides whether any module can pass, and what the gate measures. Every 1.0 Final module
 currently stops at DCQL extraction.
-& 1.0 Final as the primary benchmark (gated on regression); the ID2 plan run alongside to
-prove the pipeline reports passes. Both are config, so a later answer costs an edit.\\
+& 1.0 Final. Since the 1.0 line implements DCQL, this is now the natural benchmark rather
+than an all-fail one; the ID2 plan drops to optional.\\
 \addlinespace
-2 & \textbf{Which Inji versions should we target?} The problem statement says ``Inji
-Certify and Inji Verify (on 1.0)'' and ``1.0.x'' repositories. The newest images we
-could run are Verify 0.18.2 and Certify 0.14.0.
-& If ``1.0'' means a release line we are not running, every result we have is against
-the wrong version.
-& Stay on the latest published images and state the versions plainly in the
-submission.\\
+2 & \textbf{Confirm the 1.0 target.} We found \texttt{release-1.0.x} (Verify and Certify) and the
+published \texttt{1.0.0-alpha.1}; \texttt{alpha.2} is named in the branch but not yet published.
+Is \texttt{1.0.0-alpha.1} the intended target, or should we build the branch from source? Is
+the 0.18.x line still maintained?
+& Decides what our baseline is, and whether the 0.18.2 findings are worth reporting at all.
+& Target \texttt{1.0.0-alpha.1}; hold the 0.18.2 findings unless told the line is
+maintained.\\
 \addlinespace
 3 & \textbf{Q7 --- Is there a lighter Inji Certify setup?} \texttt{docker-compose-injistack}
 needs a PKCS12 keystore from Mimoto onboarding, a public DID endpoint, an external
@@ -162,11 +169,11 @@ build fails until conformance improves?
 & Regression-from-baseline (built). Absolute is one flag: \texttt{--policy
 absolute-pass-rate}.\\
 \addlinespace
-6 & \textbf{Submission criteria.} Is a demo video required? Must the api-testrig classes be
-merged upstream, or are branches on our forks acceptable?
+6 & \textbf{Submission criteria.} The kickoff settled the list --- source code, working
+prototype, slide deck, video demo. Remaining: must the api-testrig classes be merged upstream,
+or are branches on our forks acceptable?
 & Scopes the last week.
-& Assume a video is expected; deliver the Java classes as fork branches shaped as
-upstream pull requests.\\
+& Deliver the Java classes as fork branches shaped as upstream pull requests.\\
 \addlinespace
 7 & \textbf{Q2 --- HAIP.} Verify hard-codes \texttt{direct\us{}post}; HAIP requires
 \texttt{direct\us{}post.jwt}. Track HAIP as a known-failing suite, or exclude it?
@@ -195,8 +202,9 @@ which is what the suite's paste box does internally.
 
 \subsection{What we want to leave with}
 
-At minimum: the version target (questions 1 and 2), the Certify route (question 3), and
-where to report findings (question 4). Everything else has a workable default.
+At minimum: confirmation of the 1.0 target (question 2), the Certify route (question 3),
+and whether the 0.18.2 findings are worth reporting and where (question 4). Everything else
+has a workable default.
 
 \subsection{Notes during the session}
 
@@ -232,7 +240,7 @@ Piece & Where it listens & Why it is needed\\
 OpenID conformance suite 5.3.1 & \url{https://localhost.emobix.co.uk:8443} & The examiner. It plays
 the wallet (verifier tests) or the client (issuer tests) and checks the component against
 the spec.\\
-Inji Verify 0.18.2 & UI :3000, API :8080 (path /v1/verify) & The verifier under test.\\
+Inji Verify & UI :3000, API :8080 (path /v1/verify) & The verifier under test. Target \texttt{1.0.0-alpha.1}; Steps 4 and 6 were written and tested on 0.18.2 and are to be re-checked on 1.0.\\
 Inji Certify 0.14.0 & not yet running & The issuer under test (Part 4, weeks 3--4).\\
 ngrok tunnel & a *.ngrok-free.dev address & Mandatory. Verify identifies itself with a
 did:web DID resolved over public HTTPS, and bakes its public address into the response\us{}uri
@@ -590,6 +598,21 @@ every item are in \texttt{docs/findings/findings.tex}; this is the index to it.
   \item Wrote this handbook: mentor brief, start-to-end guide, this record, the planner.
 \end{enumerate}
 
+\subsection{2 October --- the kickoff recording, and the 1.0 line}
+
+\begin{enumerate}\tightlist
+  \item Worked through the transcript of the 23 September kickoff webinar, which we had not
+        attended live. Correction: earlier documents said it had not taken place; it had.
+  \item Took from it: the mandatory submissions are source code, a working prototype, a
+        slide deck and a video demo; the Docker Compose must bring up each module alone or
+        both together; CI's purpose is catching non-conformance per change.
+  \item Followed up a passing mention of ``DCQL requests'' and found the Inji 1.0 line:
+        \texttt{release-1.0.x} in Verify and Certify, published as \texttt{1.0.0-alpha.1}.
+        On it, DCQL exists and the nonce is random --- F-01, F-02 and F-03 do not apply.
+  \item Put the F-01/F-02 upstream issue on hold; scoped every finding to 0.18.2; decided to
+        move the baseline to \texttt{1.0.0-alpha.1}.
+\end{enumerate}
+
 \newpage
 %==========================================================================
 \section{Planner, 30 September to 26 October}
@@ -602,9 +625,9 @@ planner stays an honest record.
 \subsection{Fixed points}
 
 \begin{tabular}{@{}p{3.4cm}p{13cm}@{}}
-Wed 30 Sep & Weekly Connect --- mentor brief, Part 1\\
-Sun 4 Oct & End of week 2: verifier plan complete; api-test builds\\
-Wed 7 Oct & Weekly Connect\\
+Wed 30 Sep & Weekly Connect (first session)\\
+Sun 4 Oct & End of week 2: verifier plan baselined on \texttt{1.0.0-alpha.1}; api-test builds\\
+Wed 7 Oct & Weekly Connect --- mentor brief, Part 1\\
 Sun 11 Oct & End of week 3: runner output lands in the api-testrig report\\
 Wed 14 Oct & Weekly Connect\\
 Sun 18 Oct & End of week 4: \textbf{minimum viable submission}\\
@@ -614,44 +637,43 @@ Fri 23 Oct & \textbf{First submission} (safety net)\\
 Mon 26 Oct & \textbf{Final submission, 11:59 PM IST} --- aim to finish by 6:00 PM\\
 \end{tabular}
 
-\subsection{Week 2 remainder --- Wed 30 Sep to Sun 4 Oct: finish the verifier side}
+\subsection{Week 2 remainder --- Wed 30 Sep to Sun 4 Oct: move to the 1.0 line}
+
+Re-planned on 2 October. Wednesday and Thursday's items did not happen and are carried
+forward; the discovery of the 1.0 line changes what ``finish the verifier side'' means.
 
 \begin{longtable}{@{}p{1.9cm}p{6.9cm}p{7.2cm}@{}}
 \toprule
 Day & \Sh & \Mu\\
 \midrule
 \endhead
-Wed 30 & \todo{} Weekly Connect; record answers in findings.tex\newline
-\todo{} Run modules 02--11 through the runner
-& \todo{} Directory setup (the 29 Sep email)\newline
-\todo{} Accept the two fork invitations\newline
-\todo{} Claim an ngrok static domain\\
+Wed 30 & \todo{} Weekly Connect (attendance not recorded)
+& \done{} Directory setup email received (29 Sep)\newline
+\done{} Sent the kickoff recording link (30 Sep)\\
 \addlinespace
-Thu 1 Oct & \todo{} Triage modules 02--11: extend the baseline to all 12, each with a
-reason and evidence\newline
-\todo{} Export signed logs for any finding-bearing run
-& \todo{} Build apitest-commons from mosip-functional-tests\newline
-\todo{} api-test building and running in inji-verify\\
+Fri 2 Oct & \done{} Kickoff transcript worked through\newline
+\done{} Found the 1.0 line; findings scoped; issue on hold\newline
+\todo{} Bring up Verify \texttt{1.0.0-alpha.1}; run happy-flow
+& \todo{} Accept the two fork invitations; claim an ngrok domain\newline
+\todo{} Build apitest-commons; api-test in inji-verify\newline
+\textbf{Build api-test from \texttt{release-1.0.x}}, not master --- the target changed\\
 \addlinespace
-Fri 2 Oct & \todo{} Configure and run the ID2 verifier plan --- the likeliest source of a
-real pass\newline
-\todo{} Resolve F-05 from the UI's actual QR payload
-& \todo{} api-test building and running in inji-certify\newline
+Sat 3 Oct & \todo{} Full 1.0 Final plan on \texttt{alpha.1}; new baseline for all 12 modules,
+each with reason and evidence\newline
+\todo{} Make \texttt{nonceMode} follow the version under test
+& \todo{} api-test in inji-certify (\texttt{release-1.0.x})\newline
 \todo{} Write down the TestNG/Extent result shape\\
 \addlinespace
-Sat 3 Oct & \todo{} Validate the screenshot mechanism on a module that gets past DCQL
-extraction\newline
-\todo{} Adjust the browser match pattern if needed
-& \todo{} Review CONTRACT.md; raise its four open points\newline
-\todo{} OpenIDConformanceTest skeleton against the fixture\\
-\addlinespace
-Sun 4 Oct & \multicolumn{2}{p{14.2cm}}{\todo{} Joint sync (30 min): agree the Certify route from the mentor
-answer; confirm the week-3 split still holds. Buffer otherwise.}\\
+Sun 4 Oct & \todo{} Screenshot mechanism, on whichever module now gets past DCQL\newline
+\todo{} Re-check F-05, F-06, F-07, F-09 on 1.0
+& \todo{} Review CONTRACT.md; OpenIDConformanceTest skeleton\newline
+\todo{} Read the 1.0 compose; sketch per-module profiles\\
 \bottomrule
 \end{longtable}
 
 \textbf{Exit check:} \texttt{./run-conformance.sh --component verify} runs all 12 modules
-with a baseline entry for each; api-test builds in both repositories.
+against \texttt{1.0.0-alpha.1} with a baseline entry for each; api-test builds in both
+repositories on \texttt{release-1.0.x}.
 
 \subsection{Week 3 --- Mon 5 to Sun 11 Oct: the two halves meet}
 
@@ -661,14 +683,15 @@ Day & \Sh & \Mu\\
 \midrule
 \endhead
 Mon 5 & \todo{} Issuer-role support in the runner: no handoff; different plan
-configuration & \todo{} Unified Docker Compose: Verify and the suite in one project\\
+configuration & \todo{} Unified Docker Compose with \textbf{per-module profiles}: Verify, Certify,
+or both, each with the suite --- the kickoff's stated requirement\\
 \addlinespace
 Tue 6 & \todo{} Issuer plan configuration templates\newline
-\todo{} File the nonce issue upstream (channel per mentor answer)
+\todo{} Upstream reporting decision, per the mentor answer on 0.18.x
 & \todo{} Compose: solve cross-project networking and the public hostname\\
 \addlinespace
-Wed 7 & \todo{} Weekly Connect\newline
-\todo{} Nonce fix as a pull request from the fork
+Wed 7 & \todo{} Weekly Connect --- brief in Part 1\newline
+\todo{} File any finding that survives on 1.0
 & \todo{} OpenIDConformanceTest in inji-verify's api-test, reading real runner
 output\\
 \addlinespace
@@ -777,7 +800,7 @@ Risk & Response\\
 Certify cannot run locally & By Sat 10 Oct at the latest, fall back: submit Verify end to
 end, the issuer support in the runner, and a documented Certify path. Per-module
 conformance for one component satisfies the mandatory tasks.\\
-Mukta's start slips & No reply to the 29 September email yet. The fixture means the Java
+Mukta's start slips & No word on setup progress as of 2 October. The fixture means the Java
 class can start the moment setup is done; if api-test is not building by Fri 2 Oct, pair
 on it that weekend.\\
 Neither of us writes Java & The class is kept small and logic-free by design. Escalate by

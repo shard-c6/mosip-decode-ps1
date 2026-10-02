@@ -34,7 +34,7 @@
 \large Automated Conformance Testing for Inji Certify \& Inji Verify\\[0.8em]
 \normalsize Findings Log and Open Questions}
 \author{Shardul Chogale \and Mukta Varak}
-\date{Document started: 20 September 2026\\Last updated: 30 September 2026}
+\date{Document started: 20 September 2026\\Last updated: 2 October 2026}
 
 \begin{document}
 \maketitle
@@ -436,11 +436,107 @@ version. Added to the mentor brief as the second-ranked question.
 No conformance runs today; no findings added or changed. No reply yet from Mukta to the
 29 September setup email. Mentor answers to be recorded here after the session.
 
+\subsection{Day 6 --- Friday, 2 October 2026}
+
+\subsubsection*{Objective}
+Absorb the recording of the 23 September kickoff webinar, and act on anything in it that
+changes the build.
+
+\subsubsection*{Correction to earlier entries}
+Earlier entries, and \texttt{PLAN.md}, said the kickoff seminar did not take place. \textbf{It
+did}: the organisers held it on 23 September, 5:00--6:00 PM IST, and recorded it. We did not
+attend live, and worked from the recording's transcript today. The ``AMA'' is the weekly
+Wednesday session, 5:00--6:00 PM IST, from 30 September; organisers' contacts are
+\texttt{decode@mosip.io} and the forum at community.mosip.io.
+
+\subsubsection*{What the kickoff said about PS1}
+Walkthrough at 24:58--32:45 of the recording, plus the general session. Points that bear on
+our build:
+\begin{itemize}\tightlist
+  \item \textbf{Mandatory submissions} (08:01): source code, a working prototype, \emph{a slide
+        deck, and a video demo}. Stronger than the event page's ``document \emph{or} slides''.
+        Settles part of mentor-brief question 6: the video is required.
+  \item \textbf{Docker Compose must itself support both modes} (28:30): one file or step that
+        brings up each module on its own, or both together, connected to the conformance
+        suite. This is a concrete design input for the compose work: selective bring-up,
+        for example compose profiles, not one monolithic stack.
+  \item \textbf{One-command execution is the core ask} (29:20--29:46): explicitly contrasted with
+        configuring the plan, clicking continue and selecting tests in the suite's UI. The
+        runner meets this for Verify.
+  \item \textbf{CI/CD is framed as good-to-have, with a stated purpose} (27:33--28:26): run the
+        suite on every feature change so non-conformance is caught when the change is made,
+        not at the end. This is the case for our regression-from-baseline gate.
+  \item \textbf{Result diff is motivated by run-to-run variation} (30:12--30:37): ``each run
+        might have different failures''. Supports building the diff on module- and
+        check-level results, which the contract already carries.
+  \item The resources point to ``the latest release 1.0.x'' documentation (32:08). Taken with
+        the problem statement's ``on 1.0'', this prompted the version check below.
+\end{itemize}
+
+\subsubsection*{Finding --- an Inji 1.0 line exists, and most of our findings do not apply to it}
+The Interop Playground walkthrough (41:08) mentions choosing between a ``presentation
+exchange request or a DCQL request'' --- implying some Inji Verify sends DCQL, which
+contradicts F-03. Checked against upstream rather than taken on trust:
+
+\begin{itemize}\tightlist
+  \item \texttt{mosip/inji-verify} has a \texttt{release-1.0.x} branch, under active development
+        (head \texttt{6a6ab3b}, 1 October: ``Rename DCQL error codes to snake case''), versions
+        \texttt{1.0.0-alpha.2-SNAPSHOT}, and tags \texttt{v1.0.0-alpha.1} (4 August) and
+        \texttt{v1.0.0-dev.*}. \texttt{mosip/inji-certify} also has \texttt{release-1.0.x}.
+  \item Published on Docker Hub: \texttt{injistack/inji-verify-service} and
+        \texttt{-ui} at \texttt{1.0.0-alpha.1}. The branch's compose file names
+        \texttt{1.0.0-alpha.2}, which is not yet published.
+  \item \textbf{Everything we have run was 0.18.2}, the newest image in the \texttt{0.18.x} line
+        and the one the default branch's compose file pinned on 18 September.
+\end{itemize}
+
+Our findings against the 1.0 line, from source (not yet from runs):
+
+\begin{longtable}{p{2.4cm} p{3.9cm} p{3.9cm} p{4cm}}
+\hline
+\textbf{Finding} & \textbf{0.18.2 (tested)} & \textbf{1.0.0-alpha.1 (runnable)} & \textbf{release-1.0.x (head)}\\
+\hline
+\endhead
+F-01/F-02 nonce & \texttt{btoa(Date.now())} & \texttt{crypto.getRandomValues} & \texttt{crypto.getRandomValues}\\
+F-03 DCQL & absent & present (16 service files) & present\\
+F-06 response mode & \texttt{direct\_post} only & \texttt{direct\_post} only & not determined by source search\\
+F-09 client id & \texttt{did}, \texttt{pre\_registered} & no \texttt{x509\_san\_dns} & \texttt{x509\_san\_dns} configured\\
+\hline
+\end{longtable}
+
+\textbf{Consequences.}
+\begin{enumerate}\tightlist
+  \item \textbf{The F-01/F-02 upstream issue is on hold.} As drafted it reports a defect the 1.0
+        line has already fixed. It may still be worth raising for the 0.18.x line if that line
+        is maintained --- a question for the mentors, not an assumption. This is the
+        ``confirm before claiming'' rule doing its job a third time.
+  \item \textbf{The baseline should move to \texttt{1.0.0-alpha.1}.} It is the newest runnable 1.0
+        build and contains DCQL, so the OID4VP 1.0 Final plan may now produce real passes rather
+        than a uniform failure at DCQL extraction. This would also give the gate something to
+        protect, which it currently lacks.
+  \item \textbf{Every finding in the catalogue is now scoped to 0.18.2}, explicitly, below.
+        They remain true and evidenced for that version.
+  \item The runner's \texttt{sdk} nonce mode reproduces the 0.18.x SDK. Against 1.0 builds
+        the faithful reproduction is a random nonce; the mode needs to follow the version
+        under test rather than be a fixed default.
+\end{enumerate}
+
+\subsubsection*{Status at end of Day 6}
+No conformance runs. Next: run the harness against \texttt{1.0.0-alpha.1} and record whether
+F-03 clears and what the first real failures are. Question for mentors, now sharper: is
+\texttt{1.0.0-alpha.1} the intended target, or should we build \texttt{release-1.0.x} from source?
+
 \newpage
 %=========================================================
 \section{Findings Catalogue}
 
 Severity reflects impact on certifiability and on security, not on our convenience.
+
+\textbf{Version scope (added 2 October).} Every finding below was established against
+\textbf{Inji Verify 0.18.2}. On 2 October we found an Inji 1.0 line (\texttt{release-1.0.x};
+runnable as \texttt{1.0.0-alpha.1}) in which F-01, F-02 and F-03 appear fixed from source and
+F-09 is partly addressed. The findings stand for 0.18.2; none is to be reported upstream
+until it has been re-checked against the 1.0 line. See the Day 6 entry.
 
 %---------------------------------------------------------
 \finding{F-01 --- Nonce has insufficient entropy}{\sevhigh{} \quad \confirmed}
@@ -513,7 +609,11 @@ prevent replay. A value derived from the current clock is predictable to within 
 substantially weakening that guarantee. In a national identity deployment this is a
 meaningful security property, not a cosmetic issue.
 
-\textbf{Proposed action.} File upstream against \texttt{mosip/inji-verify} as a single issue
+\textbf{ON HOLD --- 2 October.} The Inji 1.0 line already generates the nonce with
+\texttt{crypto.getRandomValues}. The issue below must not be filed as drafted; whether it is
+worth raising for the 0.18.x line is a question for the mentors.
+
+\textbf{Proposed action (superseded).} File upstream against \texttt{mosip/inji-verify} as a single issue
 covering F-01 and F-02 together, since they share one root cause and one fix. Recommend
 \texttt{crypto.getRandomValues} over 32 bytes, base64url-encoded without padding. Draft
 prepared at \texttt{docs/upstream/ISSUE-01-nonce-entropy.md}; not yet filed.

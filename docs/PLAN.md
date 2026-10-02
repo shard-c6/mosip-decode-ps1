@@ -5,6 +5,10 @@
 **Deadline**: **26 October 2026, 11:59 PM IST** — confirmed 30 September on the official
 event page ("Final Submission Deadline"). Earlier versions of this file assumed ~21 October;
 the real date adds five days, used as a fifth week for finishing and submitting.
+**Target version (2 Oct)**: the Inji **1.0 line** — `1.0.0-alpha.1` is the newest published
+build — not 0.18.2, which everything before 2 October was tested on.
+**Mandatory submissions** (kickoff, 23 Sep): source code, working prototype, slide deck,
+**video demo**.
 **Weekly Connect** (mentors): Wednesdays 5:00–6:00 PM IST — 30 Sep, 7, 14, 21 Oct.
 
 > **The day-by-day schedule for both of us now lives in the Project Handbook, Part 4
@@ -214,7 +218,7 @@ nothing is left that would surprise us in Week 2.
 **Both**
 - [ ] Agree the role split; update this file with the real one
 - [ ] Agree and write down the runner→testrig JSON contract
-- [ ] Post Q1–Q7 to the MOSIP community forum. The AMA didn't happen, so the forum is the
+- [ ] Post Q1–Q7 to the MOSIP community forum (or raise at the Wednesday session). The forum is a
       only channel — and Q1 (which spec version to benchmark) shapes Weeks 2–4
 
 **Design decision that de-risks Q1**: build the runner so the plan name and variant set are
@@ -335,7 +339,7 @@ commented from the start rather than tidying at the end.
 
 ## Risks and fallbacks
 
-**No mentor contact.** The kickoff seminar and AMA did not happen, so Q1–Q7 have no channel
+**Limited mentor contact.** The kickoff (23 Sep) was held — we have its recording — and mentors are available at the Wednesday sessions, but Q1–Q7 have no channel
 but the community forum, and no guaranteed answer. Mitigation: make every decision Q1 could
 overturn a configuration value, and state our assumptions plainly in the submission. A
 clearly reasoned assumption is defensible; a silent one is not.

@@ -1,5 +1,12 @@
 # Draft upstream issue — nonce entropy and encoding
 
+> **ON HOLD — 2 October 2026. Do not file as written.** Everything below was established
+> against Inji Verify **0.18.2**. The Inji 1.0 line (`release-1.0.x`, and the published
+> `1.0.0-alpha.1`) already generates the nonce with `crypto.getRandomValues`, so this would
+> report a defect that is fixed where development is happening. Whether it is worth raising
+> for the 0.18.x line depends on whether that line is still maintained — ask the mentors.
+> See the Day 6 entry in `docs/findings/findings.tex`.
+
 **Target**: `mosip/inji-verify` · **Covers**: F-01, F-02 · **Status**: draft, not filed
 **Do not file until**: the fix suggestion has been sanity-checked and Shardul has read it through.
 

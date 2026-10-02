@@ -115,6 +115,11 @@ opened as an upstream pull request. `api-test/` lives inside `inji-verify` and
 
 ## Findings so far
 
+> **Version note (2 October).** These findings are against Inji Verify **0.18.2**. Upstream's
+> Inji 1.0 line — the version the problem statement targets — already fixes the nonce and
+> implements DCQL. They stand for 0.18.2 and are on hold for upstream reporting until
+> re-checked against 1.0. The harness baseline is moving to `1.0.0-alpha.1`.
+
 Nine findings catalogued against Inji Verify 0.18.2 on day one, eight confirmed with
 evidence from the OpenID Foundation's own conformance suite. Headlines:
 

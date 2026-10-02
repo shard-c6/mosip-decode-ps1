@@ -6,6 +6,15 @@ the project up after a break, joining it, or continuing in a new assistant sessi
 
 ---
 
+## 0. Read this first — the 1.0 line (2 October)
+
+Everything up to 29 September was tested against **Inji Verify 0.18.2**. On 2 October we
+found that upstream has an Inji 1.0 line — `release-1.0.x` in both inji-verify and
+inji-certify, published as `1.0.0-alpha.1` — which is what the problem statement means by
+"on 1.0". On that line, DCQL is implemented and the nonce is random, so F-01, F-02 and F-03
+do not apply there. Our findings stand for 0.18.2 but are scoped to it; the baseline moves to
+`1.0.0-alpha.1`. Details: Day 6 in `docs/findings/findings.tex`.
+
 ## 1. The one-paragraph version
 
 We are building an automated conformance-testing harness for MOSIP's Inji stack (PS1,
@@ -192,7 +201,7 @@ job through Verify's API rather than the clipboard.
 
 **Important calendar correction.** The 20 September session happened **three days before
 the event officially started**. MOSIP Decode kicked off on **23 September 2026**; the
-planned kickoff seminar and mentor AMA did not take place. Nothing was done between 20 and
+kickoff webinar (23 Sep) was held and recorded but we did not attend live; we worked from its transcript on 2 Oct. Nothing was done between 20 and
 23 September, so the "Day 2" list written on Day 1 is still entirely outstanding — it has
 simply moved into Week 1 proper. `docs/PLAN.md` has been re-anchored to the real calendar.
 
@@ -221,7 +230,7 @@ SETUP, RUNBOOK, PLAN, findings and this file; forks of all three MOSIP repos cre
   Planner in `docs/handbook/handbook.tex`, Part 4
 
 **Questions waiting on mentors**: Q1–Q8 in the findings document. Q1 (which spec version to
-benchmark against) is the one that most shapes the rest of the build. With no AMA, the
+benchmark against) is the one that most shapes the rest of the build. The weekly Wednesday sessions (5–6 PM IST, from 30 Sep) are the channel; even so, the
 community forum is the only channel — and no answer may arrive, so the runner is being
 designed so plan name and variants are configuration rather than code.
 
