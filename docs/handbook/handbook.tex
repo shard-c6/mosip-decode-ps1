@@ -687,11 +687,13 @@ planner stays an honest record.
 Wed 30 Sep & Weekly Connect (first session)\\
 Sun 4 Oct & End of week 2: verifier plan baselined on \texttt{1.0.0-alpha.1}; api-test builds\\
 Wed 7 Oct & Weekly Connect --- mentor brief, Part 1\\
+Sat 10 Oct & \textbf{Certify decision}: is a Certify 1.0 stack running? If not, fall back (Risks)\\
 Sun 11 Oct & End of week 3: runner output lands in the api-testrig report\\
 Wed 14 Oct & Weekly Connect\\
 Sun 18 Oct & End of week 4: \textbf{minimum viable submission}\\
 Tue 20 Oct & Nothing new or risky starts after today\\
 Wed 21 Oct & Weekly Connect --- show the working build if possible\\
+Fri 16 Oct & \textbf{Shardul's part complete} (estimate; see below)\\
 Fri 23 Oct & \textbf{First submission} (safety net)\\
 Mon 26 Oct & \textbf{Final submission, 11:59 PM IST} --- aim to finish by 6:00 PM\\
 \end{tabular}
@@ -735,6 +737,35 @@ Sun 4 Oct & \done{} Screenshot mechanism --- confirmed by run, 2 Oct\newline
 against \texttt{1.0.0-alpha.1} with a baseline entry for each; api-test builds in both
 repositories on \texttt{release-1.0.x}.
 
+\subsection{Remaining effort --- Shardul's part (estimate, 2 October)}
+
+Made after the verifier plan was completed on Inji Verify 1.0, and after checking what the
+issuer side needs: the suite's OID4VCI issuer plan has 20 modules (48 in the HAIP plan), and
+Inji Certify 1.0 supports the \texttt{pre-authorized\us{}code} grant, so the issuer plan can be
+driven without scripting a browser login. Hours are focused working hours.
+
+\begin{longtable}{@{}p{11.6cm}p{2cm}p{2.4cm}@{}}
+\toprule
+Task & Hours & Needs Certify?\\
+\midrule
+\endhead
+Issuer support in the runner: pre-authorized flow, issuer plan config, tests & 8--12 & no\\
+Certify integration, run by run, as Verify was on 2 October & 8--14 & \textbf{yes}\\
+Combined run across both components; consolidated report & 3--4 & partly\\
+Evidence: signed exports; F-10 filed upstream with its fix & 3 & no\\
+Docs: architecture, automation, self-certification guide & 8 & no\\
+Share of the slide deck / write-up & 4--6 & no\\
+Polish: README, findings PDF margins & 3 & no\\
+\midrule
+\textbf{Total} & \textbf{37--50} & \\
+\bottomrule
+\end{longtable}
+
+At about 5 focused hours a day: \textbf{8--10 working days}, finishing around
+\textbf{14--16 October}, ten days before the deadline. The one item that can push this out is
+Certify integration, which waits on a running Certify 1.0 stack (Mukta). Everything else on
+this list can proceed without it.
+
 \subsection{Week 3 --- Mon 5 to Sun 11 Oct: the two halves meet}
 
 \begin{longtable}{@{}p{1.9cm}p{6.9cm}p{7.2cm}@{}}
@@ -742,26 +773,27 @@ repositories on \texttt{release-1.0.x}.
 Day & \Sh & \Mu\\
 \midrule
 \endhead
-Mon 5 & \todo{} Issuer-role support in the runner: no handoff; different plan
-configuration & \todo{} Unified Docker Compose with \textbf{per-module profiles}: Verify, Certify,
+Mon 5 & \todo{} Issuer support: read the suite's issuer modules and Certify's credential-offer
+API; design the pre-authorized handoff ($\approx$5h) & \todo{} Unified Docker Compose with \textbf{per-module profiles}: Verify, Certify,
 or both, each with the suite --- the kickoff's stated requirement\\
 \addlinespace
-Tue 6 & \todo{} Issuer plan configuration templates\newline
-\todo{} Upstream reporting decision, per the mentor answer on 0.18.x
+Tue 6 & \todo{} Issuer support: code and tests against fixtures; issuer plan config
+template ($\approx$5h)
 & \todo{} Compose: solve cross-project networking and the public hostname\\
 \addlinespace
 Wed 7 & \todo{} Weekly Connect --- brief in Part 1\newline
-\todo{} File any finding that survives on 1.0
+\todo{} Finish issuer support ($\approx$2h)
 & \todo{} OpenIDConformanceTest in inji-verify's api-test, reading real runner
 output\\
 \addlinespace
-Thu 8 & \todo{} Combined mode: consolidated output across components
+Thu 8 & \todo{} Combined run: consolidated output across components ($\approx$3--4h)
 & \todo{} Inji Certify environment: keystore, DID endpoint, auth server, keys --- day 1\\
 \addlinespace
-Fri 9 & \todo{} Signed exports; findings catch-up
+Fri 9 & \todo{} Signed exports; file F-10 upstream, per the mentor answer on where ($\approx$3h)
 & \todo{} Certify environment --- day 2\\
 \addlinespace
-Sat 10 & \todo{} Architecture and automation documentation
+Sat 10 & \todo{} Architecture and automation docs ($\approx$4h)\newline
+\todo{} \textbf{Certify decision} with Mukta
 & \todo{} Certify environment --- day 3, or fall back (see risks)\\
 \addlinespace
 Sun 11 & \multicolumn{2}{p{14.2cm}}{\todo{} Joint integration session: runner output into the Extent
@@ -779,22 +811,23 @@ Verify's own api-testrig report.
 Day & \Sh & \Mu\\
 \midrule
 \endhead
-Mon 12 & \todo{} Run the issuer plan against Certify & \todo{} Fold Certify into the unified
+Mon 12 & \todo{} Certify integration: issuer plan live, one change per run ($\approx$4--7h) & \todo{} Fold Certify into the unified
 compose\\
 \addlinespace
-Tue 13 & \todo{} Triage the issuer results; baseline for Certify
+Tue 13 & \todo{} Certify integration continued; Certify baseline ($\approx$4--7h)
 & \todo{} OpenIDConformanceTest in inji-certify's api-test\\
 \addlinespace
 Wed 14 & \todo{} Weekly Connect\newline \todo{} Combined run end to end
 & \todo{} GitHub Actions workflow, first version\\
 \addlinespace
-Thu 15 & \todo{} Self-certification documentation
+Thu 15 & \todo{} Self-certification guide; finish docs ($\approx$4h)
 & \todo{} Result diff between runs; consolidated report and badge\\
 \addlinespace
-Fri 16 & \todo{} Selective execution polish; expected-failures handling
+Fri 16 & \todo{} Share of the deck / write-up ($\approx$4--6h)\newline
+\textbf{Target: Shardul's part complete}
 & \todo{} Actions: fail the build on a regression, demonstrably\\
 \addlinespace
-Sat 17 & \todo{} Findings written up as issue drafts
+Sat 17 & \todo{} Polish: README, findings PDF margins ($\approx$3h)
 & \todo{} Setup, troubleshooting and CI documentation\\
 \addlinespace
 Sun 18 & \multicolumn{2}{p{14.2cm}}{\todo{} \textbf{Minimum viable submission check}: all three
@@ -857,7 +890,7 @@ Upstream issues (\Sh) & mentor answer on channel & No --- default is a GitHub is
 Risk & Response\\
 \midrule
 \endhead
-Certify cannot run locally & By Sat 10 Oct at the latest, fall back: submit Verify end to
+Certify cannot run locally & Decided on Sat 10 Oct. Either Shardul brings the Certify 1.0 stack up himself (adds 1--2 days to his part), or fall back: submit Verify end to
 end, the issuer support in the runner, and a documented Certify path. Per-module
 conformance for one component satisfies the mandatory tasks.\\
 Mukta's start slips & No word on setup progress as of 2 October. The fixture means the Java
