@@ -95,7 +95,14 @@ Automated, unsigned. Target version. Each run changed exactly one thing.
 | `ZQqnbYfw46wpmyI` | happy-flow | FAILED | PID credential as `dc+sd-jwt`. **Verify accepted the presentation (HTTP 200)**; client-id pairing failures only |
 | `5KS13qvmbwOMNtY` | happy-flow | **REVIEW** | `redirect_uri:` client id. **35 pass, 0 fail, 0 warn.** Baseline for 1.0 |
 
+Full plan, all 11 modules — two runs:
+
+- Plan `YyUQFGfA9rlMr` — first full run. 4 PASSED, 7 REVIEW. REVIEW not yet resolved: the harness did
+  not fetch Verify's verdict, so the negative tests' outcome was invisible.
+- Plan `nupFFSGqySsbb` — with REVIEW resolution. Every module consistent with conformance; the two
+  `request-uri-*` modules not applicable to `url_query`. **Source of the 1.0 baseline.**
+
 ## Outstanding
 
-The other eleven modules of the 1.0 Final verifier plan on `1.0.0-alpha.1`. A signed export
-of `5KS13qvmbwOMNtY` before anything from it is reported upstream.
+Signed exports for anything reported upstream. The two `request-uri-*` modules, which need a
+signed by-reference request (`release-1.0.x` head). Inji Certify.

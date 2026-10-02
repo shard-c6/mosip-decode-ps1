@@ -667,6 +667,9 @@ every item are in \texttt{docs/findings/findings.tex}; this is the index to it.
         format). Established what a passing run needs.
   \item \textbf{Happy-flow passed: FINISHED / REVIEW, 35 checks, 0 failures, 0 warnings, fully
         unattended} --- including the screenshot. The gate now protects a real pass.
+  \item Ran the full plan. Added REVIEW resolution: the harness fetches Inji Verify's own
+        verdict, because the suite cannot see whether a forged credential was rejected.
+        Result: 9 of 11 modules exercised, all consistent with conformance.
 \end{enumerate}
 
 \newpage
@@ -715,8 +718,8 @@ Fri 2 Oct & \done{} Kickoff transcript worked through\newline
 \todo{} Build apitest-commons; api-test in inji-verify\newline
 \textbf{Build api-test from \texttt{release-1.0.x}}, not master --- the target changed\\
 \addlinespace
-Sat 3 Oct & \todo{} Full 1.0 Final plan on \texttt{alpha.1}; new baseline for all 12 modules,
-each with reason and evidence\newline
+Sat 3 Oct & \done{} Full 1.0 Final plan on \texttt{alpha.1} --- done early, 2 Oct: 9 of 11
+exercised and consistent, 2 n/a to the variant; baseline for all 11\newline
 \todo{} Make \texttt{nonceMode} follow the version under test
 & \todo{} api-test in inji-certify (\texttt{release-1.0.x})\newline
 \todo{} Write down the TestNG/Extent result shape\\

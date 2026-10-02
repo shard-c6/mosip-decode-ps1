@@ -5,6 +5,7 @@
 \usepackage[margin=2.2cm]{geometry}
 \usepackage{xcolor}
 \usepackage{longtable}
+\usepackage{array}
 % enumitem is not part of BasicTeX; these keep lists compact without it, so the
 % document rebuilds on a stock TeX installation with no extra packages.
 \newcommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}}
@@ -36,6 +37,12 @@
 \author{Shardul Chogale \and Mukta Varak}
 \date{Document started: 20 September 2026\\Last updated: 2 October 2026}
 
+% Long code identifiers (\texttt) otherwise never break and run into the margin. Allow
+% breaks at hyphens inside them, and a little extra inter-word stretch as a last resort.
+\let\origtexttt\texttt
+\renewcommand{\texttt}[1]{\origtexttt{\hyphenchar\font=`\-\relax #1}}
+\setlength{\emergencystretch}{3em}
+\renewcommand{\_}{\textunderscore\allowbreak}
 \begin{document}
 \maketitle
 \thispagestyle{fancy}
@@ -584,11 +591,63 @@ module failed, the gate could never do. Baselines are now per version
 (\texttt{expected-failures.json} for 1.0; \texttt{expected-failures-0.18.json} for the
 earlier evidence).
 
+\subsubsection*{The full plan on Inji Verify 1.0.0-alpha.1}
+
+Plan \texttt{nupFFSGqySsbb}: all 11 modules the OID4VP 1.0 Final verifier plan contains for this
+variant (\texttt{invalid-session-transcript} is mdoc-only). Every module FINISHED with 0
+failures and 0 warnings: 4 PASSED, 7 REVIEW.
+
+\textbf{REVIEW was not taken at face value.} For the negative tests the suite presents a forged
+credential and asks a human to confirm the verifier rejected it. It cannot see this itself:
+Inji Verify answers the \texttt{direct\_post} with HTTP 200 and verifies afterwards, which OID4VP
+1.0 Final permits. Our screenshot automation fills the placeholder regardless --- so ``REVIEW, 0
+failures'' would have been reported even if Verify had \emph{accepted} a forged credential. The
+first full run (plan \texttt{YyUQFGfA9rlMr}) had exactly that blind spot.
+
+The harness now settles each REVIEW with evidence only the verifier side has: Inji Verify's
+own verdict from \texttt{/vp-session-results}, compared with what the suite's REVIEW message
+says the test requires. A contradiction fails the gate. Second full run:
+
+{\footnotesize
+\begin{longtable}{>{\raggedright\arraybackslash}p{4.4cm} p{2.95cm} p{1.3cm} >{\raggedright\arraybackslash}p{5.9cm}}
+\hline
+\textbf{Module} & \textbf{Test ID} & \textbf{Suite} & \textbf{Inji Verify's verdict}\\
+\hline
+\endhead
+happy-flow & \texttt{FiEKKnONeoNFVWu} & REVIEW & accepted; required accept --- consistent\\
+minimal-cnf-jwk & \texttt{eGNvPaFZCvXDyF2} & REVIEW & accepted; required accept --- consistent\\
+request-uri-method-post & \texttt{D9k8YD8bC5KOPYk} & REVIEW & accepted --- \textbf{not exercised} (n/a to \texttt{url\_query})\\
+request-uri-fetched-twice & \texttt{1m9l4wYovOH7Qq5} & REVIEW & accepted --- \textbf{not exercised} (n/a to \texttt{url\_query})\\
+invalid-kb-jwt-signature & \texttt{V8O4tr84SWq2nRX} & REVIEW & rejected; required reject --- consistent\\
+invalid-credential-signature & \texttt{R7r9vitOs0OMGiG} & REVIEW & rejected; required reject --- consistent\\
+invalid-sd-hash & \texttt{jP5ItCI3EM9AT2w} & REVIEW & rejected; required reject --- consistent\\
+invalid-kb-jwt-nonce & \texttt{79k2ff0JPhb1Db6} & PASSED & rejected at submission (HTTP 400)\\
+invalid-kb-jwt-aud & \texttt{ACAbYUZ9qjIYl6E} & PASSED & rejected at submission (HTTP 400)\\
+kb-jwt-iat-in-past & \texttt{wXtLgQRsyy2VjF2} & PASSED & rejected at submission (HTTP 400)\\
+kb-jwt-iat-in-future & \texttt{LJnVhzjO72E8sEe} & PASSED & rejected at submission (HTTP 400)\\
+\hline
+\end{longtable}}
+
+\textbf{Result.} On Inji Verify 1.0.0-alpha.1 the verifier accepted every valid presentation and
+rejected every invalid one --- three forged ones (credential signature, key-binding signature,
+SD hash) after accepting the submission, and four (nonce, audience, issued-at past and future)
+at submission with precise error messages. \textbf{Nine modules are genuinely exercised and all
+nine are consistent with conformance.} Two, request-uri-method-post and
+request-uri-fetched-twice, test fetching the request by reference; the suite's own
+descriptions say they do not apply to \texttt{request\_method=url\_query}, so under our variant
+they ran as plain happy flows. They are recorded as \emph{not exercised}, not as passes.
+Exercising them needs a signed by-reference request with \texttt{x509\_san\_dns}, present only on
+the \texttt{release-1.0.x} head.
+
+The 1.0 baseline now covers all 11 modules, each with its reason and evidence; re-gating this
+run against it passes with no unknown modules and no mismatches.
+
 \subsubsection*{Status at end of Day 6}
-One module of twelve passes on the target version. Two new findings (F-10, F-11); F-05
+The verifier plan is complete on the target version: 9 of 11 modules exercised, all
+consistent with conformance; 2 not applicable to our variant. Earlier in the day, before the
+full run: one module of twelve passed. Two new findings (F-10, F-11); F-05
 resolved as our artefact; F-01, F-02, F-03, F-04 confirmed fixed on 1.0 by run; F-07
-persists on 1.0; F-09 does not apply on 1.0. Next: the remaining eleven modules on
-\texttt{1.0.0-alpha.1}. Question for mentors, sharpened: is \texttt{1.0.0-alpha.1} the target,
+persists on 1.0; F-09 does not apply on 1.0. Next: Inji Certify. Question for mentors, sharpened: is \texttt{1.0.0-alpha.1} the target,
 or the \texttt{release-1.0.x} head built from source?
 
 \newpage

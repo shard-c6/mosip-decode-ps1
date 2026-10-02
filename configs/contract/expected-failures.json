@@ -1,17 +1,114 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-10-02T07:00:00Z",
+  "updatedAt": "2026-10-02T09:00:00Z",
   "componentVersions": {
     "inji-verify": "1.0.0-alpha.1"
   },
-  "note": "Inji Verify 1.0.0-alpha.1 baseline (the target version). Recorded 2 October from the first run with zero failures. Modules not yet run are absent deliberately and gate as SKIP until recorded. Every entry carries a reason and evidence: an expected result without a documented reason is a silenced test.",
+  "note": "Inji Verify 1.0.0-alpha.1 baseline (the target version), from the full plan run of 2 October. All 11 modules the plan contains for this variant: 4 PASSED; 7 REVIEW, each resolved by the harness against Verify's own verdict and consistent with what the test required. Two of the 11 (request-uri-*) are not applicable to the url_query variant and are marked exercised:false. invalid-session-transcript is mdoc-only and not in this plan.",
   "components": {
     "inji-verify": {
       "oid4vp-1final-verifier-test-plan": {
         "oid4vp-1final-verifier-happy-flow": {
           "expected": "REVIEW",
-          "reason": "All 35 automated checks pass; REVIEW is the suite's state for 'passed, screenshot evidence awaiting human review', reached by design for this module. Requires the test configuration documented in docs/handbook Part 2: PID credential (vct urn:eudi:pid:1, dc+sd-jwt), redirect_uri client id, the F-10 database fix, and a signing key.",
-          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-happy-flow-5KS13qvmbwOMNtY.json",
+          "reason": "All checks pass. REVIEW resolved by the harness: Verify's own verdict accepted the valid presentation (allChecksSuccessful=true).",
+          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-happy-flow-FiEKKnONeoNFVWu.json",
+          "recordedAt": "2026-10-02",
+          "reviewResolution": {
+            "expected": "accept",
+            "verifier": "accepted",
+            "consistent": true
+          }
+        },
+        "oid4vp-1final-verifier-minimal-cnf-jwk": {
+          "expected": "REVIEW",
+          "reason": "Credential with a minimal cnf JWK. REVIEW resolved: Verify accepted it, as required.",
+          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-minimal-cnf-jwk-eGNvPaFZCvXDyF2.json",
+          "recordedAt": "2026-10-02",
+          "reviewResolution": {
+            "expected": "accept",
+            "verifier": "accepted",
+            "consistent": true
+          }
+        },
+        "oid4vp-1final-verifier-request-uri-method-post": {
+          "expected": "REVIEW",
+          "reason": "NOT EXERCISED. Tests fetching the request by reference with POST; per the suite's own description not applicable to request_method=url_query, so it ran as a plain happy flow. Needs a signed by-reference request (x509_san_dns), only on the release-1.0.x head.",
+          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-request-uri-method-post-D9k8YD8bC5KOPYk.json",
+          "recordedAt": "2026-10-02",
+          "exercised": false,
+          "reviewResolution": {
+            "expected": "accept",
+            "verifier": "accepted",
+            "consistent": true
+          }
+        },
+        "oid4vp-1final-verifier-request-uri-fetched-twice": {
+          "expected": "REVIEW",
+          "reason": "NOT EXERCISED. Tests re-fetching a request_uri; not applicable to url_query per the suite's description. Ran as a plain happy flow. Same prerequisite as request-uri-method-post.",
+          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-request-uri-fetched-twice-1m9l4wYovOH7Qq5.json",
+          "recordedAt": "2026-10-02",
+          "exercised": false,
+          "reviewResolution": {
+            "expected": "accept",
+            "verifier": "accepted",
+            "consistent": true
+          }
+        },
+        "oid4vp-1final-verifier-invalid-kb-jwt-signature": {
+          "expected": "REVIEW",
+          "reason": "Forged key-binding JWT signature. Verify answers direct_post 200 then verifies; REVIEW resolved: Verify's verdict rejected it (allChecksSuccessful=false), as required.",
+          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-invalid-kb-jwt-signature-V8O4tr84SWq2nRX.json",
+          "recordedAt": "2026-10-02",
+          "reviewResolution": {
+            "expected": "reject",
+            "verifier": "rejected",
+            "consistent": true
+          }
+        },
+        "oid4vp-1final-verifier-invalid-credential-signature": {
+          "expected": "REVIEW",
+          "reason": "Forged issuer signature on the credential. REVIEW resolved: Verify's verdict rejected it, as required.",
+          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-invalid-credential-signature-R7r9vitOs0OMGiG.json",
+          "recordedAt": "2026-10-02",
+          "reviewResolution": {
+            "expected": "reject",
+            "verifier": "rejected",
+            "consistent": true
+          }
+        },
+        "oid4vp-1final-verifier-invalid-sd-hash": {
+          "expected": "REVIEW",
+          "reason": "Tampered sd_hash. REVIEW resolved: Verify's verdict rejected it, as required.",
+          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-invalid-sd-hash-jP5ItCI3EM9AT2w.json",
+          "recordedAt": "2026-10-02",
+          "reviewResolution": {
+            "expected": "reject",
+            "verifier": "rejected",
+            "consistent": true
+          }
+        },
+        "oid4vp-1final-verifier-invalid-kb-jwt-nonce": {
+          "expected": "PASSED",
+          "reason": "Wrong KB-JWT nonce. Verify rejects synchronously at direct_post (HTTP 400, 'Nonce validation failed'); the suite sees it and passes.",
+          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-invalid-kb-jwt-nonce-79k2ff0JPhb1Db6.json",
+          "recordedAt": "2026-10-02"
+        },
+        "oid4vp-1final-verifier-invalid-kb-jwt-aud": {
+          "expected": "PASSED",
+          "reason": "Wrong KB-JWT aud. Rejected synchronously (HTTP 400, 'Client id validation failed'); suite passes.",
+          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-invalid-kb-jwt-aud-ACAbYUZ9qjIYl6E.json",
+          "recordedAt": "2026-10-02"
+        },
+        "oid4vp-1final-verifier-kb-jwt-iat-in-past": {
+          "expected": "PASSED",
+          "reason": "KB-JWT iat too old. Rejected synchronously (HTTP 400); suite passes.",
+          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-kb-jwt-iat-in-past-wXtLgQRsyy2VjF2.json",
+          "recordedAt": "2026-10-02"
+        },
+        "oid4vp-1final-verifier-kb-jwt-iat-in-future": {
+          "expected": "PASSED",
+          "reason": "KB-JWT iat in the future. Rejected synchronously (HTTP 400); suite passes.",
+          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-kb-jwt-iat-in-future-LJnVhzjO72E8sEe.json",
           "recordedAt": "2026-10-02"
         }
       }
