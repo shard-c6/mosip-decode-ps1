@@ -240,7 +240,7 @@ Piece & Where it listens & Why it is needed\\
 OpenID conformance suite 5.3.1 & \url{https://localhost.emobix.co.uk:8443} & The examiner. It plays
 the wallet (verifier tests) or the client (issuer tests) and checks the component against
 the spec.\\
-Inji Verify & UI :3000, API :8080 (path /v1/verify) & The verifier under test. Target \texttt{1.0.0-alpha.1}; Steps 4 and 6 were written and tested on 0.18.2 and are to be re-checked on 1.0.\\
+Inji Verify 1.0.0-alpha.1 & UI :3000, API :8080 (path /v1/verify) & The verifier under test. Happy-flow passes on it as of 2 October.\\
 Inji Certify 0.14.0 & not yet running & The issuer under test (Part 4, weeks 3--4).\\
 ngrok tunnel & a *.ngrok-free.dev address & Mandatory. Verify identifies itself with a
 did:web DID resolved over public HTTPS, and bakes its public address into the response\us{}uri
@@ -281,6 +281,16 @@ git clone https://gitlab.com/openid/conformance-suite.git
 git clone https://gitlab.com/openid/conformance-suite-automated-testing-tutorial.git
 \end{verbatim}
 
+Then the \textbf{target version}, Inji Verify 1.0, as a seventh folder: a worktree of the
+\texttt{inji-verify} clone at the published 1.0 tag. The 0.18.2 checkout stays as it is,
+because it reproduces the earlier evidence.
+
+\begin{verbatim}
+git -C inji-verify fetch --depth 1 https://github.com/mosip/inji-verify.git \
+    tag v1.0.0-alpha.1
+git -C inji-verify worktree add --detach ../inji-verify-1.0 v1.0.0-alpha.1
+\end{verbatim}
+
 \texttt{mosip-decode-ps1} is ours. The Java work lands on branches of our forks of
 \texttt{inji-verify} and \texttt{inji-certify} (Shardul's forks at
 github.com/shard-c6; Mukta has write access to both).
@@ -292,18 +302,17 @@ account's free \textbf{static} domain in the dashboard. Without a static domain 
 hostname changes on every restart and Step 4 must be redone each time. The domain is
 per-developer: Shardul's is sphere-dust-sandlot.ngrok-free.dev; Mukta needs her own.
 
-\subsection{Step 4 --- Two local edits to Inji Verify}
+\subsection{Step 4 --- Three local edits to Inji Verify 1.0}
 
-These are not committed anywhere. A fresh clone lacks both, and either one missing
-produces failures that look like Inji Verify defects.
+In \texttt{inji-verify-1.0/docker-compose/}. None is committed anywhere; each one missing
+produces a failure that looks like a defect in Inji Verify. Each was established by the run
+that needed it (findings, Day 6).
 
-\textbf{4a.} In \texttt{inji-verify/docker-compose/docker-compose.yml} the literal
-placeholder \texttt{VERIFY\us{}SERVICE\us{}PROXY\us{}FOR\us{}LOCALHOST} appears in five
-environment variables and is substituted by nothing. Replace it with your domain ---
-hostname only, no https://, no trailing slash:
+\textbf{4a. Public host.} The literal \texttt{VERIFY\us{}SERVICE\us{}PROXY\us{}FOR\us{}LOCALHOST}
+appears in five values of \texttt{docker-compose.yml} and is substituted by nothing. Replace it
+with your domain --- hostname only:
 
 \begin{verbatim}
-cd ~/projects/MOSIP/inji-verify/docker-compose
 sed -i '' 's/VERIFY_SERVICE_PROXY_FOR_LOCALHOST/YOUR-DOMAIN.ngrok-free.dev/g' \
     docker-compose.yml                  # macOS; on Linux drop the ''
 grep -c "YOUR-DOMAIN" docker-compose.yml      # expect 5
@@ -315,21 +324,56 @@ Windows (PowerShell):
   'YOUR-DOMAIN.ngrok-free.dev' | Set-Content docker-compose.yml
 \end{verbatim}
 
-\textbf{4b.} In \texttt{inji-verify/docker-compose/config/config.json}, set the
-\emph{Mock Identity (SD JWT)} entry to \texttt{"clientIdScheme":"pre\us{}registered"}. It ships
-as \texttt{did}, which delivers the authorisation request by reference; the test variant
-needs it inline.
+\textbf{4b. Database script (finding F-10).} In \texttt{db-init/init.sql}, replace the
+\texttt{verify.vp\us{}submission} table with the definition in
+\texttt{../db\us{}scripts/inji\us{}verify/ddl/verify-vp\us{}submission.sql} (keep the
+\texttt{verify.} schema prefix). Without this, every presentation submission returns HTTP 500.
+If the stack has already run once, the old schema is in the data volume: recreate it with
+\cmd{docker compose up -d --force-recreate --renew-anon-volumes postgres}.
+
+\textbf{4c. A conformance credential.} In \texttt{config/config.json}, add to
+\texttt{verifiableClaims}:
+
+\begin{verbatim}
+{ "logo": "/assets/cert.png",
+  "name": "OIDF Conformance PID (SD JWT)",
+  "clientIdPrefix": "pre_registered",
+  "purpose": "OpenID Foundation conformance testing",
+  "dcqlQuery": { "credentials": [ {
+      "id": "pid_sd_jwt", "format": "dc+sd-jwt",
+      "meta": { "vct_values": [ "urn:eudi:pid:1" ] } } ] } }
+\end{verbatim}
+
+The suite's verifier tests always present a credential of type \texttt{urn:eudi:pid:1}; a
+verifier that asks for anything else rejects it, correctly. \texttt{pre\us{}registered} makes
+Verify deliver the request inline, which the test variant needs.
 
 \subsection{Step 5 --- Point the runner at your machine}
 
-\texttt{configs/runner.json} is shared and committed. Put anything that is yours in
-\texttt{configs/runner.local.json}, which git ignores and the runner deep-merges on top,
-matching components by name. Most setups need nothing here --- the runner talks to Verify
-on localhost. Example, to change the suite alias so two developers' plans don't collide:
+\textbf{5a. A signing key for the suite's test credential.} Private, so it lives in the
+gitignored \texttt{configs/keys/}. Generated with the suite's own script:
 
 \begin{verbatim}
-{ "components": [ { "component": "inji-verify", "alias": "injiverify-mukta" } ] }
+cd ~/projects/MOSIP/mosip-decode-ps1
+python3 ../conformance-suite/scripts/generate-vp-test-cert.py \
+    --hostname YOUR-DOMAIN.ngrok-free.dev \
+    --output configs/keys/vp-signing-jwk.json --ca-output configs/keys/vp-test-ca.pem
 \end{verbatim}
+
+\textbf{5b. Your own settings.} \texttt{configs/runner.json} is shared and committed. Anything
+that is yours goes in \texttt{configs/runner.local.json}, which git ignores and the runner
+deep-merges on top, matching components by name. The client identifier must use the
+\texttt{redirect\us{}uri:} prefix with \emph{your} response URI, and a distinct alias keeps two
+developers' plans apart:
+
+\begin{verbatim}
+{ "components": [ { "component": "inji-verify", "alias": "injiverify-YOURNAME",
+    "verifierRequest": { "clientId":
+      "redirect_uri:https://HOST/v1/verify/v2/vp-submission/direct-post"
+} } ] }
+\end{verbatim}
+
+\texttt{HOST} is your ngrok domain, e.g. \texttt{sphere-dust-sandlot.ngrok-free.dev}.
 
 Install the runner's one dependency: \cmd{python3 -m pip install -r requirements.txt}.
 
@@ -345,9 +389,12 @@ cd ~/projects/MOSIP/conformance-suite
 docker compose -f docker-compose-prebuilt.yml up -d
 \end{verbatim}
 
-\textbf{6c. Inji Verify.}
+\textbf{6c. Inji Verify 1.0.} Only one Verify version can run at a time --- they share
+container names and ports --- so take the other one down first.
+
 \begin{verbatim}
-cd ~/projects/MOSIP/inji-verify/docker-compose && docker compose up -d
+cd ~/projects/MOSIP/inji-verify/docker-compose && docker compose down     # 0.18.2, if up
+cd ~/projects/MOSIP/inji-verify-1.0/docker-compose && docker compose up -d
 \end{verbatim}
 
 \textbf{6d. The tunnel} --- leave it running in its own terminal:
@@ -375,7 +422,7 @@ Needs no Docker. Normalisation is tested against the real Day 1 log, so these al
 that the suite's field names have not drifted from our contract.
 
 \begin{verbatim}
-cd ~/projects/MOSIP/mosip-decode-ps1 && python3 -m pytest tests/ -q     # expect 50 passed
+cd ~/projects/MOSIP/mosip-decode-ps1 && python3 -m pytest tests/ -q     # expect 63 passed
 \end{verbatim}
 
 \subsection{Step 9 --- Run conformance}
@@ -385,6 +432,8 @@ cd ~/projects/MOSIP/mosip-decode-ps1 && python3 -m pytest tests/ -q     # expect
 ./run-conformance.sh --component verify \
     --only oid4vp-1final-verifier-happy-flow -v          # one module, verbose
 ./run-conformance.sh --component verify --output scratch/run.json
+./run-conformance.sh --component verify \
+    --config configs/runner-0.18.json                    # 0.18.2: earlier evidence
 ./run-conformance.sh --component certify                 # once Certify is configured
 ./run-conformance.sh --combined                          # every configured component
 \end{verbatim}
@@ -611,6 +660,13 @@ every item are in \texttt{docs/findings/findings.tex}; this is the index to it.
         On it, DCQL exists and the nonce is random --- F-01, F-02 and F-03 do not apply.
   \item Put the F-01/F-02 upstream issue on hold; scoped every finding to 0.18.2; decided to
         move the baseline to \texttt{1.0.0-alpha.1}.
+  \item Taught the runner the 1.0 API (DCQL, \texttt{/v2/vp-session-request}, the 1.0 SDK's
+        behaviour). Resolved F-05 as our own artefact on the way.
+  \item Five runs on \texttt{1.0.0-alpha.1}, each changing one thing. Found F-10 (the Compose
+        database script breaks every submission) and F-11 (sample config uses a superseded
+        format). Established what a passing run needs.
+  \item \textbf{Happy-flow passed: FINISHED / REVIEW, 35 checks, 0 failures, 0 warnings, fully
+        unattended} --- including the screenshot. The gate now protects a real pass.
 \end{enumerate}
 
 \newpage
@@ -653,7 +709,8 @@ Wed 30 & \todo{} Weekly Connect (attendance not recorded)
 \addlinespace
 Fri 2 Oct & \done{} Kickoff transcript worked through\newline
 \done{} Found the 1.0 line; findings scoped; issue on hold\newline
-\todo{} Bring up Verify \texttt{1.0.0-alpha.1}; run happy-flow
+\done{} Bring up Verify \texttt{1.0.0-alpha.1}; run happy-flow --- \textbf{passes}\newline
+\done{} F-10 found; upstream issue drafted
 & \todo{} Accept the two fork invitations; claim an ngrok domain\newline
 \todo{} Build apitest-commons; api-test in inji-verify\newline
 \textbf{Build api-test from \texttt{release-1.0.x}}, not master --- the target changed\\
@@ -664,7 +721,7 @@ each with reason and evidence\newline
 & \todo{} api-test in inji-certify (\texttt{release-1.0.x})\newline
 \todo{} Write down the TestNG/Extent result shape\\
 \addlinespace
-Sun 4 Oct & \todo{} Screenshot mechanism, on whichever module now gets past DCQL\newline
+Sun 4 Oct & \done{} Screenshot mechanism --- confirmed by run, 2 Oct\newline
 \todo{} Re-check F-05, F-06, F-07, F-09 on 1.0
 & \todo{} Review CONTRACT.md; OpenIDConformanceTest skeleton\newline
 \todo{} Read the 1.0 compose; sketch per-module profiles\\

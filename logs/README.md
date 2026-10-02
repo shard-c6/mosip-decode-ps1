@@ -83,7 +83,19 @@ reported upstream still needs the suite's signed export.
 
 ---
 
+### 2026-10-02 — Day 6 (first runs on Inji Verify 1.0.0-alpha.1)
+
+Automated, unsigned. Target version. Each run changed exactly one thing.
+
+| Test ID | Module | Result | Notes |
+|---|---|---|---|
+| `Bob121tXCWTGf9y` | happy-flow | FAILED | First 1.0 run. DCQL extracted, nonce checks pass. Stopped: our plan config lacked a signing key |
+| `gIA512EeJWehcHt` | happy-flow | FAILED | Signing key added. Verify answered **HTTP 500** — F-10 (database script) |
+| `tpKVz6upccxpO5U` | happy-flow | FAILED | Database fixed. Verify rejected the credential's `vct` — correct behaviour |
+| `ZQqnbYfw46wpmyI` | happy-flow | FAILED | PID credential as `dc+sd-jwt`. **Verify accepted the presentation (HTTP 200)**; client-id pairing failures only |
+| `5KS13qvmbwOMNtY` | happy-flow | **REVIEW** | `redirect_uri:` client id. **35 pass, 0 fail, 0 warn.** Baseline for 1.0 |
+
 ## Outstanding
 
-Modules 02–11 of the 1.0 Final alpha verifier plan, and the ID2 verifier plan, are not yet
-run. Scheduled in Week 1 — see `docs/PLAN.md`.
+The other eleven modules of the 1.0 Final verifier plan on `1.0.0-alpha.1`. A signed export
+of `5KS13qvmbwOMNtY` before anything from it is reported upstream.

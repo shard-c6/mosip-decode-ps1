@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0",
+  "updatedAt": "2026-10-02T07:00:00Z",
+  "componentVersions": {
+    "inji-verify": "1.0.0-alpha.1"
+  },
+  "note": "Inji Verify 1.0.0-alpha.1 baseline (the target version). Recorded 2 October from the first run with zero failures. Modules not yet run are absent deliberately and gate as SKIP until recorded. Every entry carries a reason and evidence: an expected result without a documented reason is a silenced test.",
+  "components": {
+    "inji-verify": {
+      "oid4vp-1final-verifier-test-plan": {
+        "oid4vp-1final-verifier-happy-flow": {
+          "expected": "REVIEW",
+          "reason": "All 35 automated checks pass; REVIEW is the suite's state for 'passed, screenshot evidence awaiting human review', reached by design for this module. Requires the test configuration documented in docs/handbook Part 2: PID credential (vct urn:eudi:pid:1, dc+sd-jwt), redirect_uri client id, the F-10 database fix, and a signing key.",
+          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-happy-flow-5KS13qvmbwOMNtY.json",
+          "recordedAt": "2026-10-02"
+        }
+      }
+    },
+    "inji-certify": {
+      "_comment": "Not yet exercised."
+    }
+  }
+}

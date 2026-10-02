@@ -500,7 +500,7 @@ Our findings against the 1.0 line, from source (not yet from runs):
 F-01/F-02 nonce & \texttt{btoa(Date.now())} & \texttt{crypto.getRandomValues} & \texttt{crypto.getRandomValues}\\
 F-03 DCQL & absent & present (16 service files) & present\\
 F-06 response mode & \texttt{direct\_post} only & \texttt{direct\_post} only & not determined by source search\\
-F-09 client id & \texttt{did}, \texttt{pre\_registered} & no \texttt{x509\_san\_dns} & \texttt{x509\_san\_dns} configured\\
+F-09 client id & \texttt{did}, \texttt{pre\_registered} & \texttt{redirect\_uri:} works --- see runs below$^\dagger$ & \texttt{x509\_san\_dns} configured\\
 \hline
 \end{longtable}
 
@@ -521,10 +521,75 @@ F-09 client id & \texttt{did}, \texttt{pre\_registered} & no \texttt{x509\_san\_
         under test rather than be a fixed default.
 \end{enumerate}
 
+$^\dagger$\,Corrected the same day. Written from source as ``no overlap'' because alpha.1 has no
+\texttt{x509\_san\_dns}; run \texttt{5KS13qvmbwOMNtY} below showed the \texttt{redirect\_uri:}
+client identifier prefix works, which source search had not revealed. Recorded rather than
+silently fixed.
+
+\subsubsection*{Runs on Inji Verify 1.0.0-alpha.1}
+
+Run from a worktree of \texttt{inji-verify} at tag \texttt{v1.0.0-alpha.1}
+(\texttt{../inji-verify-1.0}) with the same suite and variant as every earlier run. The runner
+gained a 1.0 mode first: \texttt{/v2/vp-session-request}, a DCQL query read from Verify's own
+config, and a reproduction of the 1.0 SDK, including the \texttt{client\_metadata} it adds
+when building the request URI. Each run changed one thing, so each change in result has a
+single cause.
+
+\begin{longtable}{p{2.6cm} p{4.4cm} p{3.4cm} p{4.1cm}}
+\hline
+\textbf{Test ID} & \textbf{Change from previous} & \textbf{Result} & \textbf{Stopped at / outcome}\\
+\hline
+\endhead
+\texttt{Bob121tXCWTGf9y} & First 1.0 run; shipped \emph{Mock Identity} credential
+& INTERRUPTED / FAILED, 23 pass & \texttt{CreateSdJwtKbCredential}: our plan config lacked a
+signing key. \textbf{DCQL extracted; all nonce checks pass.}\\
+\texttt{gIA512EeJWehcHt} & Test signing key added & FINISHED / FAILED, 28 pass & Verify
+answered the submission with \textbf{HTTP 500} --- F-10\\
+\texttt{tpKVz6upccxpO5U} & Database init script corrected & FINISHED / FAILED, 28 pass &
+Verify answered 400: credential \texttt{vct} does not match the query --- correct behaviour\\
+\texttt{ZQqnbYfw46wpmyI} & Credential requesting \texttt{urn:eudi:pid:1} as \texttt{dc+sd-jwt}
+& FINISHED / FAILED, 32 pass & \textbf{Verify accepted the presentation (HTTP 200).} Two
+DCQL failures cleared. Remaining failures: client id pairing only\\
+\texttt{5KS13qvmbwOMNtY} & Client id \texttt{redirect\_uri:<response\_uri>} &
+\textbf{FINISHED / REVIEW, 35 pass, 0 fail, 0 warn} & Every automated check passes; screenshot
+placeholder filled by the suite's browser automation\\
+\hline
+\end{longtable}
+
+\textbf{The happy-flow module passes against Inji Verify 1.0.0-alpha.1, fully unattended.}
+REVIEW is the suite's state for ``all checks passed, image evidence awaiting human review'',
+which this module reaches by design. The suite log confirms ``All placeholders filled by
+scripted browser'' --- the screenshot requirement (Q6) is automated, now observed rather than
+read from source.
+
+\textbf{What a passing run requires} --- each item established by the run that needed it:
+\begin{enumerate}\tightlist
+  \item A signing key for the suite's test credential (\texttt{credential.signing\_jwk}),
+        generated with the suite's own \texttt{generate-vp-test-cert.py}; kept out of git.
+  \item The database fix for F-10.
+  \item A verifier credential requesting \texttt{vct} \texttt{urn:eudi:pid:1} as
+        \texttt{dc+sd-jwt}. The suite's verifier tests \emph{always} present that credential
+        type --- hard-coded in \texttt{CreateSdJwtKbCredential.java:17} --- so a verifier asking
+        for anything else will, correctly, reject it. Run \texttt{tpKVz6upccxpO5U} is Inji Verify
+        doing exactly that. Added locally to Verify's \texttt{config.json}.
+  \item The \texttt{redirect\_uri:} client identifier prefix: \texttt{client\_id} =
+        \texttt{redirect\_uri:} followed by the response URI, matching the plan's
+        \texttt{client\_id\_prefix=redirect\_uri} variant. Per-developer, because the response
+        URI contains the ngrok host.
+\end{enumerate}
+
+\textbf{The gate now has something to protect.} The 1.0 baseline records happy-flow as
+REVIEW; a return to FAILED on the target version fails the build --- which, while every
+module failed, the gate could never do. Baselines are now per version
+(\texttt{expected-failures.json} for 1.0; \texttt{expected-failures-0.18.json} for the
+earlier evidence).
+
 \subsubsection*{Status at end of Day 6}
-No conformance runs. Next: run the harness against \texttt{1.0.0-alpha.1} and record whether
-F-03 clears and what the first real failures are. Question for mentors, now sharper: is
-\texttt{1.0.0-alpha.1} the intended target, or should we build \texttt{release-1.0.x} from source?
+One module of twelve passes on the target version. Two new findings (F-10, F-11); F-05
+resolved as our artefact; F-01, F-02, F-03, F-04 confirmed fixed on 1.0 by run; F-07
+persists on 1.0; F-09 does not apply on 1.0. Next: the remaining eleven modules on
+\texttt{1.0.0-alpha.1}. Question for mentors, sharpened: is \texttt{1.0.0-alpha.1} the target,
+or the \texttt{release-1.0.x} head built from source?
 
 \newpage
 %=========================================================
@@ -536,7 +601,8 @@ Severity reflects impact on certifiability and on security, not on our convenien
 \textbf{Inji Verify 0.18.2}. On 2 October we found an Inji 1.0 line (\texttt{release-1.0.x};
 runnable as \texttt{1.0.0-alpha.1}) in which F-01, F-02 and F-03 appear fixed from source and
 F-09 is partly addressed. The findings stand for 0.18.2; none is to be reported upstream
-until it has been re-checked against the 1.0 line. See the Day 6 entry.
+until it has been re-checked against the 1.0 line. See the Day 6 entry. F-10 and F-11 were
+found on the 1.0 line itself.
 
 %---------------------------------------------------------
 \finding{F-01 --- Nonce has insufficient entropy}{\sevhigh{} \quad \confirmed}
@@ -682,7 +748,19 @@ draft's query model. Recorded separately because a maintainer may address them
 independently (e.g.\ support both during a transition period).
 
 %---------------------------------------------------------
-\finding{F-05 --- \texttt{client\_metadata} absent in inline mode}{\sevmed{} \quad \unverified}
+\finding{F-05 --- \texttt{client\_metadata} absent in inline mode}{\sevlow{} \quad \textbf{RESOLVED --- NOT A DEFECT}}
+
+\textbf{Resolved 2 October: our artefact.} The 0.18.x SDK adds \texttt{client\_metadata}
+(\texttt{client\_name} and \texttt{vp\_formats}) to every inline request when it builds the
+request URI (\texttt{OpenID4VPVerification.tsx}, lines 124--130). Our
+\texttt{build-oid4vp-uri.py}, and the runner copied from it, did not. The ``client\_metadata
+not present'' warning in the Day 1 run and in run \texttt{hcuWEvxGbvRgt7e} was produced by our
+tooling, and both runs share the artefact --- which is why they matched each other. The runner
+now reproduces the SDK. One caveat stands: the 0.18 SDK uses the pre-Final key
+\texttt{vp\_formats}, while 1.0 Final requires \texttt{vp\_formats\_supported}, so on 0.18.2 that
+check would likely still fail, for a different reason. On 1.0 the SDK uses the Final key.
+
+\textbf{Original entry follows.}
 
 \textbf{Component:} Inji Verify 0.18.2 \quad \textbf{Spec:} OID4VP 1.0 Final, §5.1; Annex B.2.2, B.3.4
 
@@ -786,6 +864,62 @@ plan matches Verify's client identification model.}
 reportable observation is the absence of overlap, not that any single value is ``wrong''.
 
 \textbf{Open question for mentors.} See Q3.
+
+%---------------------------------------------------------
+\finding{F-10 --- Docker Compose database script out of date; every VP submission fails with HTTP 500}{\sevhigh{} \quad \confirmed}
+
+\textbf{Component:} Inji Verify 1.0.0-alpha.1, and \texttt{release-1.0.x} head (6a6ab3b, 1 October)
+\quad \textbf{Kind:} packaging --- the service is correct
+
+\textbf{Observation.} Brought up the documented way, with Docker Compose, Inji Verify 1.0
+answers every presentation submission (\texttt{POST /v2/vp-submission/direct-post}) with HTTP 500.
+
+\textbf{Evidence --- service log} (run \texttt{gIA512EeJWehcHt}):
+\begin{quote}\small
+\texttt{PSQLException: ERROR: column v1\_0.response\_code does not exist}\\
+\texttt{at ...VerifiablePresentationRequestServiceImpl.getCurrentRequestStatus(...java:126)}
+\end{quote}
+
+\textbf{Root cause.} The Compose stack initialises its database from
+\texttt{docker-compose/db-init/init.sql}, which creates \texttt{verify.vp\_submission} with five
+columns. The canonical schema, \texttt{db\_scripts/inji\_verify/ddl/verify-vp\_submission.sql},
+has eight: it adds \texttt{response\_code}, \texttt{response\_code\_expiry\_at} and
+\texttt{response\_code\_used}, makes \texttt{vp\_token} and \texttt{presentation\_submission}
+nullable, and adds a primary key. The 1.0 service is written against the canonical schema.
+
+\textbf{Ruled out first:} a stale database from the earlier 0.18.2 stack. The data volume was
+created at 06:34 on 2 October; the Postgres log shows \texttt{init.sql} running and creating
+four tables; the live table matches \texttt{init.sql} column for column.
+
+\textbf{Confirmed fix.} With the canonical \texttt{vp\_submission} definition substituted into
+\texttt{init.sql}, the 500 disappears and Verify processes submissions normally (runs
+\texttt{tpKVz6upccxpO5U} onward).
+
+\textbf{Also inferred, not observed:} \texttt{presentation\_submission NOT NULL} would likely
+break storing a DCQL response, which carries no presentation submission. Not separately tested.
+
+\textbf{Impact.} Anyone evaluating Inji Verify 1.0 through its quick start sees verification
+fail outright, for a reason that is not in the product.
+
+\textbf{Proposed action.} Report upstream with the fix: regenerate \texttt{init.sql} from
+\texttt{db\_scripts}. Present on the branch head, so this is the one to file. Draft in
+\texttt{docs/upstream/ISSUE-02-compose-db-init.md}.
+
+%---------------------------------------------------------
+\finding{F-11 --- Shipped DCQL sample uses the superseded format identifier}{\sevlow{} \quad \confirmed}
+
+\textbf{Component:} Inji Verify 1.0.0-alpha.1 \texttt{docker-compose/config/config.json}
+\quad \textbf{Kind:} sample configuration
+
+\textbf{Evidence.} \texttt{ValidateDCQLQuery}: \emph{``does not have a value in the enumeration
+[dc+sd-jwt, mso\_mdoc]''} at \texttt{\$.credentials[0].format}; the shipped \emph{Mock Identity}
+entry requests \texttt{vc+sd-jwt}. OID4VP 1.0 Final, §6.
+
+\textbf{Configuration, not implementation.} Run \texttt{ZQqnbYfw46wpmyI}, requesting
+\texttt{dc+sd-jwt}, cleared both DCQL failures and Verify accepted the presentation.
+
+\textbf{Not to be reported.} The \texttt{release-1.0.x} head already adds a \texttt{dc+sd-jwt}
+entry to the sample configuration; upstream is addressing it.
 
 \newpage
 %=========================================================

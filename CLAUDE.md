@@ -57,7 +57,24 @@ unauthenticated; the Swagger page's auth section describes the hosted deployment
 
 ## Uncommitted local modifications
 
-Not in any repo. A fresh clone lacks both; either one missing produces confusing failures.
+Not in any repo. A fresh clone lacks them; any one missing produces confusing failures.
+
+**Target: the 1.0 worktree** — `../inji-verify-1.0`, a worktree of `inji-verify` at tag
+`v1.0.0-alpha.1` (`git -C inji-verify worktree add --detach ../inji-verify-1.0 v1.0.0-alpha.1`):
+
+1. `docker-compose/docker-compose.yml` — `VERIFY_SERVICE_PROXY_FOR_LOCALHOST` → ngrok host (5 places).
+2. `docker-compose/db-init/init.sql` — `vp_submission` replaced with the canonical schema from
+   `db_scripts`. Without it every submission returns HTTP 500 (finding F-10). Backup: `init.sql.bak`.
+3. `docker-compose/config/config.json` — added credential **"OIDF Conformance PID (SD JWT)"**:
+   `pre_registered`, DCQL `dc+sd-jwt`, `vct_values ["urn:eudi:pid:1"]`. The suite only ever presents
+   that vct. Also *Mock Identity* switched to `pre_registered` (unused now). Backup: `config.json.bak`.
+4. Runner side, gitignored: `configs/keys/vp-signing-jwk.json` (suite's test signing key, from
+   `../conformance-suite/scripts/generate-vp-test-cert.py`) and `configs/runner.local.json`
+   setting `clientId` to `redirect_uri:https://<ngrok-host>/v1/verify/v2/vp-submission/direct-post`.
+
+Only one Verify version runs at a time — same container names and ports.
+
+**0.18.2 clone** (`../inji-verify`, earlier evidence only):
 
 1. **`inji-verify/docker-compose/docker-compose.yml`** — the literal placeholder
    `VERIFY_SERVICE_PROXY_FOR_LOCALHOST` sits in five env vars and is substituted by nothing.

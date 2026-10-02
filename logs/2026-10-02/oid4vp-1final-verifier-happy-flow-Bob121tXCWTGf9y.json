@@ -1,0 +1,1232 @@
+[
+  {
+    "_id": "Bob121tXCWTGf9y-Z0oEigjMzqVEJ1baJjkzJHVb9TBNsMtL",
+    "msg": "Test instance Bob121tXCWTGf9y created",
+    "result": "INFO",
+    "baseUrl": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul",
+    "variant": {
+      "credential_format": "sd_jwt_vc",
+      "request_method": "url_query",
+      "vp_profile": "plain_vp",
+      "client_id_prefix": "redirect_uri",
+      "response_mode": "direct_post"
+    },
+    "alias": "injiverify-shardul",
+    "description": "Inji Verify 1.0.0-alpha.1 - OID4VP 1.0 Final alpha verifier - automated run",
+    "planId": "G5hJns6EiXl9S",
+    "config": {
+      "_comment_browser": "The happy-flow module wants a screenshot of the verifier's verification-result page before it reaches REVIEW. AbstractVP1FinalVerifierTest serves an HTML stand-in at the verification-evidence path and fills the placeholder through browser automation when a matching entry exists, so this block is what makes an unattended run possible. Confirm the match pattern against a live run before trusting it.",
+      "browser": [
+        {
+          "match": "*/verification-evidence*",
+          "tasks": [
+            {
+              "task": "Capture verification evidence",
+              "match": "*/verification-evidence*",
+              "commands": [
+                [
+                  "wait",
+                  "xpath",
+                  "//*",
+                  10,
+                  "Verification evidence",
+                  "update-image-placeholder"
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "alias": "injiverify-shardul",
+      "description": "Inji Verify 1.0.0-alpha.1 - OID4VP 1.0 Final alpha verifier - automated run"
+    },
+    "baseMtlsUrl": "https://localhost.emobix.co.uk:8444/test-mtls/a/injiverify-shardul",
+    "testName": "oid4vp-1final-verifier-happy-flow",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "TEST-RUNNER",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922917055
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-OvqK1Pclo5VKldVC9QIsPsUR66KNYiU8",
+    "server_configuration": {
+      "issuer": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul/",
+      "authorization_endpoint": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul/authorize",
+      "token_endpoint": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul/token",
+      "jwks_uri": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul/jwks",
+      "userinfo_endpoint": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul/userinfo",
+      "registration_endpoint": "https://localhost.emobix.co.uk:8443/test/a/injiverify-shardul/register",
+      "scopes_supported": [
+        "openid",
+        "phone",
+        "profile",
+        "email",
+        "address",
+        "offline_access"
+      ],
+      "response_types_supported": [
+        "code",
+        "id_token code",
+        "token code id_token",
+        "id_token",
+        "token id_token",
+        "token code",
+        "token"
+      ],
+      "response_modes_supported": [
+        "query",
+        "fragment",
+        "form_post"
+      ],
+      "token_endpoint_auth_methods_supported": [
+        "client_secret_basic",
+        "client_secret_post",
+        "client_secret_jwt",
+        "private_key_jwt"
+      ],
+      "token_endpoint_auth_signing_alg_values_supported": [
+        "HS256",
+        "HS384",
+        "HS512",
+        "RS256",
+        "RS384",
+        "RS512",
+        "PS256",
+        "PS384",
+        "PS512",
+        "ES256",
+        "ES256K",
+        "ES384",
+        "ES512",
+        "EdDSA",
+        "Ed25519",
+        "Ed448"
+      ],
+      "grant_types_supported": [
+        "authorization_code",
+        "implicit"
+      ],
+      "claims_parameter_supported": true,
+      "acr_values_supported": [
+        "PASSWORD"
+      ],
+      "subject_types_supported": [
+        "public",
+        "pairwise"
+      ],
+      "claim_types_supported": [
+        "normal",
+        "aggregated",
+        "distributed"
+      ],
+      "claims_supported": [
+        "sub",
+        "name",
+        "given_name",
+        "family_name",
+        "middle_name",
+        "nickname",
+        "preferred_username",
+        "gender",
+        "birthdate",
+        "address",
+        "zoneinfo",
+        "locale",
+        "phone_number",
+        "phone_number_verified",
+        "email",
+        "email_verified",
+        "website",
+        "profile",
+        "updated_at",
+        "txn"
+      ],
+      "id_token_signing_alg_values_supported": [
+        "none",
+        "RS256",
+        "RS384",
+        "RS512",
+        "PS256",
+        "PS384",
+        "PS512",
+        "ES256",
+        "ES256K",
+        "ES384",
+        "ES512",
+        "EdDSA",
+        "Ed25519",
+        "Ed448"
+      ],
+      "id_token_encryption_alg_values_supported": [
+        "RSA1_5",
+        "RSA-OAEP",
+        "RSA-OAEP-256",
+        "RSA-OAEP-384",
+        "RSA-OAEP-512",
+        "ECDH-ES",
+        "ECDH-ES+A128KW",
+        "ECDH-ES+A192KW",
+        "ECDH-ES+A256KW",
+        "A128KW",
+        "A192KW",
+        "A256KW",
+        "A128GCMKW",
+        "A192GCMKW",
+        "A256GCMKW",
+        "dir"
+      ],
+      "id_token_encryption_enc_values_supported": [
+        "A128CBC-HS256",
+        "A192CBC-HS384",
+        "A256CBC-HS512",
+        "A128GCM",
+        "A192GCM",
+        "A256GCM"
+      ],
+      "request_object_signing_alg_values_supported": [
+        "none",
+        "RS256",
+        "RS384",
+        "RS512",
+        "PS256",
+        "PS384",
+        "PS512",
+        "ES256",
+        "ES256K",
+        "ES384",
+        "ES512",
+        "EdDSA",
+        "Ed25519",
+        "Ed448"
+      ],
+      "request_object_encryption_alg_values_supported": [
+        "RSA1_5",
+        "RSA-OAEP",
+        "RSA-OAEP-256",
+        "RSA-OAEP-384",
+        "RSA-OAEP-512",
+        "ECDH-ES",
+        "ECDH-ES+A128KW",
+        "ECDH-ES+A192KW",
+        "ECDH-ES+A256KW",
+        "A128KW",
+        "A192KW",
+        "A256KW",
+        "A128GCMKW",
+        "A192GCMKW",
+        "A256GCMKW",
+        "dir"
+      ],
+      "request_object_encryption_enc_values_supported": [
+        "A128CBC-HS256",
+        "A192CBC-HS384",
+        "A256CBC-HS512",
+        "A128GCM",
+        "A192GCM",
+        "A256GCM"
+      ],
+      "userinfo_signing_alg_values_supported": [
+        "RS256",
+        "RS384",
+        "RS512",
+        "PS256",
+        "PS384",
+        "PS512",
+        "ES256",
+        "ES256K",
+        "ES384",
+        "ES512",
+        "EdDSA",
+        "Ed25519",
+        "Ed448"
+      ],
+      "userinfo_encryption_alg_values_supported": [
+        "RSA1_5",
+        "RSA-OAEP",
+        "RSA-OAEP-256",
+        "RSA-OAEP-384",
+        "RSA-OAEP-512",
+        "ECDH-ES",
+        "ECDH-ES+A128KW",
+        "ECDH-ES+A192KW",
+        "ECDH-ES+A256KW",
+        "A128KW",
+        "A192KW",
+        "A256KW",
+        "A128GCMKW",
+        "A192GCMKW",
+        "A256GCMKW",
+        "dir"
+      ],
+      "userinfo_encryption_enc_values_supported": [
+        "A128CBC-HS256",
+        "A192CBC-HS384",
+        "A256CBC-HS512",
+        "A128GCM",
+        "A192GCM",
+        "A256GCM"
+      ]
+    },
+    "msg": "Generated default server configuration",
+    "result": "SUCCESS",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "OIDCCGenerateServerConfiguration",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922917072
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-PheQNjdyqoxBSrfooHpWHbXHLxEVzhDW",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "RegisterClientRequestObjectTrustAnchor",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922917075,
+    "msg": "No client request object trust anchor configured, skipping registration"
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-u4TnEjusrh0KmC7tAfno5gIjiePrVf7A",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "oid4vp-1final-verifier-happy-flow",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922917077,
+    "msg": "Setup Done"
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-6BM773rnii24kxprYJACxZEVoyw10PMy",
+    "msg": "Incoming HTTP request to /test/a/injiverify-shardul/authorize",
+    "incoming_headers": {
+      "host": "localhost.emobix.co.uk",
+      "x-forwarded-uri": "/test/a/injiverify-shardul/authorize?client_id=inji-verify-ui&state=req_9a238d2a-3eb5-4cc1-96e2-40a18a889903&response_mode=direct_post&response_type=vp_token&nonce=jib2CEwDGCOJik-ScUElC4mrTAyAXLF9eO2aQp9U800&response_uri=https%3A%2F%2Fsphere-dust-sandlot.ngrok-free.dev%2Fv1%2Fverify%2Fv2%2Fvp-submission%2Fdirect-post&dcql_query=%7B%22credentials%22%3A%5B%7B%22id%22%3A%22mock_identity_sd_jwt_credential_id%22%2C%22format%22%3A%22vc%2Bsd-jwt%22%2C%22meta%22%3A%7B%22vct_values%22%3A%5B%22MockVerifiableCredential_SD_JWT%22%5D%7D%7D%5D%7D",
+      "forwarded": "by=172.18.0.4;for=192.168.65.1;host=localhost.emobix.co.uk;proto=https",
+      "connection": "close",
+      "accept": "*/*",
+      "accept-encoding": "gzip, deflate, br",
+      "user-agent": "python-httpx/0.28.1",
+      "content-type": "application/json"
+    },
+    "incoming_path": "/test/a/injiverify-shardul/authorize",
+    "incoming_body_form_params": null,
+    "incoming_method": "GET",
+    "incoming_tls_version": "TLSv1.3",
+    "incoming_tls_cert": null,
+    "incoming_query_string_params": {
+      "client_id": "inji-verify-ui",
+      "state": "req_9a238d2a-3eb5-4cc1-96e2-40a18a889903",
+      "response_mode": "direct_post",
+      "response_type": "vp_token",
+      "nonce": "jib2CEwDGCOJik-ScUElC4mrTAyAXLF9eO2aQp9U800",
+      "response_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/verify/v2/vp-submission/direct-post",
+      "dcql_query": "{\"credentials\":[{\"id\":\"mock_identity_sd_jwt_credential_id\",\"format\":\"vc+sd-jwt\",\"meta\":{\"vct_values\":[\"MockVerifiableCredential_SD_JWT\"]}}]}"
+    },
+    "incoming_body": null,
+    "incoming_tls_chain": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "http": "incoming",
+    "incoming_body_json_parse_error": null,
+    "incoming_tls_cipher": "TLS_AES_256_GCM_SHA384",
+    "incoming_body_json": null,
+    "testId": "Bob121tXCWTGf9y",
+    "src": "oid4vp-1final-verifier-happy-flow",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918474
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-NMUdqGA2uTPI12b8LYV9pcZStJwCybc8",
+    "msg": "Authorization endpoint",
+    "startBlock": true,
+    "blockId": "257c1f",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "-START-BLOCK-",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918476
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-r9IIDpyX2urLL4QZYhNcTmaDKZ6De8Oi",
+    "msg": "HTTP authorization request does not use request or request_uri; raw outer-parameter check is not applicable",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckForUnexpectedParametersInVpAuthorizationEndpointHttpRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918477
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-7m638zpa4S9NLLgwW9gn2l2I0UpTFoTo",
+    "msg": "Merged http request parameters with request object claims",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "requirements": [
+      "OIDCC-6.2",
+      "OIDCC-6.1"
+    ],
+    "effective_authorization_endpoint_request": {
+      "client_id": "inji-verify-ui",
+      "state": "req_9a238d2a-3eb5-4cc1-96e2-40a18a889903",
+      "response_mode": "direct_post",
+      "response_type": "vp_token",
+      "nonce": "jib2CEwDGCOJik-ScUElC4mrTAyAXLF9eO2aQp9U800",
+      "response_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/verify/v2/vp-submission/direct-post",
+      "dcql_query": {
+        "credentials": [
+          {
+            "id": "mock_identity_sd_jwt_credential_id",
+            "format": "vc+sd-jwt",
+            "meta": {
+              "vct_values": [
+                "MockVerifiableCredential_SD_JWT"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CreateEffectiveAuthorizationRequestParameters",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918481
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-UvvKp6o1Qa058bQ8i6dn8kyAlGDpp2mG",
+    "msg": "Extracted nonce",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-5.2"
+    ],
+    "nonce": "jib2CEwDGCOJik-ScUElC4mrTAyAXLF9eO2aQp9U800",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "ExtractNonceFromAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918482
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-uChVR7pEUcn5Xz59hEFaLOor2MhlxiHo",
+    "msg": "Nonce contains only URL safe characters",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-5.2"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckForInvalidCharsInNonce",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918483
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-Y9clqYFCOQfYL3na5p6lscrPnMuEdu4w",
+    "msg": "Nonce is at least 16 characters. Section 5.2 of OID4VP 1.0 Final does not impose a minimum length; this check flags obviously-too-short nonces that cannot plausibly satisfy the spec's \"sufficient entropy\" requirement.",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-5.2"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "VP1FinalCheckNonceMinimumLength",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918484
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-xHvNjPvoUOqdc3ro2aq0UqUBUCh2O0nr",
+    "length": 43,
+    "msg": "Nonce does not exceed 43 characters. Section 5.2 of OID4VP 1.0 Final requires the nonce to be a \"fresh, cryptographically random number with sufficient entropy\" but does not specify its length. To promote interoperability we expect nonces no longer than 43 characters (the longest the conformance suite itself generates as a verifier when testing a wallet); longer values may not be accepted by all wallets.",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-5.2"
+    ],
+    "nonce": "jib2CEwDGCOJik-ScUElC4mrTAyAXLF9eO2aQp9U800",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "VP1FinalCheckNonceMaximumLength",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918486
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-2vg1c1yP9wi7RasrnLXGYhHCtKVpfJp4",
+    "msg": "Nonce appears to have sufficient entropy. Section 5.2 of OID4VP 1.0 Final requires the nonce to be a \"fresh, cryptographically random number with sufficient entropy\"; OpenID4VP PR #722 (https://github.com/openid/OpenID4VP/pull/722/changes) recommends at least 128 bits.",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "actual": 212.57449695002674,
+    "requirements": [
+      "OID4VP-1FINAL-5.2"
+    ],
+    "expected": 96.0,
+    "value": "jib2CEwDGCOJik-ScUElC4mrTAyAXLF9eO2aQp9U800",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "VP1FinalEnsureMinimumNonceEntropy",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918487
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-bWyqEnkjQCiPdl96Mf7XRwEcun4tsgGl",
+    "msg": "Skipped evaluation due to missing required element: effective_authorization_endpoint_request code_challenge",
+    "result": "INFO",
+    "blockId": "257c1f",
+    "path": "code_challenge",
+    "requirements": [
+      "RFC7636-4.3"
+    ],
+    "mapped": null,
+    "object": "effective_authorization_endpoint_request",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "EnsureAuthorizationRequestContainsPkceCodeChallenge",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918489
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-MCyUt8tSDw41vscrgWoK17Sww5IEwnb2",
+    "msg": "Response type is expected value",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "expected": "vp_token",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "EnsureResponseTypeIsVpToken",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918490
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-gZMeRpd8gV7Jw5d3LihXAUg7zJ2eWfzd",
+    "msg": "response_mode is direct_post",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "ValidateResponseMode",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918490
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-bQkgvrXUYVXAZKX0trwuV1YT4bVWrDPx",
+    "msg": "client_id_scheme parameter is not present, as expected.",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckNoClientIdSchemeParameter",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918491
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-saLYaPrA46ZBRRgcm7lsZCl59aIbkoXv",
+    "msg": "scope parameter is not present, as expected.",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckNoScopeParameter",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918492
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-JEqNOmWKe18B81S4Fnmm0QufhbdmPxC9",
+    "msg": "request_uri_method parameter is not present.",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckRequestUriMethodParameter",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918492
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-nzHLJHBMYwfykR0T8cMpkw3AckYafKzd",
+    "msg": "Skipped evaluation due to missing required string: authorization_request_object",
+    "result": "INFO",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "expected": "authorization_request_object",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "WarnIfRequestUriMethodInRequestObject",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918493
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-Tp88IR65f6oYdIrRbHoMw7hhVKAAJhHu",
+    "msg": "Skipped evaluation due to missing required string: authorization_request_object",
+    "result": "INFO",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-5.10"
+    ],
+    "expected": "authorization_request_object",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "EnsureNoWalletNonceInRequestObject",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918494
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-OI5iWpXSlXqcrYUMk6c7oDU1nXtVDgri",
+    "msg": "All authorization parameters are expected",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "known_params": [
+      "presentation_definition",
+      "dcql_query",
+      "client_id",
+      "client_id_scheme",
+      "response_uri",
+      "client_metadata",
+      "nonce",
+      "state",
+      "response_type",
+      "response_mode",
+      "verifier_info",
+      "scope",
+      "request_uri_method",
+      "wallet_nonce",
+      "aud",
+      "iss",
+      "iat",
+      "nbf",
+      "exp",
+      "jti"
+    ],
+    "parameters": [
+      "client_id",
+      "state",
+      "response_mode",
+      "response_type",
+      "nonce",
+      "response_uri",
+      "dcql_query"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckForUnexpectedParametersInVpAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918494
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-vkXzOHGXj24EIRs5JOzrXhW3tesyV1kg",
+    "msg": "Authorization request does not contain transaction_data",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-5",
+      "OID4VP-1FINAL-5.1",
+      "OID4VP-1FINAL-8.4"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckNoTransactionDataInVpAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918495
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-ub0WA9AWCbG08bmhww8wEXsHUEvbTsmX",
+    "msg": "Skipped evaluation due to missing required element: effective_authorization_endpoint_request verifier_info",
+    "result": "INFO",
+    "blockId": "257c1f",
+    "path": "verifier_info",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "mapped": null,
+    "object": "effective_authorization_endpoint_request",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "ExtractVerifierInfoFromAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918496
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-hWKcE16aW7UtmWA3rF9yK8r2LE5gSaP5",
+    "msg": "Skipped evaluation due to missing required element: effective_authorization_endpoint_request verifier_info",
+    "result": "INFO",
+    "blockId": "257c1f",
+    "path": "verifier_info",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "mapped": null,
+    "object": "effective_authorization_endpoint_request",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "ValidateVerifierInfo",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918497
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-pMFsQEazPsmspmG0EhHLFk6FJQxeFEri",
+    "msg": "Skipped evaluation due to missing required element: effective_authorization_endpoint_request verifier_info",
+    "result": "INFO",
+    "blockId": "257c1f",
+    "path": "verifier_info",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "mapped": null,
+    "object": "effective_authorization_endpoint_request",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckForUnexpectedParametersInVerifierInfo",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918497
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-dF4ZB4ZEOKp18JjjxPVHghv1WeDnRkMw",
+    "response_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/verify/v2/vp-submission/direct-post",
+    "msg": "For redirect_uri client_id prefix, the client_id (without prefix) must equal response_uri",
+    "result": "FAILURE",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-5.9.2"
+    ],
+    "orig_client_id": "inji-verify-ui",
+    "client_id": "inji-verify-ui",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "EnsureClientIdMatchesResponseUri",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918498
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-WxXvbKF0XKESN2tcQtHORttX83y2N6vS",
+    "msg": "response_uri is valid https url with no fragment",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "actual": "https://sphere-dust-sandlot.ngrok-free.dev/v1/verify/v2/vp-submission/direct-post",
+    "requirements": [
+      "OID4VP-1FINAL-8.2"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "EnsureValidResponseUriForAuthorizationEndpointRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918499
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-eHBSWQNPPL9vRu7L7ehPqPlV4vK6VLrw",
+    "msg": "Authorization request does not contain 'redirect_uri'",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-8.2"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckNoRedirectUriInVpAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918500
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-zX50TiJvpZnE2gz77CKEl5ofDcFgXmed",
+    "msg": "Authorization request does not contain presentation_definition or presentation_definition_uri",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckNoPresentationDefinitionInVpAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918501
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-KWkjdD0AO3ovpswIIEpDB3U9n6CcyDAr",
+    "msg": "client_metadata not present in request but it is mandatory to include vp_formats in it",
+    "result": "WARNING",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-5.1"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "VP1FinalCheckForUnexpectedParametersInVpClientMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918502
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-rgtQAKp9f9n4QKzT7naHpKCz3a0DpSY3",
+    "msg": "client_metadata is missing or not a JSON object",
+    "result": "FAILURE",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINALA-B.2.2",
+      "OID4VP-1FINALA-B.3.4"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "VP1FinalValidateVpFormatsSupportedInClientMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918503
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-1PFTbYCM8DLKpSnCZWbuuN5sABdSG5Vn",
+    "msg": "Extracted dcql_query from authorization request",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-6"
+    ],
+    "dcql": {
+      "credentials": [
+        {
+          "id": "mock_identity_sd_jwt_credential_id",
+          "format": "vc+sd-jwt",
+          "meta": {
+            "vct_values": [
+              "MockVerifiableCredential_SD_JWT"
+            ]
+          }
+        }
+      ]
+    },
+    "testId": "Bob121tXCWTGf9y",
+    "src": "ExtractDCQLQueryFromAuthorizationRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918504
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-oejTBdHnTxcOH6R3sHGiD189Icj0op9B",
+    "invalid_entries": [
+      {
+        "error": "does not have a value in the enumeration [\"dc+sd-jwt\", \"mso_mdoc\"]",
+        "path": "$.credentials[0].format"
+      }
+    ],
+    "result": "FAILURE",
+    "msg": "Found invalid entries in DCQL query input",
+    "blockId": "257c1f",
+    "input": {
+      "credentials": [
+        {
+          "id": "mock_identity_sd_jwt_credential_id",
+          "format": "vc+sd-jwt",
+          "meta": {
+            "vct_values": [
+              "MockVerifiableCredential_SD_JWT"
+            ]
+          }
+        }
+      ]
+    },
+    "error_class": "net.openid.conformance.util.validation.JsonSchemaValidationException",
+    "requirements": [
+      "OID4VP-1FINAL-6"
+    ],
+    "stacktrace": [
+      "net.openid.conformance.condition.AbstractJsonSchemaBasedValidation.onValidationFailure(AbstractJsonSchemaBasedValidation.java:48)",
+      "net.openid.conformance.condition.AbstractJsonSchemaBasedValidation.evaluate(AbstractJsonSchemaBasedValidation.java:32)",
+      "net.openid.conformance.condition.client.ValidateDCQLQuery.evaluate(ValidateDCQLQuery.java:32)",
+      "net.openid.conformance.condition.AbstractCondition.execute(AbstractCondition.java:153)",
+      "net.openid.conformance.testmodule.AbstractTestModule.call(AbstractTestModule.java:490)",
+      "net.openid.conformance.testmodule.AbstractTestModule.callAndContinueOnFailure(AbstractTestModule.java:274)",
+      "net.openid.conformance.vp1finalverifier.AbstractVP1FinalVerifierTest.handleAuthorizationEndpointRequest(AbstractVP1FinalVerifierTest.java:511)",
+      "net.openid.conformance.vp1finalverifier.AbstractVP1FinalVerifierTest.handleClientRequestForPath(AbstractVP1FinalVerifierTest.java:287)",
+      "net.openid.conformance.vp1finalverifier.AbstractVP1FinalVerifierTest.handleHttp(AbstractVP1FinalVerifierTest.java:273)",
+      "net.openid.conformance.runner.TestDispatcher.handle(TestDispatcher.java:182)",
+      "java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+      "java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+      "org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:252)",
+      "org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:184)",
+      "org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)",
+      "org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934)",
+      "org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853)",
+      "org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86)",
+      "org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)",
+      "org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)",
+      "org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000)",
+      "org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892)",
+      "jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622)",
+      "org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)",
+      "jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)",
+      "org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128)",
+      "org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)",
+      "org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)",
+      "net.openid.conformance.security.DummyUserFilter.doFilter(DummyUserFilter.java:85)",
+      "org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)",
+      "org.springframework.web.servlet.resource.ResourceUrlEncodingFilter.doFilter(ResourceUrlEncodingFilter.java:66)",
+      "org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)",
+      "org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)",
+      "org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:235)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$FilterObservation$SimpleFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:493)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:354)",
+      "org.springframework.security.web.ObservationFilterChainDecorator.lambda$wrapSecured$0(ObservationFilterChainDecorator.java:86)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:132)",
+      "org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)",
+      "org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:132)",
+      "org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:86)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.oauth2.client.web.OAuth2AuthorizationCodeGrantFilter.doFilterInternal(OAuth2AuthorizationCodeGrantFilter.java:183)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:181)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.authentication.ui.DefaultOneTimeTokenSubmitPageGeneratingFilter.doFilterInternal(DefaultOneTimeTokenSubmitPageGeneratingFilter.java:61)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.authentication.ui.DefaultResourcesFilter.doFilter(DefaultResourcesFilter.java:73)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:245)",
+      "org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:239)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:245)",
+      "org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:239)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "net.openid.conformance.security.DummyUserFilter.doFilter(DummyUserFilter.java:85)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.authentication.ott.GenerateOneTimeTokenFilter.doFilterInternal(GenerateOneTimeTokenFilter.java:67)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:195)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:195)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110)",
+      "org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)",
+      "org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)",
+      "org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "net.openid.conformance.security.RejectPlainHttpTrafficFilter.doFilterInternal(RejectPlainHttpTrafficFilter.java:22)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.session.ForceEagerSessionCreationFilter.doFilterInternal(ForceEagerSessionCreationFilter.java:45)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:231)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:244)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:337)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)",
+      "org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:141)",
+      "org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:237)",
+      "org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:195)",
+      "org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)",
+      "org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)",
+      "org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)",
+      "org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)",
+      "org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:317)",
+      "org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:355)",
+      "org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:272)",
+      "org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)",
+      "org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)",
+      "org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)",
+      "org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:110)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)",
+      "org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)",
+      "org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)",
+      "org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)",
+      "org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)",
+      "org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)",
+      "org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492)",
+      "org.apache.catalina.valves.StuckThreadDetectionValve.invoke(StuckThreadDetectionValve.java:187)",
+      "org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)",
+      "org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)",
+      "org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)",
+      "org.apache.catalina.valves.RemoteIpValve.invoke(RemoteIpValve.java:685)",
+      "org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341)",
+      "org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)",
+      "org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)",
+      "org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:1272)",
+      "org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1801)",
+      "org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)",
+      "org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946)",
+      "org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480)",
+      "org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57)",
+      "java.base/java.lang.Thread.run(Thread.java:1583)"
+    ],
+    "schema_link": "/json-schemas/oid4vp/dcql_request.json",
+    "error": "Schema Validation Failed",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "ValidateDCQLQuery",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918589
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-GZm1CbveyvvFKZfPgKfYjfXYalfma5ea",
+    "msg": "No unknown properties were found in the DCQL query",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "input": {
+      "credentials": [
+        {
+          "id": "mock_identity_sd_jwt_credential_id",
+          "format": "vc+sd-jwt",
+          "meta": {
+            "vct_values": [
+              "MockVerifiableCredential_SD_JWT"
+            ]
+          }
+        }
+      ]
+    },
+    "schema_link": "/json-schemas/oid4vp/dcql_request.json",
+    "requirements": [
+      "OID4VP-1FINAL-6"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckForUnexpectedParametersInDcqlQuery",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918594
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-y80SgytK0LhsNSxfQTv5B9Uz8MskUqpd",
+    "msg": "DCQL query does not request any SD-JWT VC claims that cannot be selectively disclosed",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "requirements": [
+      "SDJWTVC-3.2.2.2"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckForNonSelectivelyDisclosableClaimsInDcqlQuery",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918595
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-kQIvxja77ADUOw4ik8bn2TksDOmMAok0",
+    "msg": "The DCQL query does not contain claims entries unreferenced by claim_sets",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "requirements": [
+      "OID4VP-1FINAL-6.4.1"
+    ],
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckForUnreferencedClaimsInDcqlQuery",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918596
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-prynRStXmRx5YGQ936dkGTMPaQkjhoyJ",
+    "expected_format": "dc+sd-jwt",
+    "msg": "DCQL query requests credential format 'vc+sd-jwt' but the test is configured for 'dc+sd-jwt' (sd_jwt_vc)",
+    "result": "FAILURE",
+    "blockId": "257c1f",
+    "credential": {
+      "id": "mock_identity_sd_jwt_credential_id",
+      "format": "vc+sd-jwt",
+      "meta": {
+        "vct_values": [
+          "MockVerifiableCredential_SD_JWT"
+        ]
+      }
+    },
+    "configured_credential_format": "sd_jwt_vc",
+    "actual_format": "vc+sd-jwt",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CheckDCQLQueryCredentialFormatMatchesTestConfiguration",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918597
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-eVXB1sHF4XxOeqRtTOWoRTPayDWu8ET0",
+    "msg": "Added authorization_endpoint_response_params to environment",
+    "result": "SUCCESS",
+    "blockId": "257c1f",
+    "params": {
+      "state": "req_9a238d2a-3eb5-4cc1-96e2-40a18a889903"
+    },
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CreateAuthorizationEndpointResponseParams",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918599
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-K2SizmsnrJxXAam1CYjlxUo7XEVyeNbs",
+    "msg": "'Signing JWK' field is missing from the 'Credential Issuer' section in the test configuration",
+    "result": "FAILURE",
+    "blockId": "257c1f",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "CreateSdJwtKbCredential",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918643
+  },
+  {
+    "_id": "Bob121tXCWTGf9y-s0K0nUku7BuCadWf7hB4f9nXEqgMI29a",
+    "msg": "Test was interrupted before it could complete. The failure 'CreateSdJwtKbCredential: 'Signing JWK' field is missing from the 'Credential Issuer' section in the test configuration' means the test cannot continue.",
+    "result": "INTERRUPTED",
+    "blockId": "257c1f",
+    "testId": "Bob121tXCWTGf9y",
+    "src": "oid4vp-1final-verifier-happy-flow",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1790922918646
+  }
+]
