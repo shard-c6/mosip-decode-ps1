@@ -35,7 +35,7 @@
 \large Automated Conformance Testing for Inji Certify \& Inji Verify\\[0.8em]
 \normalsize Findings Log and Open Questions}
 \author{Shardul Chogale \and Mukta Varak}
-\date{Document started: 20 September 2026\\Last updated: 2 October 2026}
+\date{Document started: 20 September 2026\\Last updated: 26 October 2026}
 
 % Long code identifiers (\texttt) otherwise never break and run into the margin. Allow
 % breaks at hyphens inside them, and a little extra inter-word stretch as a last resort.
@@ -649,6 +649,39 @@ full run: one module of twelve passed. Two new findings (F-10, F-11); F-05
 resolved as our artefact; F-01, F-02, F-03, F-04 confirmed fixed on 1.0 by run; F-07
 persists on 1.0; F-09 does not apply on 1.0. Next: Inji Certify. Question for mentors, sharpened: is \texttt{1.0.0-alpha.1} the target,
 or the \texttt{release-1.0.x} head built from source?
+
+\subsection{Day 7 --- Monday, 26 October 2026}
+
+\subsubsection*{Context}
+No work took place between 2 and 26 October. On 26 October the organisers extended the
+submission deadline to 2 November 2026, and an earlier notice (12 October) confirmed that
+submissions go by email to \texttt{decode@mosip.io}, not through the Unstop page. Mukta's
+assigned work had not started; the final week is re-planned with Shardul covering it.
+
+\subsubsection*{Work completed --- problem statement task (iii)}
+\texttt{OpenIDConformanceTest} added to Inji Verify's api-test, on branch
+\texttt{feature/openid-conformance-test} of \texttt{shard-c6/inji-verify}, based on
+\texttt{release-1.0.x}. It reads the runner's contract document --- or invokes the runner against
+the testrig's own \texttt{injiVerifyBaseUrl}, via a new \texttt{--endpoint} option --- and reports
+each conformance module as a TestNG test, plus one test for the benchmark gate.
+
+Verified three ways, by running the class under TestNG with MOSIP's own report listener:
+\begin{itemize}\tightlist
+  \item the real full-plan run on Inji Verify 1.0.0-alpha.1: 12 of 12 tests pass, each named
+        \texttt{conformance.inji-verify.<module>} in MOSIP's EmailableReport;
+  \item a doctored copy with one regression and one accepted forged credential: exactly those
+        two and the gate fail, each with a specific reason;
+  \item nothing configured: one test, skipped, with an explanation --- existing testrig runs
+        are unaffected.
+\end{itemize}
+
+\subsubsection*{Environment note}
+Building api-test inside a git worktree needs \texttt{-Dmaven.gitcommitid.skip=true}: the
+project's \texttt{git-commit-id-plugin} cannot read a worktree's \texttt{.git} file. A property of
+our setup, not of Inji Verify; not a finding.
+
+\subsubsection*{Status at end of Day 7}
+Mandatory task (iii) demonstrated for Inji Verify. No conformance runs; no findings changed.
 
 \newpage
 %=========================================================

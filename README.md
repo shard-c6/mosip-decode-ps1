@@ -34,7 +34,7 @@ module's existing `api-testrig` so conformance becomes a gate on every release.
 
 **Start with the [Project Handbook](docs/handbook/handbook.pdf)** — the clean guide to
 running everything from a fresh machine to shutdown, a record of every step taken, and
-the day-by-day planner to the 26 October deadline. Source: `docs/handbook/handbook.tex`.
+the day-by-day planner to the **2 November** deadline (extended from 26 October). Source: `docs/handbook/handbook.tex`.
 
 | Document | What it covers |
 |---|---|

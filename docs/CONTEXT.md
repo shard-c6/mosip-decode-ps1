@@ -226,7 +226,7 @@ SETUP, RUNBOOK, PLAN, findings and this file; forks of all three MOSIP repos cre
 - Add Mukta as collaborator; she adds Shardul on hers
 - Share the agreed role split (PLAN.md) and `docs/CONTRACT.md` with Mukta so she can start
 - Move Day 1 log exports into `logs/2026-09-20/` (commit `.json` and `.sig` both)
-- ~~Confirm the real submission deadline~~ — **done 30 Sep: 26 October 2026, 11:59 PM IST.**
+- ~~Confirm the real submission deadline~~ — **done 30 Sep: 26 October 2026, 11:59 PM IST** — **extended on 26 Oct to 2 November 2026.**
   Planner in `docs/handbook/handbook.tex`, Part 4
 
 **Questions waiting on mentors**: Q1–Q8 in the findings document. Q1 (which spec version to

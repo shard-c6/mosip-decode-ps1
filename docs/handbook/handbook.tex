@@ -60,12 +60,12 @@
 Shardul Chogale (conformance engine and evidence)\\
 Mukta Varak (platform and delivery)\\[2em]
 Written: 30 September 2026; updated 2 October 2026\\
-Final submission deadline: \textbf{26 October 2026, 11:59 PM IST}\\[3em]
+Final submission deadline: \textbf{2 November 2026} (extended from 26 October)\\[3em]
 \begin{tabular}{@{}ll@{}}
 Part 1 & Mentor session brief --- Weekly Connect, 7 October\\
 Part 2 & Start to end: the clean guide to running the project\\
 Part 3 & Record of every step taken so far\\
-Part 4 & Planner, 30 September to 26 October, for both of us\\
+Part 4 & Planner, to 2 November --- final week re-planned 26 October\\
 \end{tabular}
 \vfill
 {\small This is the document to open first. It is kept current: when a procedure changes,
@@ -523,8 +523,14 @@ The final week, in order. Detail and dates in Part 4.
   \item Submission package: public repo with a clear README; the 1--2 page document or
         5--7 slide pitch; demo video; the Docker Compose, test plan configuration,
         one-command runner and GitHub Actions workflow the problem statement lists.
-  \item Submit early (target 23 October). Multiple submissions are allowed and only the
-        last before 26 October, 11:59 PM IST counts, so an early one is a safety net.
+  \item Submit \textbf{by email to decode@mosip.io} --- \emph{not} with the Unstop page's submit
+        button, which the organisers say is only a placeholder. Source code in the GitHub
+        repository; every other deliverable in a shared cloud folder (e.g. Google Drive); the
+        email gives the team name, the problem statement and those URLs, and every link must
+        be accessible. Target Sunday 1 November; the deadline is Monday 2 November.
+  \item The guidelines' mandatory items: source code, working prototype or demo, slide deck,
+        2--5 minute video, usage and installation instructions, API documentation where
+        applicable, a git repository with history, and \emph{each} student's college ID.
   \item Hand-over: MOSIP may request the code be contributed. Keep the repository
         clean enough that this is a formality.
   \item Shut the stack down (Step 13).
@@ -672,9 +678,54 @@ every item are in \texttt{docs/findings/findings.tex}; this is the index to it.
         Result: 9 of 11 modules exercised, all consistent with conformance.
 \end{enumerate}
 
+\subsection{26 October --- deadline extended; the api-testrig class}
+
+\begin{enumerate}\tightlist
+  \item No work between 2 and 26 October. The organisers extended the deadline to 2 November
+        and confirmed submission is by email, not the Unstop button.
+  \item Built Inji Verify's api-test on \texttt{release-1.0.x}: \texttt{apitest-commons} 1.5.0
+        resolves from Maven Central.
+  \item Wrote \texttt{OpenIDConformanceTest}: each conformance module becomes a TestNG result
+        in the testrig's own report, plus one for the gate. Checked on the real 11-module run
+        (12 of 12 pass, all named in MOSIP's EmailableReport) and on a doctored result with a
+        regression and an accepted forged credential (exactly those and the gate fail).
+        Pushed to \texttt{shard-c6/inji-verify}, branch \texttt{feature/openid-conformance-test}.
+\end{enumerate}
+
 \newpage
 %==========================================================================
-\section{Planner, 30 September to 26 October}
+\section{Planner, to 2 November}
+
+\subsection{Re-plan, 26 October: the final week}
+
+The deadline moved to 2 November. No work happened between 2 and 26 October, so the
+week-by-week plan below records what had been intended and is now superseded by this
+table. Mukta's assigned work (Compose, the Java class, CI, the Certify environment) had not
+started; Shardul takes all of it on. Scope is cut to what one person can finish well:
+Inji Verify end to end, with Inji Certify time-boxed to one day.
+
+\begin{longtable}{@{}p{2.2cm}p{11.2cm}p{2.6cm}@{}}
+\toprule
+Day & Work & Status\\
+\midrule
+\endhead
+Mon 26 Oct & \texttt{OpenIDConformanceTest} in Inji Verify's api-test (fork branch
+\texttt{feature/openid-conformance-test}); runner \texttt{--endpoint} & \done{} done\\
+Tue 27 Oct & Docker Compose with per-module profiles; GitHub Actions running the unit and
+contract tests & \todo{}\\
+Wed 28 Oct & Inji Certify, \textbf{time-boxed to one day}: issuer support; one issuer module
+if the stack comes up, otherwise a documented path, stated plainly & \todo{}\\
+Thu 29 Oct & Architecture diagram; README; runner API documentation; signed evidence exports
+& \todo{}\\
+Fri 30 Oct & Slide deck (problem, solution, stack, audience, impact); video, 2--5 min & \todo{}\\
+Sat 31 Oct & Fresh-clone test; fixes; contribution record made accurate & \todo{}\\
+Sun 1 Nov & Cloud folder; college IDs; \textbf{submission email to decode@mosip.io} & \todo{}\\
+Mon 2 Nov & Buffer only --- deadline & \\
+\bottomrule
+\end{longtable}
+
+\textbf{Cut:} a real Inji Certify pass, the HAIP plan, the two \texttt{request-uri} modules,
+result diff, the badge.
 %==========================================================================
 
 \Sh{} = Shardul (conformance engine and evidence). \Mu{} = Mukta (platform and delivery).
@@ -695,7 +746,9 @@ Tue 20 Oct & Nothing new or risky starts after today\\
 Wed 21 Oct & Weekly Connect --- show the working build if possible\\
 Fri 16 Oct & \textbf{Shardul's part complete} (estimate; see below)\\
 Fri 23 Oct & \textbf{First submission} (safety net)\\
-Mon 26 Oct & \textbf{Final submission, 11:59 PM IST} --- aim to finish by 6:00 PM\\
+Mon 26 Oct & \textit{Original deadline --- extended to 2 November}\\
+Sun 1 Nov & \textbf{Submission email} to decode@mosip.io (target)\\
+Mon 2 Nov & \textbf{Final submission deadline}\\
 \end{tabular}
 
 \subsection{Week 2 remainder --- Wed 30 Sep to Sun 4 Oct: move to the 1.0 line}

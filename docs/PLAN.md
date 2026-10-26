@@ -2,7 +2,8 @@
 
 **Team**: Shardul Chogale (`shard-c6`), Mukta Varak
 **Official kickoff**: 23 September 2026 — Day 2 of the event as this plan is written
-**Deadline**: **26 October 2026, 11:59 PM IST** — confirmed 30 September on the official
+**Deadline**: **2 November 2026** — extended on 26 October (email from decode@mosip.io). Was
+26 October 2026, 11:59 PM IST, confirmed 30 September on the official
 event page ("Final Submission Deadline"). Earlier versions of this file assumed ~21 October;
 the real date adds five days, used as a fifth week for finishing and submitting.
 **Target version (2 Oct)**: the Inji **1.0 line** — `1.0.0-alpha.1` is the newest published
