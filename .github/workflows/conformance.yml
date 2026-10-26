@@ -56,6 +56,8 @@ jobs:
           docker compose --env-file /dev/null config --services
           docker compose --env-file /dev/null --profile verify config --services
           docker compose --env-file /dev/null --profile verify --profile tunnel config --services
+          docker compose --env-file /dev/null --profile certify config --services
+          docker compose --env-file /dev/null --profile verify --profile certify config --services
 
   conformance:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'

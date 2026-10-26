@@ -62,6 +62,9 @@ Not in any repo. A fresh clone lacks them; any one missing produces confusing fa
 **Target (since 27 Oct): `docker/docker-compose.yml` in this repo** — no edits to any
 Inji Verify clone. `scripts/stack.sh up verify` brings up the suite and Inji Verify 1.0.
 The F-10 database fix and the conformance credential live in `docker/inji-verify/`.
+`scripts/stack.sh up certify|combined` adds Inji Certify (release-1.0.x QA image, pinned); its
+config and our changes to it live in `docker/inji-certify/` (see its README). Both components
+share one ngrok domain through `docker/gateway/nginx.conf`, which also holds the F-12 test shim.
 
 Per-developer, gitignored: `docker/.env` (`PUBLIC_HOST`, optional `NGROK_AUTHTOKEN`),
 `configs/keys/vp-signing-jwk.json` (suite's test signing key, from

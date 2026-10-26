@@ -29,6 +29,9 @@ from dataclasses import dataclass
 from typing import Any
 
 from .suite import ConformanceSuite
+
+if False:  # typing only
+    from .certify_client import InjiCertifyClient  # noqa: F401
 from .verify_client import (
     API_0_18,
     NONCE_SDK,
@@ -141,3 +144,58 @@ def deliver(
         api_version=api_version,
         session_cookie=verify.session_cookie,
     )
+
+
+# ---------------------------------------------------------------------------------------
+# Issuer side
+# ---------------------------------------------------------------------------------------
+
+def deliver_credential_offer(
+    suite: ConformanceSuite,
+    certify: "InjiCertifyClient",
+    module_id: str,
+    credential_configuration_id: str,
+    claims: dict[str, Any],
+    tx_code: str | None = None,
+) -> HandoffResult:
+    """
+    The issuer-plan handoff, for the pre-authorized flow.
+
+    The suite plays the wallet. AbstractVCIIssuerTestModule.waitForCredentialOffer()
+    exposes `credential_offer_endpoint` and handleHttp() dispatches path
+    "credential_offer" -- the same shape as the verifier handoff. The harness asks Certify
+    for a fresh offer and delivers its query string to that endpoint by HTTP GET, as a
+    wallet scanning Certify's QR code would.
+    """
+    from .certify_client import offer_params
+
+    exposed = suite.get_exposed(module_id)
+    endpoint = exposed.get("credential_offer_endpoint")
+    if not endpoint:
+        raise HandoffError(
+            f"module {module_id} exposes no credential_offer_endpoint "
+            f"(exposed keys: {sorted(exposed)}). It is not waiting for an offer."
+        )
+    offer_uri = certify.create_pre_authorized_offer(credential_configuration_id, claims, tx_code=tx_code)
+    status = suite.deliver_authorization_request(endpoint, offer_params(offer_uri))
+    log.info("issuer handoff: module=%s config=%s -> HTTP %s", module_id, credential_configuration_id, status)
+    return HandoffResult(delivered=True, http_status=status, request_id=None, seconds_remaining=None,
+                         detail="pre-authorized credential offer")
+
+
+def deliver_tx_code(suite: ConformanceSuite, module_id: str, tx_code: str) -> HandoffResult:
+    """
+    Answer a module waiting for a transaction code. The suite exposes
+    `tx_code_endpoint` as `<base>/tx_code?code=your_tx_code`
+    (AbstractVCIIssuerTestModule.waitForTxCode); the code goes in that query parameter.
+    """
+    from urllib.parse import urlsplit, urlunsplit
+
+    endpoint = suite.get_exposed(module_id).get("tx_code_endpoint")
+    if not endpoint:
+        raise HandoffError(f"module {module_id} exposes no tx_code_endpoint")
+    base = urlunsplit(urlsplit(endpoint)._replace(query=""))
+    status = suite.deliver_authorization_request(base, {"code": tx_code})
+    log.info("tx_code handoff: module=%s -> HTTP %s", module_id, status)
+    return HandoffResult(delivered=True, http_status=status, request_id=None, seconds_remaining=None,
+                         detail="tx_code")

@@ -8,6 +8,8 @@
 #   docker compose --profile certify up -d                     Inji Certify + suite
 #   docker compose --profile verify --profile certify up -d    both
 #
+# Both components share one public hostname through the gateway (port 3000).
+#
 # Prefer scripts/stack.sh, which also waits until everything answers.
 #
 # Settings come from docker/.env (copy .env.example). PUBLIC_HOST is required for Inji
@@ -109,8 +111,7 @@ services:
     profiles: [verify]
     image: injistack/inji-verify-ui:${VERIFY_TAG:-1.0.0-alpha.1}
     platform: linux/amd64
-    ports:
-      - "3000:8000"
+    # Reached through the gateway on port 3000, not published directly.
     environment:
       DEFAULT_TITLE: Inji Verify
       DEFAULT_LANG: en
@@ -148,17 +149,89 @@ services:
   tunnel:
     profiles: [tunnel]
     image: ngrok/ngrok:${NGROK_IMAGE_TAG:-latest}
-    command: ["http", "--url=https://${PUBLIC_HOST:-PUBLIC_HOST-not-set}", "verify-ui:8000", "--log=stdout"]
+    command: ["http", "--url=https://${PUBLIC_HOST:-PUBLIC_HOST-not-set}", "gateway:80", "--log=stdout"]
     environment:
       NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN:-}
     depends_on:
-      - verify-ui
+      - gateway
     logging: *logging
 
-  # --- Inji Certify (profile: certify) ----------------------------------------------
-  # Not yet added. Inji Certify 1.0 runs through inji-certify's docker-compose-injistack,
-  # which needs more than this file can provide on its own; see docs/handbook Part 4.
+  # --- Gateway (profiles: verify, certify) ------------------------------------------
+  # One public hostname for both components; see gateway/nginx.conf. ngrok -- on the host or
+  # the tunnel profile -- forwards to this, on port 3000.
+
+  gateway:
+    profiles: [verify, certify]
+    image: nginx:stable
+    ports:
+      - "3000:80"
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    logging: *logging
+
+  # --- Inji Certify 1.0 (profile: certify) ------------------------------------------
+  # The release-1.0.x build (MOSIP's QA image), pinned by digest: the published 1.0.0-alpha.1
+  # has no DPoP, which the OID4VCI 1.0 issuer plan's FAPI 2.0 base requires. Configuration
+  # from release-1.0.x, adjusted as recorded in inji-certify/README.md. Mimoto and Inji Web,
+  # also in Certify's own compose file, are the wallet side -- here the suite is the wallet.
+
+  certify-db:
+    profiles: [certify]
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      default:
+        aliases: [database]   # the hostname Certify's configuration expects
+    volumes:
+      - ./inji-certify/certify_init.sql:/docker-entrypoint-initdb.d/certify_init.sql:ro
+      - certify-db:/var/lib/postgresql/data
+    logging: *logging
+
+  certify:
+    profiles: [certify]
+    image: injistackqa/inji-certify-with-plugins@${CERTIFY_DIGEST:-sha256:2c72a78cd3c54d9bfdaf58489123cd78aa3f7d12108fdf4546fc28591b593c24}
+    user: root
+    ports:
+      - "8090:8090"
+    environment:
+      container_user: mosip
+      active_profile_env: default, csvdp-farmer
+      SPRING_CONFIG_NAME: certify
+      SPRING_CONFIG_LOCATION: /home/mosip/config/
+      enable_certify_artifactory: "false"
+      download_hsm_client: "false"
+      mosip_certify_domain_url: https://${PUBLIC_HOST:-PUBLIC_HOST-not-set}
+      # Read by the configuration files for the authorisation server and did:web URLs.
+      PUBLIC_HOST: ${PUBLIC_HOST:-PUBLIC_HOST-not-set}
+    volumes:
+      - ./inji-certify/config/certify-default.properties:/home/mosip/config/certify-default.properties:ro
+      - ./inji-certify/config/certify-csvdp-farmer.properties:/home/mosip/config/certify-csvdp-farmer.properties:ro
+      - ./inji-certify/config/farmer_identity_data.csv:/home/mosip/config/farmer_identity_data.csv:ro
+      - ./inji-certify/config/vp_request_config.json:/home/mosip/config/vp_request_config.json:ro
+      - ./inji-certify/context/farmer-context.json:/home/mosip/context/farmer-context.json:ro
+      # Certify generates its signing keystore here on first start.
+      - certify-keys:/home/mosip/CERTIFY_PKCS12
+    depends_on:
+      - certify-db
+    logging: *logging
+
+  certify-nginx:
+    profiles: [certify]
+    image: nginx:stable
+    volumes:
+      - ./inji-certify/certify-nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./inji-certify/config/mimoto-issuers-config.json:/config/server/mimoto-issuers-config.json:ro
+      - ./inji-certify/config/mimoto-trusted-verifiers.json:/config/server/mimoto-trusted-verifiers.json:ro
+      - ./inji-certify/config/credential-template.html:/config/server/credential-template.html:ro
+      - ./inji-certify/config/vp_request_config.json:/config/server/vp_request_config.json:ro
+    depends_on:
+      - certify
+    logging: *logging
 
 volumes:
   suite-mongo:
   verify-db:
+  certify-db:
+  certify-keys:

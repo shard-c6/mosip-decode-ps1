@@ -14,8 +14,9 @@ from typing import Any
 from . import __version__, gate, normalise
 from .redact import redact
 from .config import ComponentConfig, RunnerConfig
-from .handoff import HandoffError, deliver
+from .handoff import HandoffError, deliver, deliver_credential_offer, deliver_tx_code
 from .suite import ConformanceSuite, SuiteError
+from .certify_client import CertifyError, InjiCertifyClient
 from .verify_client import (
     InjiVerifyClient,
     RequestExpired,
@@ -58,26 +59,36 @@ def resolve_plan_config(plan_config: dict[str, Any], repo_root: Path) -> dict[st
     """
     Turn file references in the plan configuration into their contents.
 
-    The suite needs `credential.signing_jwk` -- the private key it signs the test
-    credential with -- inline in the plan configuration. Private key material must not
-    sit in a committed file, so the committed config names a file instead
-    (`signing_jwk_file`, repo-relative, under the gitignored configs/keys/) and it is
-    read here, at run time. Shape copied from the suite's own CI config,
-    scripts/test-configs-rp-against-op/vp-verifier-test-config.json.
+    The suite needs private keys inline in the plan configuration -- `credential.signing_jwk`
+    for the verifier plan, `client.jwks` for the issuer plan. Private key material must not
+    sit in a committed file, so the committed config names a file instead: any key ending
+    in `_file` (`signing_jwk_file`, `jwks_file`) is read in at run time, as JSON, under the
+    same name without the suffix. The files live in the gitignored configs/keys/.
     """
-    resolved = _strip_comments(json.loads(json.dumps(plan_config)))  # deep copy; the dataclass is frozen
-    credential = resolved.get("credential")
-    if isinstance(credential, dict) and "signing_jwk_file" in credential:
-        path = Path(credential.pop("signing_jwk_file"))
-        path = path if path.is_absolute() else repo_root / path
-        if not path.exists():
-            raise ModuleFailure(
-                f"signing key not found at {path}. Generate a test key with:\n"
-                "  python3 ../conformance-suite/scripts/generate-vp-test-cert.py "
-                "--hostname <your-ngrok-domain> --output configs/keys/vp-signing-jwk.json "
-                "--ca-output configs/keys/vp-test-ca.pem"
-            )
-        credential["signing_jwk"] = json.loads(path.read_text())
+    resolved = _strip_comments(json.loads(json.dumps(plan_config)))  # deep copy
+
+    def walk(node: Any) -> None:
+        if isinstance(node, dict):
+            for key in [k for k in node if isinstance(k, str) and k.endswith("_file")]:
+                path = Path(node.pop(key))
+                path = path if path.is_absolute() else repo_root / path
+                if not path.exists():
+                    raise ModuleFailure(
+                        f"key file not found at {path}. See docs/handbook Part 2, Step 5, for "
+                        "generating the suite's test keys:\n"
+                        "  python3 ../conformance-suite/scripts/generate-vp-test-cert.py "
+                        "--hostname <your-ngrok-domain> --output configs/keys/vp-signing-jwk.json "
+                        "--ca-output configs/keys/vp-test-ca.pem\n"
+                        "  python3 scripts/generate-client-jwks.py"
+                    )
+                node[key[: -len("_file")]] = json.loads(path.read_text())
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    walk(resolved)
     return resolved
 
 
@@ -108,7 +119,7 @@ def run_component(
         variant = entry.get("variant") or component.variant
         try:
             results.append(_run_module(suite, component, config, plan_id, module_name, variant))
-        except (ModuleFailure, SuiteError, VerifyError, HandoffError, TimeoutError) as exc:
+        except (ModuleFailure, SuiteError, VerifyError, CertifyError, HandoffError, TimeoutError) as exc:
             log.error("module %s could not be executed: %s", module_name, exc)
             results.append(_harness_failure_entry(module_name, variant, exc))
 
@@ -189,6 +200,8 @@ def _run_module(
                 verdict = verify.get_vp_session_results(handoff_result.session_cookie)
         finally:
             verify.close()
+    elif component.is_issuer:
+        final_state, handoff_result = _run_issuer_handoffs(suite, component, config, module_name, module_id)
     else:
         final_state = suite.wait_for_state(
             module_id, TERMINAL_STATES, timeout=config.module_timeout_seconds
@@ -235,6 +248,68 @@ def summarise_verdict(verdict: dict[str, Any]) -> dict[str, Any]:
         if key in body:
             summary[key] = body[key]
     return summary
+
+
+# Some issuer modules wait for more than one offer -- one per client in the multiple-client
+# test, a fresh one for additional requests. Deliver each time the module asks, up to this.
+MAX_OFFERS_PER_MODULE = 4
+
+
+def _run_issuer_handoffs(
+    suite: ConformanceSuite,
+    component: ComponentConfig,
+    config: RunnerConfig,
+    module_name: str,
+    module_id: str,
+) -> tuple[str, Any]:
+    """
+    Deliver a fresh pre-authorized offer each time the module waits for one, then wait for
+    it to finish. Modules that never wait (metadata tests, authorization_code variants that
+    need no offer) go straight to their terminal state.
+    """
+    request = component.issuer_request
+    handoff_result = None
+    offers = 0
+    with InjiCertifyClient(request.get("endpoint", component.endpoint)) as certify:
+        while True:
+            state = suite.wait_for_state(
+                module_id, WAITING_STATES | TERMINAL_STATES, timeout=config.module_timeout_seconds
+            )
+            if state in TERMINAL_STATES:
+                return state, handoff_result
+            exposed = suite.get_exposed(module_id)
+            # waitForCredentialOffer() unexposes tx_code_endpoint, so its presence means the
+            # module waits for a code; otherwise an exposed offer endpoint means an offer.
+            # credential_offer_endpoint stays exposed after use, so it alone proves nothing.
+            if "tx_code_endpoint" in exposed:
+                tx_code = request.get("txCode")
+                if not tx_code:
+                    raise ModuleFailure(f"{module_name} waits for a tx_code; set issuerRequest.txCode")
+                handoff_result = deliver_tx_code(suite, module_id, tx_code)
+            elif "credential_offer_endpoint" in exposed:
+                if offers >= MAX_OFFERS_PER_MODULE:
+                    raise ModuleFailure(
+                        f"{module_name} asked for more than {MAX_OFFERS_PER_MODULE} credential offers"
+                    )
+                handoff_result = deliver_credential_offer(
+                    suite, certify, module_id,
+                    credential_configuration_id=request["credentialConfigurationId"],
+                    claims=request.get("claims", {}),
+                    tx_code=request.get("txCode"),
+                )
+                offers += 1
+            else:
+                # Waiting on something the harness does not provide.
+                return suite.wait_for_state(
+                    module_id, TERMINAL_STATES, timeout=config.module_timeout_seconds
+                ), handoff_result
+            # The module can still read WAITING for a moment while the suite processes the
+            # offer. Delivering again then would hand the suite an offer it is not waiting
+            # for. Wait for it to leave WAITING before deciding whether it wants another.
+            for _ in range(40):
+                if suite.get_module_info(module_id).get("status") != "WAITING":
+                    break
+                time.sleep(0.5)
 
 
 def _archive_log(log_dir: Path, module_name: str, module_id: str, raw_log: Any) -> Path | None:

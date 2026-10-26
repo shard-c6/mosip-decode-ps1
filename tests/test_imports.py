@@ -11,7 +11,7 @@ import importlib
 import pytest
 
 MODULES = [
-    "runner", "runner.config", "runner.suite", "runner.verify_client", "runner.handoff",
+    "runner", "runner.config", "runner.suite", "runner.verify_client", "runner.certify_client", "runner.handoff",
     "runner.normalise", "runner.gate", "runner.orchestrator", "runner.__main__",
 ]
 

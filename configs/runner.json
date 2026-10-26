@@ -64,7 +64,61 @@
         "_comment": "Target: the Inji 1.0 line, run from docker/docker-compose.yml (profile verify), whose Inji Verify config lives in docker/inji-verify/. apiVersion '1.0' means DCQL, /v2/vp-session-request, and a reproduction of the 1.0 SDK. The credential's clientIdPrefix is locally set to pre_registered so the request is delivered inline, matching the url_query variant.",
         "_comment_credential": "The suite's verifier tests always present a credential with vct urn:eudi:pid:1 (hard-coded in CreateSdJwtKbCredential.java:17) in the 1.0 Final format dc+sd-jwt. A verifier must ask for that, or it will -- correctly -- reject the presentation. This entry is added locally to Inji Verify's config.json; the shipped 'Mock Identity (SD JWT)' asks for a different vct in the superseded vc+sd-jwt format."
       }
+    },
+    {
+      "component": "inji-certify",
+      "role": "issuer",
+      "version": "1.0.x (MOSIP QA build of release-1.0.x, digest sha256:2c72a78c)",
+      "endpoint": "http://localhost:8090/v1/certify",
+      "planName": "oid4vci-1_0-issuer-test-plan",
+      "specification": "OID4VCI 1.0 Final (alpha issuer tests)",
+      "alias": "injicertify",
+      "description": "Inji Certify release-1.0.x - OID4VCI 1.0 Final alpha issuer - pre-authorized code, SD-JWT",
+      "variant": {
+        "fapi_profile": "vci",
+        "vci_grant_type": "pre_authorization_code",
+        "vci_authorization_code_flow_variant": "issuer_initiated",
+        "credential_format": "sd_jwt_vc",
+        "sender_constrain": "dpop",
+        "client_auth_type": "private_key_jwt",
+        "authorization_request_type": "simple",
+        "fapi_request_method": "unsigned",
+        "grant_management": "disabled",
+        "vci_credential_encryption": "plain"
+      },
+      "planConfig": {
+        "_comment": "vci.credential_issuer_url contains the per-developer public host, so it is set in the gitignored configs/runner.local.json: \"https://<PUBLIC_HOST>\". The client keys are private: generate them with scripts/generate-client-jwks.py.",
+        "vci": {
+          "credential_configuration_id": "MockIdentitySdJwtCredential",
+          "static_tx_code": "4815",
+          "_comment": "static_tx_code must equal issuerRequest.txCode: the harness asks Certify for offers that require this code, and the suite sends it. A test value, not a secret."
+        },
+        "client": {
+          "client_id": "oidf-conformance-wallet",
+          "dpop_signing_alg": "ES256",
+          "jwks_file": "configs/keys/vci-client-jwks.json"
+        },
+        "client2": {
+          "client_id": "oidf-conformance-wallet-2",
+          "dpop_signing_alg": "ES256",
+          "jwks_file": "configs/keys/vci-client2-jwks.json"
+        }
+      },
+      "issuerRequest": {
+        "_comment": "The offer the harness asks Certify for before each delivery. Claims cover every claim of the SD-JWT credential configuration in docker/inji-certify/sd-jwt-credential-config.json.",
+        "credentialConfigurationId": "MockIdentitySdJwtCredential",
+        "claims": {
+          "fullName": "Conformance Test Holder",
+          "dateOfBirth": "1990-01-01",
+          "gender": "Female",
+          "phone": "9999999999",
+          "email": "holder@example.org",
+          "UIN": "1234567890",
+          "postalCode": "400001",
+          "region": "Mumbai"
+        },
+        "txCode": "4815"
+      }
     }
-  ],
-  "_certify_note": "Inji Certify is absent deliberately rather than stubbed. Its docker-compose-injistack needs a PKCS12 keystore from Mimoto onboarding, a public DID endpoint, an external authorisation server and partner API keys; Mukta owns standing that up (see docs/PLAN.md). A stub here would make --combined appear to work when it cannot."
+  ]
 }

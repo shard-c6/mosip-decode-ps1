@@ -54,10 +54,16 @@ class ComponentConfig:
     # Kept separate from plan_config, which is sent to the conformance suite -- these
     # values are for Inji Verify, and mixing the two would leak them into the suite.
     verifier_request: dict[str, Any] = field(default_factory=dict)
+    # Issuer components only: how to ask the component for a credential offer.
+    issuer_request: dict[str, Any] = field(default_factory=dict)
 
     @property
     def is_verifier(self) -> bool:
         return self.role == "verifier"
+
+    @property
+    def is_issuer(self) -> bool:
+        return self.role == "issuer"
 
 
 @dataclass(frozen=True)
@@ -84,6 +90,7 @@ def _component_from_dict(raw: dict[str, Any]) -> ComponentConfig:
         plan_config=raw.get("planConfig", {}),
         only_modules=raw.get("onlyModules", []),
         verifier_request=_resolve_request_paths(raw.get("verifierRequest", {})),
+        issuer_request=raw.get("issuerRequest", {}),
     )
 
 
