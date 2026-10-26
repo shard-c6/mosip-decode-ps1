@@ -81,6 +81,15 @@ are added as repository secrets.
 rest fail for four reasons now documented as findings F-12 to F-15. Bring it up with
 `scripts/stack.sh up certify` (or `combined`) and run `./run-conformance.sh --component certify`.
 
+**Both together:** `scripts/stack.sh up combined`, then `./run-conformance.sh --combined` runs
+both plans in one go and gates them as one run (26 modules; each component's results identical
+to its standalone run).
+
+**In MOSIP's api-testrig:** an `OpenIDConformanceTest` TestNG class, on branch
+`feature/openid-conformance-test` of [shard-c6/inji-verify](https://github.com/shard-c6/inji-verify/tree/feature/openid-conformance-test/api-test)
+and [shard-c6/inji-certify](https://github.com/shard-c6/inji-certify/tree/feature/openid-conformance-test/api-test),
+reports each conformance module and the gate as a test, from a result file or by running the runner.
+
 **Results on Inji Verify 1.0.0-alpha.1:** all 11 modules the OID4VP 1.0 Final verifier plan
 has for our variant finish with 0 failures; 9 are genuinely exercised and all consistent with
 conformance, 2 do not apply to the variant. Details in `docs/findings/findings.tex`.

@@ -110,7 +110,23 @@ Plan `2WXPDhBNMwyCL`: the full verifier plan against Inji Verify 1.0.0-alpha.1 b
 full baseline with no unknown modules, mismatches or harness errors. The same result fed to
 `OpenIDConformanceTest` gives 12 of 12 passing in MOSIP's EmailableReport.
 
+### 2026-10-26 — Inji Certify (release-1.0.x), OID4VCI 1.0 issuer plan
+
+Plan `89gcoUu8shPu1`: the full issuer plan, 15 modules, for the pre-authorized code / SD-JWT /
+DPoP variant. 3 PASSED (each checked in Certify's own log to be rejected for the right reason),
+3 SKIPPED, 1 WARNING, 8 FAILED, every failure traced to F-12 to F-15 or an optional feature.
+**Source of the Certify baseline.** All results through the F-12 gateway shim.
+
+### 2026-10-26 — combined run (problem statement task iv)
+
+`./run-conformance.sh --combined`: one invocation runs both plans and writes one result with
+one gate. Plans `uzQR679oonrne` (Inji Verify, 11 modules) and `q4RAMcjJWpAhF` (Inji Certify,
+15 modules). **Each identical, module for module and check for check, to its standalone run**
+(`2WXPDhBNMwyCL` and `89gcoUu8shPu1`). Gate passes: no regressions, unknown modules, harness
+errors or review mismatches. The same result file fed to both api-testrig classes gives 12 of 12
+(`OpenIDConformanceTest` in Inji Verify) and 16 of 16 (in Inji Certify) in MOSIP's EmailableReport.
+
 ## Outstanding
 
 Signed exports for anything reported upstream. The two `request-uri-*` modules, which need a
-signed by-reference request (`release-1.0.x` head). Inji Certify.
+signed by-reference request (`release-1.0.x` head).

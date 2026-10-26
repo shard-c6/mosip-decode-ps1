@@ -651,6 +651,12 @@ every item are in \texttt{docs/findings/findings.tex}; this is the index to it.
         (12 of 12 pass, all named in MOSIP's EmailableReport) and on a doctored result with a
         regression and an accepted forged credential (exactly those and the gate fail).
         Pushed to \texttt{shard-c6/inji-verify}, branch \texttt{feature/openid-conformance-test}.
+  \item The same class in Inji Certify's api-test (\texttt{shard-c6/inji-certify}, same branch
+        name): 16 of 16 on the recorded issuer run; a doctored regression fails exactly that
+        module and the gate; unconfigured, one skipped test.
+  \item The combined run, \texttt{./run-conformance.sh --combined}: both plans, 26 modules, one
+        result and one gate. Each component identical to its standalone run; gate passes. The
+        one result file gives 12 of 12 in Inji Verify's testrig and 16 of 16 in Inji Certify's.
 \end{enumerate}
 
 \newpage
@@ -676,6 +682,8 @@ Tue 27 Oct & Docker Compose with per-module profiles; GitHub Actions running the
 contract tests --- done a day early, 26 Oct & \done{} done\\
 Wed 28 Oct & Inji Certify, \textbf{time-boxed to one day}: issuer support; one issuer module
 if the stack comes up --- done early, 26 Oct: full 15-module plan run, 3 pass, 4 findings & \done{} done\\
+26 Oct (extra) & \texttt{OpenIDConformanceTest} in Inji Certify's api-test; combined run of both
+components, gated as one & \done{} done\\
 Thu 29 Oct & Architecture diagram; README; runner API documentation; signed evidence exports
 & \todo{}\\
 Fri 30 Oct & Slide deck (problem, solution, stack, audience, impact); video, 2--5 min & \todo{}\\

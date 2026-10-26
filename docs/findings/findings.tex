@@ -706,9 +706,25 @@ rejected for the right reason, so none is vacuous --- 3 SKIPPED for features Cer
 offer, 1 WARNING, and 8 FAILED, every one traced to F-12--F-15 or an optional feature. All
 results through the F-12 shim. Baseline recorded for all 15.
 
+\subsubsection*{Inji Certify's api-testrig and the combined run}
+\texttt{OpenIDConformanceTest} added to Inji Certify's api-test too (branch
+\texttt{feature/openid-conformance-test} of \texttt{shard-c6/inji-certify}, based on
+\texttt{release-1.0.x}): the same class as Inji Verify's, running the runner against the
+testrig's own \texttt{injiCertifyBaseURL} when asked to. Verified the same three ways: the
+recorded issuer run gives 16 of 16 passing tests (15 modules and the gate); a doctored copy with
+one regression fails exactly that module and the gate; with nothing configured, one skipped test.
+
+Then the combined run, \texttt{./run-conformance.sh --combined} on the \texttt{combined} stack:
+both plans in one invocation, one result document, one gate. Inji Verify (plan
+\texttt{uzQR679oonrne}, 11 modules) and Inji Certify (plan \texttt{q4RAMcjJWpAhF}, 15 modules)
+each came out identical, module for module and check for check, to their standalone runs; the
+gate passes with no regressions, unknown modules, harness errors or review mismatches. That one
+file, fed to both api-testrig classes, gives 12 of 12 and 16 of 16 passing tests.
+
 \subsubsection*{Status at end of Day 7}
-Mandatory tasks (i) for Inji Verify, (ii), (iii) for Inji Verify, and (v) are demonstrated end
-to end; GitHub Actions in place. No findings changed.
+All five mandatory tasks are demonstrated end to end: (i) one Compose stack for the suite and
+both components; (ii) the runner; (iii) \texttt{OpenIDConformanceTest} in both api-testrigs;
+(iv) the combined run; (v) one command each. GitHub Actions in place. No findings changed.
 
 \newpage
 %=========================================================
