@@ -680,8 +680,20 @@ Building api-test inside a git worktree needs \texttt{-Dmaven.gitcommitid.skip=t
 project's \texttt{git-commit-id-plugin} cannot read a worktree's \texttt{.git} file. A property of
 our setup, not of Inji Verify; not a finding.
 
+\subsubsection*{Docker Compose stack and CI}
+The suite and Inji Verify 1.0 now run from \texttt{docker/docker-compose.yml} in our repository,
+with per-module profiles, and with Inji Verify's two fixed files (F-10's database script, the
+conformance credential) kept in the repository instead of edited by hand. CI runs the harness
+tests and validates the stack on every push; the first run on GitHub passed.
+
+The full verifier plan run on the Compose stack (plan \texttt{2WXPDhBNMwyCL}) is identical to
+the 2 October run module for module and check for check, and passes the gate against the full
+baseline. Fed to \texttt{OpenIDConformanceTest}, the same result gives 12 of 12 passing tests in
+MOSIP's EmailableReport: stack, runner, gate and api-testrig shown together on one run.
+
 \subsubsection*{Status at end of Day 7}
-Mandatory task (iii) demonstrated for Inji Verify. No conformance runs; no findings changed.
+Mandatory tasks (i) for Inji Verify, (ii), (iii) for Inji Verify, and (v) are demonstrated end
+to end; GitHub Actions in place. No findings changed.
 
 \newpage
 %=========================================================

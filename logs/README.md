@@ -102,6 +102,14 @@ Full plan, all 11 modules — two runs:
 - Plan `nupFFSGqySsbb` — with REVIEW resolution. Every module consistent with conformance; the two
   `request-uri-*` modules not applicable to `url_query`. **Source of the 1.0 baseline.**
 
+### 2026-10-26 — first run on the Compose stack
+
+Plan `2WXPDhBNMwyCL`: the full verifier plan against Inji Verify 1.0.0-alpha.1 brought up from
+`docker/docker-compose.yml` rather than the hand-edited worktree. **Identical to plan
+`YyUQFGfA9rlMr` (2 October) module for module and check for check**; gate passes against the
+full baseline with no unknown modules, mismatches or harness errors. The same result fed to
+`OpenIDConformanceTest` gives 12 of 12 passing in MOSIP's EmailableReport.
+
 ## Outstanding
 
 Signed exports for anything reported upstream. The two `request-uri-*` modules, which need a
