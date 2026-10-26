@@ -17,7 +17,7 @@ import logging
 import sys
 from pathlib import Path
 
-from . import __version__, config as config_module, gate
+from . import __version__, config as config_module, gate, report
 from .orchestrator import run
 from .redact import redact
 
@@ -57,6 +57,13 @@ def build_parser() -> argparse.ArgumentParser:
         "--no-gate-exit",
         action="store_true",
         help="always exit 0, even on a regression. For exploratory runs, never for CI.",
+    )
+    parser.add_argument(
+        "--report",
+        type=Path,
+        metavar="DIR",
+        help="also write the consolidated human-readable report here: report.md, report.html "
+        "and a status badge, badge.svg (re-render any result later with python -m runner.report)",
     )
     parser.add_argument("--only", nargs="+", metavar="MODULE", help="run only these modules")
     parser.add_argument(
@@ -115,6 +122,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"wrote {args.output}", file=sys.stderr)
     else:
         print(payload)
+
+    if args.report:
+        for path in report.write(redact(document), args.report):
+            print(f"wrote {path}", file=sys.stderr)
 
     print("", file=sys.stderr)
     print(gate.summarise_for_humans(document["gate"]), file=sys.stderr)

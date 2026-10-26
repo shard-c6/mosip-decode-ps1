@@ -6,13 +6,18 @@
 #              is committed.
 #   compose  - the Docker Compose stack resolves under every profile.
 #
-# On demand (Actions tab -> Run workflow) or on schedule:
-#   conformance - brings up the conformance suite and Inji Verify, runs the OID4VP 1.0
-#                 Final verifier plan, and fails the build if any module regresses against
-#                 the recorded baseline (configs/contract/expected-failures.json).
+# On demand (Actions tab -> Run workflow, choosing verify, certify or combined) and weekly
+# (combined):
+#   conformance - one command, run-full-stack-conformance.sh: brings up the conformance
+#                 suite with Inji Verify, Inji Certify or both, runs the OID4VP 1.0 Final
+#                 verifier plan and/or the OID4VCI 1.0 issuer plan, and fails the build if
+#                 any module regresses against the recorded baseline
+#                 (configs/contract/expected-failures.json). The result, the consolidated
+#                 report and badge, and the suite's logs are kept as a build artifact.
 #
-# The conformance job needs a public HTTPS hostname, because Inji Verify bakes it into the
-# response_uri the suite must reach. Add two repository secrets:
+# The conformance job needs a public HTTPS hostname: Inji Verify bakes it into the
+# response_uri the suite must reach, and Inji Certify into its credential issuer URL. Add two
+# repository secrets:
 #   PUBLIC_HOST       an ngrok static domain, hostname only
 #   NGROK_AUTHTOKEN   the token for that ngrok account
 # A free ngrok account allows one session at a time, so don't run the job while the same
@@ -24,6 +29,12 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      component:
+        description: "Which plan(s) to run"
+        type: choice
+        options: [combined, verify, certify]
+        default: combined
   schedule:
     - cron: "30 2 * * 1"   # Mondays 02:30 UTC
 
@@ -67,6 +78,7 @@ jobs:
     env:
       PUBLIC_HOST: ${{ secrets.PUBLIC_HOST }}
       NGROK_AUTHTOKEN: ${{ secrets.NGROK_AUTHTOKEN }}
+      COMPONENT: ${{ inputs.component || 'combined' }}
     steps:
       - name: Skip unless the public-host secrets are configured
         id: secrets
@@ -91,14 +103,17 @@ jobs:
         if: steps.secrets.outputs.ready == 'true'
         run: python -m pip install -r requirements.txt cryptography
 
-      - name: Generate the suite's test signing key (never committed)
+      - name: Generate the test keys (never committed)
         if: steps.secrets.outputs.ready == 'true'
         run: |
+          # The verifier plan's test credential signing key, from the suite's own script.
           git clone --depth 1 https://gitlab.com/openid/conformance-suite.git /tmp/conformance-suite
           mkdir -p configs/keys
           python /tmp/conformance-suite/scripts/generate-vp-test-cert.py \
             --hostname "$PUBLIC_HOST" \
             --output configs/keys/vp-signing-jwk.json --ca-output configs/keys/vp-test-ca.pem
+          # The issuer plan's two wallet clients (private_key_jwt + DPoP).
+          python scripts/generate-client-jwks.py
 
       - name: Per-run settings
         if: steps.secrets.outputs.ready == 'true'
@@ -107,29 +122,32 @@ jobs:
           python - <<'PY'
           import json, os
           host = os.environ["PUBLIC_HOST"]
-          local = {"components": [{"component": "inji-verify", "alias": "injiverify-ci",
-                    "verifierRequest": {"clientId": f"redirect_uri:https://{host}/v1/verify/v2/vp-submission/direct-post"}}]}
+          local = {"components": [
+              {"component": "inji-verify", "alias": "injiverify-ci",
+               "verifierRequest": {"clientId": f"redirect_uri:https://{host}/v1/verify/v2/vp-submission/direct-post"}},
+              {"component": "inji-certify", "alias": "injicertify-ci",
+               "planConfig": {"vci": {"credential_issuer_url": f"https://{host}"}}},
+          ]}
           json.dump(local, open("configs/runner.local.json", "w"), indent=2)
           PY
 
-      - name: Start the stack (suite + Inji Verify + tunnel)
+      - name: Stack up, run the plan(s), stack down; the gate's verdict is this step's exit status
         if: steps.secrets.outputs.ready == 'true'
-        run: scripts/stack.sh up verify --tunnel
+        run: |
+          if [ "$COMPONENT" = combined ]; then selection=(--combined); else selection=(--component "$COMPONENT"); fi
+          ./run-full-stack-conformance.sh "${selection[@]}" --tunnel --out results
 
-      - name: Run the verifier plan; the gate's verdict is this step's exit status
-        if: steps.secrets.outputs.ready == 'true'
-        run: ./run-conformance.sh --component verify --output results/conformance.json
+      - name: Show the consolidated report in the run summary
+        if: always() && steps.secrets.outputs.ready == 'true'
+        run: |
+          if [ -f results/report/report.md ]; then cat results/report/report.md >> "$GITHUB_STEP_SUMMARY"; fi
 
-      - name: Keep the result and the suite's logs
+      - name: Keep the result, the report and the suite's logs
         if: always() && steps.secrets.outputs.ready == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: conformance-${{ github.run_id }}
+          name: conformance-${{ env.COMPONENT }}-${{ github.run_id }}
           path: |
             results/
             logs/
           if-no-files-found: warn
-
-      - name: Stop the stack
-        if: always() && steps.secrets.outputs.ready == 'true'
-        run: scripts/stack.sh down

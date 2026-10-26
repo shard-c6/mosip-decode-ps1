@@ -35,3 +35,6 @@ configs/keys/
 
 # Docker Compose settings: per-developer host and the ngrok token
 docker/.env
+
+# Output of run-full-stack-conformance.sh
+results/
