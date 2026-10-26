@@ -49,3 +49,11 @@ def test_committed_config_loads():
     cfg = config.load(config.REPO_ROOT / "configs" / "runner.json")
     v = cfg.components[0]
     assert v.is_verifier and v.verifier_request["nonceMode"] in ("sdk", "service")
+
+
+def test_endpoint_override_replaces_the_component_endpoint(tmp_path):
+    from runner.__main__ import _override_endpoint
+    cfg = config.load(_write(tmp_path / "runner.json", BASE))
+    out = _override_endpoint(cfg, "https://injiverify.qa.example/v1/verify/")
+    assert out.components[0].endpoint == "https://injiverify.qa.example/v1/verify"
+    assert cfg.components[0].endpoint == "http://localhost:8080/v1/verify"  # original untouched

@@ -60,6 +60,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--only", nargs="+", metavar="MODULE", help="run only these modules")
     parser.add_argument(
+        "--endpoint",
+        metavar="URL",
+        help="override the component's API endpoint (e.g. https://host/v1/verify). Used by "
+        "OpenIDConformanceTest so conformance runs against the same environment the "
+        "api-testrig already targets, as the problem statement requires",
+    )
+    parser.add_argument(
         "--nonce-mode",
         choices=["sdk", "service"],
         help="override where verifier nonces come from: 'sdk' reproduces what the shipped UI "
@@ -96,6 +103,8 @@ def main(argv: list[str] | None = None) -> int:
         cfg = _restrict_modules(cfg, args.only)
     if args.nonce_mode:
         cfg = _override_nonce_mode(cfg, args.nonce_mode)
+    if args.endpoint:
+        cfg = _override_endpoint(cfg, args.endpoint)
 
     document = run(cfg, mode)
 
@@ -121,6 +130,15 @@ def _restrict_modules(cfg: config_module.RunnerConfig, only: list[str]) -> confi
     return dataclasses.replace(
         cfg,
         components=[dataclasses.replace(c, only_modules=list(only)) for c in cfg.components],
+    )
+
+
+def _override_endpoint(cfg: config_module.RunnerConfig, endpoint: str) -> config_module.RunnerConfig:
+    """Point every selected component at one endpoint. Only meaningful with --component."""
+    import dataclasses
+
+    return dataclasses.replace(
+        cfg, components=[dataclasses.replace(c, endpoint=endpoint.rstrip("/")) for c in cfg.components]
     )
 
 
