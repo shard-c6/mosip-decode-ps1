@@ -302,51 +302,22 @@ account's free \textbf{static} domain in the dashboard. Without a static domain 
 hostname changes on every restart and Step 4 must be redone each time. The domain is
 per-developer: Shardul's is sphere-dust-sandlot.ngrok-free.dev; Mukta needs her own.
 
-\subsection{Step 4 --- Three local edits to Inji Verify 1.0}
+\subsection{Step 4 --- Stack settings}
 
-In \texttt{inji-verify-1.0/docker-compose/}. None is committed anywhere; each one missing
-produces a failure that looks like a defect in Inji Verify. Each was established by the run
-that needed it (findings, Day 6).
+Since 27 October the whole stack --- the conformance suite and Inji Verify 1.0 --- runs from
+this repository's \texttt{docker/docker-compose.yml}. Inji Verify's files need no manual
+edits: the two it needs fixed (the F-10 database script, and a conformance credential in its
+UI config) are kept in \texttt{docker/inji-verify/}, with their provenance recorded there.
 
-\textbf{4a. Public host.} The literal \texttt{VERIFY\us{}SERVICE\us{}PROXY\us{}FOR\us{}LOCALHOST}
-appears in five values of \texttt{docker-compose.yml} and is substituted by nothing. Replace it
-with your domain --- hostname only:
-
-\begin{verbatim}
-sed -i '' 's/VERIFY_SERVICE_PROXY_FOR_LOCALHOST/YOUR-DOMAIN.ngrok-free.dev/g' \
-    docker-compose.yml                  # macOS; on Linux drop the ''
-grep -c "YOUR-DOMAIN" docker-compose.yml      # expect 5
-\end{verbatim}
-
-Windows (PowerShell):
-\begin{verbatim}
-(Get-Content docker-compose.yml) -replace 'VERIFY_SERVICE_PROXY_FOR_LOCALHOST',
-  'YOUR-DOMAIN.ngrok-free.dev' | Set-Content docker-compose.yml
-\end{verbatim}
-
-\textbf{4b. Database script (finding F-10).} In \texttt{db-init/init.sql}, replace the
-\texttt{verify.vp\us{}submission} table with the definition in
-\texttt{../db\us{}scripts/inji\us{}verify/ddl/verify-vp\us{}submission.sql} (keep the
-\texttt{verify.} schema prefix). Without this, every presentation submission returns HTTP 500.
-If the stack has already run once, the old schema is in the data volume: recreate it with
-\cmd{docker compose up -d --force-recreate --renew-anon-volumes postgres}.
-
-\textbf{4c. A conformance credential.} In \texttt{config/config.json}, add to
-\texttt{verifiableClaims}:
+One file to create:
 
 \begin{verbatim}
-{ "logo": "/assets/cert.png",
-  "name": "OIDF Conformance PID (SD JWT)",
-  "clientIdPrefix": "pre_registered",
-  "purpose": "OpenID Foundation conformance testing",
-  "dcqlQuery": { "credentials": [ {
-      "id": "pid_sd_jwt", "format": "dc+sd-jwt",
-      "meta": { "vct_values": [ "urn:eudi:pid:1" ] } } ] } }
+cp docker/.env.example docker/.env
+# then set PUBLIC_HOST=YOUR-DOMAIN.ngrok-free.dev   (hostname only)
 \end{verbatim}
 
-The suite's verifier tests always present a credential of type \texttt{urn:eudi:pid:1}; a
-verifier that asks for anything else rejects it, correctly. \texttt{pre\us{}registered} makes
-Verify deliver the request inline, which the test variant needs.
+\texttt{docker/.env} is gitignored. Set \texttt{NGROK\us{}AUTHTOKEN} there only if you want the
+stack to run ngrok itself (the \texttt{tunnel} profile); otherwise run ngrok on the host.
 
 \subsection{Step 5 --- Point the runner at your machine}
 
@@ -377,30 +348,25 @@ developers' plans apart:
 
 Install the runner's one dependency: \cmd{python3 -m pip install -r requirements.txt}.
 
-\subsection{Step 6 --- Start the stack, in this order}
+\subsection{Step 6 --- Start the stack}
 
 \textbf{6a. Docker Desktop.} Start it and wait for the engine: \cmd{docker info}.
 
-\textbf{6b. Conformance suite.} Note the \texttt{-f}: without it, stop and start target
-the wrong file and report success while doing nothing.
-
-\begin{verbatim}
-cd ~/projects/MOSIP/conformance-suite
-docker compose -f docker-compose-prebuilt.yml up -d
-\end{verbatim}
-
-\textbf{6c. Inji Verify 1.0.} Only one Verify version can run at a time --- they share
-container names and ports --- so take the other one down first.
-
-\begin{verbatim}
-cd ~/projects/MOSIP/inji-verify/docker-compose && docker compose down     # 0.18.2, if up
-cd ~/projects/MOSIP/inji-verify-1.0/docker-compose && docker compose up -d
-\end{verbatim}
-
-\textbf{6d. The tunnel} --- leave it running in its own terminal:
+\textbf{6b. The tunnel}, in its own terminal --- or pass \texttt{--tunnel} below instead:
 \begin{verbatim}
 ngrok http --url=https://YOUR-DOMAIN.ngrok-free.dev 3000
 \end{verbatim}
+
+\textbf{6c. Everything else, one command.} It starts the suite and Inji Verify and waits until
+each answers, including over the public hostname:
+\begin{verbatim}
+scripts/stack.sh up verify            # or: scripts/stack.sh up verify --tunnel
+\end{verbatim}
+
+The underlying Compose profiles, should you need them directly (run in \texttt{docker/}):
+no profile starts the suite alone; \texttt{--profile verify} adds Inji Verify;
+\texttt{--profile tunnel} adds ngrok; \texttt{--profile certify} is planned. Only one copy of the
+stack runs at a time --- it uses ports 8443, 8444, 3000 and 8080.
 
 \subsection{Step 7 --- Check everything is healthy}
 
@@ -497,18 +463,13 @@ any kind} --- commits are made under our own names. Push to \texttt{master} on
 
 \subsection{Step 13 --- Shut down}
 
-Leaving the stack running costs memory and is the commonest cause of ``it worked
-yesterday''.
-
 \begin{verbatim}
-cd ~/projects/MOSIP/inji-verify/docker-compose && docker compose down
-cd ~/projects/MOSIP/conformance-suite && docker compose -f docker-compose-prebuilt.yml down
-docker ps                        # expect headers only
+scripts/stack.sh down
 \end{verbatim}
 
-Then stop ngrok (Ctrl-C in its terminal). \texttt{down} keeps volumes, so the suite's
-plans and logs survive. \textbf{Never} add \texttt{-v} to the suite's \texttt{down} unless
-you mean to delete every plan and log it holds.
+Then stop ngrok if it runs on the host (Ctrl-C). \texttt{down} keeps the data volumes, so the
+suite's plans and logs survive. \textbf{Never} add \texttt{-v} unless you mean to delete every
+plan and log the suite holds.
 
 \subsection{Step 14 --- Ending the project}
 
@@ -712,7 +673,7 @@ Day & Work & Status\\
 Mon 26 Oct & \texttt{OpenIDConformanceTest} in Inji Verify's api-test (fork branch
 \texttt{feature/openid-conformance-test}); runner \texttt{--endpoint} & \done{} done\\
 Tue 27 Oct & Docker Compose with per-module profiles; GitHub Actions running the unit and
-contract tests & \todo{}\\
+contract tests --- done a day early, 26 Oct & \done{} done\\
 Wed 28 Oct & Inji Certify, \textbf{time-boxed to one day}: issuer support; one issuer module
 if the stack comes up, otherwise a documented path, stated plainly & \todo{}\\
 Thu 29 Oct & Architecture diagram; README; runner API documentation; signed evidence exports

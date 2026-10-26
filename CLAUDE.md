@@ -59,20 +59,19 @@ unauthenticated; the Swagger page's auth section describes the hosted deployment
 
 Not in any repo. A fresh clone lacks them; any one missing produces confusing failures.
 
-**Target: the 1.0 worktree** — `../inji-verify-1.0`, a worktree of `inji-verify` at tag
-`v1.0.0-alpha.1` (`git -C inji-verify worktree add --detach ../inji-verify-1.0 v1.0.0-alpha.1`):
+**Target (since 27 Oct): `docker/docker-compose.yml` in this repo** — no edits to any
+Inji Verify clone. `scripts/stack.sh up verify` brings up the suite and Inji Verify 1.0.
+The F-10 database fix and the conformance credential live in `docker/inji-verify/`.
 
-1. `docker-compose/docker-compose.yml` — `VERIFY_SERVICE_PROXY_FOR_LOCALHOST` → ngrok host (5 places).
-2. `docker-compose/db-init/init.sql` — `vp_submission` replaced with the canonical schema from
-   `db_scripts`. Without it every submission returns HTTP 500 (finding F-10). Backup: `init.sql.bak`.
-3. `docker-compose/config/config.json` — added credential **"OIDF Conformance PID (SD JWT)"**:
-   `pre_registered`, DCQL `dc+sd-jwt`, `vct_values ["urn:eudi:pid:1"]`. The suite only ever presents
-   that vct. Also *Mock Identity* switched to `pre_registered` (unused now). Backup: `config.json.bak`.
-4. Runner side, gitignored: `configs/keys/vp-signing-jwk.json` (suite's test signing key, from
-   `../conformance-suite/scripts/generate-vp-test-cert.py`) and `configs/runner.local.json`
-   setting `clientId` to `redirect_uri:https://<ngrok-host>/v1/verify/v2/vp-submission/direct-post`.
+Per-developer, gitignored: `docker/.env` (`PUBLIC_HOST`, optional `NGROK_AUTHTOKEN`),
+`configs/keys/vp-signing-jwk.json` (suite's test signing key, from
+`../conformance-suite/scripts/generate-vp-test-cert.py`), and `configs/runner.local.json`
+setting `clientId` to `redirect_uri:https://<ngrok-host>/v1/verify/v2/vp-submission/direct-post`.
 
-Only one Verify version runs at a time — same container names and ports.
+The `../inji-verify-1.0` worktree (tag `v1.0.0-alpha.1`, same edits applied by hand) produced
+the 2 October evidence and is no longer needed to run anything. Only one stack runs at a
+time — same ports. Starting ngrok may be blocked by the assistant's permission settings; the
+user starts it.
 
 **0.18.2 clone** (`../inji-verify`, earlier evidence only):
 

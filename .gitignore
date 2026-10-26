@@ -32,3 +32,6 @@ desktop.ini
 
 # Test signing keys for the conformance suite (private key material - never commit)
 configs/keys/
+
+# Docker Compose settings: per-developer host and the ngrok token
+docker/.env

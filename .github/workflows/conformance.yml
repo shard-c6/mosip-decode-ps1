@@ -1,0 +1,133 @@
+# OpenID conformance harness for the Inji stack.
+#
+# On every push and pull request:
+#   tests    - the harness's own tests: normalisation against real suite logs, the gate,
+#              the runner-to-testrig contract, and a scan proving no private key material
+#              is committed.
+#   compose  - the Docker Compose stack resolves under every profile.
+#
+# On demand (Actions tab -> Run workflow) or on schedule:
+#   conformance - brings up the conformance suite and Inji Verify, runs the OID4VP 1.0
+#                 Final verifier plan, and fails the build if any module regresses against
+#                 the recorded baseline (configs/contract/expected-failures.json).
+#
+# The conformance job needs a public HTTPS hostname, because Inji Verify bakes it into the
+# response_uri the suite must reach. Add two repository secrets:
+#   PUBLIC_HOST       an ngrok static domain, hostname only
+#   NGROK_AUTHTOKEN   the token for that ngrok account
+# A free ngrok account allows one session at a time, so don't run the job while the same
+# domain is in use on a laptop. Without the secrets the job is skipped, not failed.
+
+name: conformance
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 2 * * 1"   # Mondays 02:30 UTC
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - name: Harness tests
+        run: python -m pytest tests/ -q
+
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stack resolves under every profile
+        working-directory: docker
+        env:
+          PUBLIC_HOST: ci.example.invalid
+        run: |
+          set -euo pipefail
+          docker compose --env-file /dev/null config --services
+          docker compose --env-file /dev/null --profile verify config --services
+          docker compose --env-file /dev/null --profile verify --profile tunnel config --services
+
+  conformance:
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    needs: [tests, compose]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      PUBLIC_HOST: ${{ secrets.PUBLIC_HOST }}
+      NGROK_AUTHTOKEN: ${{ secrets.NGROK_AUTHTOKEN }}
+    steps:
+      - name: Skip unless the public-host secrets are configured
+        id: secrets
+        run: |
+          if [ -n "$PUBLIC_HOST" ] && [ -n "$NGROK_AUTHTOKEN" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::PUBLIC_HOST / NGROK_AUTHTOKEN secrets not set; conformance run skipped."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.secrets.outputs.ready == 'true'
+
+      - uses: actions/setup-python@v5
+        if: steps.secrets.outputs.ready == 'true'
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install runner and key-generation dependencies
+        if: steps.secrets.outputs.ready == 'true'
+        run: python -m pip install -r requirements.txt cryptography
+
+      - name: Generate the suite's test signing key (never committed)
+        if: steps.secrets.outputs.ready == 'true'
+        run: |
+          git clone --depth 1 https://gitlab.com/openid/conformance-suite.git /tmp/conformance-suite
+          mkdir -p configs/keys
+          python /tmp/conformance-suite/scripts/generate-vp-test-cert.py \
+            --hostname "$PUBLIC_HOST" \
+            --output configs/keys/vp-signing-jwk.json --ca-output configs/keys/vp-test-ca.pem
+
+      - name: Per-run settings
+        if: steps.secrets.outputs.ready == 'true'
+        run: |
+          printf 'PUBLIC_HOST=%s\nNGROK_AUTHTOKEN=%s\n' "$PUBLIC_HOST" "$NGROK_AUTHTOKEN" > docker/.env
+          python - <<'PY'
+          import json, os
+          host = os.environ["PUBLIC_HOST"]
+          local = {"components": [{"component": "inji-verify", "alias": "injiverify-ci",
+                    "verifierRequest": {"clientId": f"redirect_uri:https://{host}/v1/verify/v2/vp-submission/direct-post"}}]}
+          json.dump(local, open("configs/runner.local.json", "w"), indent=2)
+          PY
+
+      - name: Start the stack (suite + Inji Verify + tunnel)
+        if: steps.secrets.outputs.ready == 'true'
+        run: scripts/stack.sh up verify --tunnel
+
+      - name: Run the verifier plan; the gate's verdict is this step's exit status
+        if: steps.secrets.outputs.ready == 'true'
+        run: ./run-conformance.sh --component verify --output results/conformance.json
+
+      - name: Keep the result and the suite's logs
+        if: always() && steps.secrets.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: conformance-${{ github.run_id }}
+          path: |
+            results/
+            logs/
+          if-no-files-found: warn
+
+      - name: Stop the stack
+        if: always() && steps.secrets.outputs.ready == 'true'
+        run: scripts/stack.sh down

@@ -1,0 +1,164 @@
+# One stack for OpenID conformance testing of the Inji components.
+#
+# The OpenID Foundation conformance suite always runs. Components are added by profile,
+# so each can be brought up on its own or together, as the problem statement asks:
+#
+#   docker compose --profile verify up -d                      Inji Verify + suite
+#   docker compose --profile verify --profile tunnel up -d     ... plus the public tunnel
+#   docker compose --profile certify up -d                     Inji Certify + suite
+#   docker compose --profile verify --profile certify up -d    both
+#
+# Prefer scripts/stack.sh, which also waits until everything answers.
+#
+# Settings come from docker/.env (copy .env.example). PUBLIC_HOST is required for Inji
+# Verify: it is baked into the response_uri the suite must reach, so it has to be a public
+# HTTPS hostname -- an ngrok static domain, served by the `tunnel` service or by an ngrok
+# agent run on the host.
+#
+# Compose resolves variables for every service, even in profiles not selected, so nothing
+# here is marked required: that would break `--profile verify` for anyone without an ngrok
+# token. scripts/stack.sh checks each setting only for the profiles that need it.
+#
+# Only one copy of this stack runs at a time: it publishes the suite on 8443/8444 and Inji
+# Verify on 3000/8080.
+
+name: inji-conformance
+
+services:
+
+  # --- OpenID Foundation conformance suite (always on) ------------------------------
+  # Mirrors conformance-suite/docker-compose-prebuilt.yml, with a named volume for the
+  # database instead of a bind mount into that repository.
+
+  mongodb:
+    image: ${MONGODB_IMAGE:-mongo:6.0.13}
+    volumes:
+      - suite-mongo:/data/db
+    logging: &logging
+      driver: json-file
+      options:
+        max-size: "500k"
+        max-file: "5"
+
+  server:
+    image: registry.gitlab.com/openid/conformance-suite:${SUITE_IMAGE_TAG:-latest}
+    environment:
+      BASE_URL: https://localhost.emobix.co.uk:8443
+      BASE_MTLS_URL: https://localhost.emobix.co.uk:8444
+      MONGODB_HOST: mongodb
+      # Local developer profile: no login, no API token.
+      SPRING_PROFILES_ACTIVE: dev
+      # Dummy values, as in the suite's own compose file. The server refuses to start if
+      # these are empty, even though the dev profile never uses them.
+      OIDC_GOOGLE_CLIENTID: google-client
+      OIDC_GOOGLE_SECRET: google-secret
+      OIDC_GITLAB_CLIENTID: gitlab-client
+      OIDC_GITLAB_SECRET: gitlab-secret
+    depends_on:
+      - mongodb
+    logging: *logging
+
+  nginx:
+    image: registry.gitlab.com/openid/conformance-suite/nginx:${SUITE_IMAGE_TAG:-latest}
+    ports:
+      - "8443:8443"
+      - "8444:8444"
+    networks:
+      default:
+        aliases:
+          # Lets the suite's own requests to its public hostname reach nginx; inside a
+          # container that name otherwise resolves to 127.0.0.1.
+          - localhost.emobix.co.uk
+    depends_on:
+      - server
+    logging: *logging
+
+  # --- Inji Verify 1.0 (profile: verify) --------------------------------------------
+  # Service names are fixed by the images: the UI's nginx proxies /v1/verify to
+  # http://verify-service:8080, and the service reaches its database as `postgres`.
+
+  verify-service:
+    profiles: [verify]
+    image: injistack/inji-verify-service:${VERIFY_TAG:-1.0.0-alpha.1}
+    platform: linux/amd64
+    user: root
+    ports:
+      - "8080:8080"
+    environment:
+      active_profile_env: default
+      DATABASE_HOST: postgres
+      DATABASE_PORT: "5432"
+      DATABASE_NAME: inji_verify
+      DATABASE_SCHEMA: verify
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      INJI_VP_REQUEST_LONG_POLLING_TIMEOUT: "55000"
+      INJI_VP_SUBMISSION_BASE_URL: https://${PUBLIC_HOST:-PUBLIC_HOST-not-set}/v1/verify
+      INJI_DID_VERIFY_URI: did:web:${PUBLIC_HOST:-PUBLIC_HOST-not-set}:v1:verify
+      INJI_DID_VERIFY_PUBLIC_KEY_URI: did:web:${PUBLIC_HOST:-PUBLIC_HOST-not-set}:verify#key-0
+      INJI_KEYSTORE_FILE_PASS: mosip
+      INJI_VERIFY_REDIRECT_URI: https://${PUBLIC_HOST:-PUBLIC_HOST-not-set}
+      INJI_VERIFY_RESPONSE_CODE_EXPIRY_TIME_IN_MINS: "5"
+      INJI_VERIFY_CLAIMS_WITH_META_DATA: _sd,_sd_alg,iss,cnf,sub,aud,exp,nbf,iat,cti
+      VERIFY_CONTEXT_PATH: /v1/verify
+    depends_on:
+      - postgres
+    logging: *logging
+
+  verify-ui:
+    profiles: [verify]
+    image: injistack/inji-verify-ui:${VERIFY_TAG:-1.0.0-alpha.1}
+    platform: linux/amd64
+    ports:
+      - "3000:8000"
+    environment:
+      DEFAULT_TITLE: Inji Verify
+      DEFAULT_LANG: en
+      INTERNET_CONNECTIVITY_CHECK_ENDPOINT: https://dns.google/
+      INTERNET_CONNECTIVITY_CHECK_TIMEOUT: "10000"
+      VERIFIABLE_CLAIMS_CONFIG_URL: /assets/config.json
+      VP_SUBMISSION_SUPPORTED: "false"
+      CLIENT_ID: inji-verify-ui
+      CLIENT_ID_DID: decentralized_identifier:did:web:${PUBLIC_HOST:-PUBLIC_HOST-not-set}:v1:verify
+      DISPLAY_TIMEOUT: "120000"
+    volumes:
+      # Our copy, with the conformance credential added. See docker/inji-verify/README.md.
+      - ./inji-verify/config.json:/usr/share/nginx/html/assets/config.json:ro
+    depends_on:
+      - verify-service
+    logging: *logging
+
+  postgres:
+    profiles: [verify]
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: inji_verify
+    volumes:
+      # Our copy, with the F-10 fix: the shipped script breaks every VP submission.
+      - ./inji-verify/db-init:/docker-entrypoint-initdb.d:ro
+      - verify-db:/var/lib/postgresql/data
+    logging: *logging
+
+  # --- Public tunnel (profile: tunnel) ----------------------------------------------
+  # Optional. Serves PUBLIC_HOST from this stack. Leave it out if an ngrok agent already
+  # runs on the host for the same domain -- a free ngrok account allows one session.
+
+  tunnel:
+    profiles: [tunnel]
+    image: ngrok/ngrok:${NGROK_IMAGE_TAG:-latest}
+    command: ["http", "--url=https://${PUBLIC_HOST:-PUBLIC_HOST-not-set}", "verify-ui:8000", "--log=stdout"]
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN:-}
+    depends_on:
+      - verify-ui
+    logging: *logging
+
+  # --- Inji Certify (profile: certify) ----------------------------------------------
+  # Not yet added. Inji Certify 1.0 runs through inji-certify's docker-compose-injistack,
+  # which needs more than this file can provide on its own; see docs/handbook Part 4.
+
+volumes:
+  suite-mongo:
+  verify-db:

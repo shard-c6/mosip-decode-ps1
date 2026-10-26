@@ -58,18 +58,27 @@ cd docs/findings && pdflatex findings.tex && pdflatex findings.tex
 
 ```bash
 python3 -m pip install -r requirements.txt
-./run-conformance.sh --component verify
+cp docker/.env.example docker/.env          # set PUBLIC_HOST to your ngrok domain
+ngrok http --url=https://YOUR-DOMAIN 3000   # or add --tunnel below
+scripts/stack.sh up verify                  # conformance suite + Inji Verify 1.0, waits until ready
+./run-conformance.sh --component verify     # the OID4VP 1.0 Final verifier plan
+scripts/stack.sh down
 ```
 
-Also `--component certify` and `--combined`. Exit status is the gate's verdict: `0` when
-nothing regressed against the recorded baseline, `1` on a regression, `2` on a configuration
-error — which is what CI should key on.
+Exit status is the gate's verdict: `0` when nothing regressed against the recorded
+baseline, `1` on a regression or a harness error, `2` on a configuration error.
 
-The stack must be up first (see [docs/RUNBOOK.md](docs/RUNBOOK.md)), and `configs/runner.json`
-carries a per-developer ngrok hostname you will need to change.
+The suite's test credential needs a signing key, and a passing run needs a `redirect_uri:`
+client id. Both are per-developer and kept out of git; see the
+[handbook](docs/handbook/handbook.pdf), Part 2, Step 5.
 
-> **Status**: unit-tested but **not yet run against a live conformance suite**. The handoff
-> and screenshot mechanisms are derived from the suite's source, not yet observed working.
+CI (`.github/workflows/conformance.yml`) runs the harness's tests and validates the stack on
+every push. The full conformance job runs on demand once `PUBLIC_HOST` and `NGROK_AUTHTOKEN`
+are added as repository secrets.
+
+**Results on Inji Verify 1.0.0-alpha.1:** all 11 modules the OID4VP 1.0 Final verifier plan
+has for our variant finish with 0 failures; 9 are genuinely exercised and all consistent with
+conformance, 2 do not apply to the variant. Details in `docs/findings/findings.tex`.
 
 ```bash
 python3 -m pytest tests/ -q
@@ -78,6 +87,8 @@ python3 -m pytest tests/ -q
 ## Repository layout
 
 ```
+docker/        the Compose stack: suite + Inji Verify 1.0 (profiles), with its Verify config
+.github/       CI: harness tests and stack validation; on-demand conformance run
 runner/        the conformance runner — suite client, handoff, gate, orchestrator
 tests/         unit tests (run without Docker; normalisation uses the real Day 1 log)
 docs/          setup, runbook, plan, contract, week plan, findings (LaTeX)
