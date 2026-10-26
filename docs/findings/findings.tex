@@ -691,6 +691,21 @@ the 2 October run module for module and check for check, and passes the gate aga
 baseline. Fed to \texttt{OpenIDConformanceTest}, the same result gives 12 of 12 passing tests in
 MOSIP's EmailableReport: stack, runner, gate and api-testrig shown together on one run.
 
+\subsubsection*{Inji Certify, time-boxed}
+Brought Certify 1.0 into the Compose stack (profile \texttt{certify}) and taught the runner the
+issuer side: it asks Certify for a pre-authorized offer --- with a transaction code --- and
+delivers it, then the code, to the suite. Both components share the one ngrok domain through a
+gateway. Certify's own signing keystore is generated at start-up: the ``PKCS12 from Mimoto
+onboarding'' blocker recorded since September applies to Mimoto, which conformance does not need.
+
+Configuration we had to get right, each found by a run: Certify as its own authorisation server;
+its credential endpoint validating its own tokens (not eSignet's); an SD-JWT credential, since
+Certify ships only \texttt{ldp\_vc}; the transaction code. Then the full issuer plan, 15 modules
+for the pre-authorized / SD-JWT / DPoP variant: 3 PASSED --- each confirmed in Certify's log to be
+rejected for the right reason, so none is vacuous --- 3 SKIPPED for features Certify does not
+offer, 1 WARNING, and 8 FAILED, every one traced to F-12--F-15 or an optional feature. All
+results through the F-12 shim. Baseline recorded for all 15.
+
 \subsubsection*{Status at end of Day 7}
 Mandatory tasks (i) for Inji Verify, (ii), (iii) for Inji Verify, and (v) are demonstrated end
 to end; GitHub Actions in place. No findings changed.
@@ -1024,6 +1039,90 @@ entry requests \texttt{vc+sd-jwt}. OID4VP 1.0 Final, §6.
 
 \textbf{Not to be reported.} The \texttt{release-1.0.x} head already adds a \texttt{dc+sd-jwt}
 entry to the sample configuration; upstream is addressing it.
+
+%---------------------------------------------------------
+\finding{F-12 --- Certify's authorisation-server metadata cannot carry authorization\_endpoint}{\sevmed{} \quad \confirmed}
+
+\textbf{Component:} Inji Certify \texttt{release-1.0.x} (QA image, digest \texttt{2c72a78c}) \quad
+\textbf{Kind:} implementation \quad \textbf{Spec:} RFC 8414 §2
+
+\textbf{Observation.} With Certify as its own authorisation server --- what the pre-authorized
+grant needs --- its metadata advertises \texttt{grant\_types\_supported} including
+\texttt{authorization\_code} and \texttt{response\_types\_supported: [code]}, but no
+\texttt{authorization\_endpoint}; it offers \texttt{interactive\_authorization\_endpoint} instead.
+RFC 8414 §2 requires \texttt{authorization\_endpoint} unless no supported grant uses it.
+
+\textbf{Implementation, not configuration.} \texttt{OAuthAuthorizationServerMetadataDTO} has no such
+field, so no setting can add it.
+
+\textbf{Consequence.} The OpenID Foundation issuer plan's FAPI 2.0 base requires the field for
+every module (\texttt{CheckServerConfiguration}), so no module gets past its first check (run
+\texttt{LYhOSkqpZXhz7jP}). Every later Certify result was obtained through a test shim in our
+gateway that injects the field; the pre-authorized flow never calls it.
+
+\textbf{Two readings.} Certify follows a newer OID4VCI draft's interactive authorisation, so it may
+consider the classic endpoint out of scope; but then it should not advertise
+\texttt{authorization\_code} with \texttt{response\_types\_supported: [code]}. And the suite could
+arguably relax its check for pre-authorized-only tests. Both are worth raising.
+
+%---------------------------------------------------------
+\finding{F-13 --- Credential request rejects unrecognised parameters}{\sevmed{} \quad \confirmed}
+
+\textbf{Component:} Inji Certify \texttt{release-1.0.x} \quad \textbf{Kind:} implementation \quad
+\textbf{Spec:} OID4VCI 1.0 Final §8.2 --- ``The Credential Issuer MUST ignore any unrecognized
+parameters.''
+
+\textbf{Evidence.} The happy-flow module adds a random top-level field to the credential request.
+Certify answers 400 \texttt{invalid\_request}; its log: \texttt{UnrecognizedPropertyException:
+Unrecognized field "W38QWFYMxa0FEhkw" (class io.mosip.certify.core.dto.CredentialRequest), not
+marked as ignorable (2 known properties: "credential\_configuration\_id", "proofs")} (run
+\texttt{C5ccbcnbc9sRWMk}). The same rejection hits the spec-defined \texttt{credential\_identifier}.
+
+\textbf{Impact.} Any wallet that sends a newer or extension parameter cannot obtain a credential.
+Blocks the issuer happy flow.
+
+\textbf{Proposed fix.} Ignore unknown properties when reading \texttt{CredentialRequest} (e.g.
+\texttt{@JsonIgnoreProperties(ignoreUnknown = true)}). Present on the branch head: worth filing.
+
+%---------------------------------------------------------
+\finding{F-14 --- Wrong error code for an unknown credential configuration}{\sevlow{} \quad \confirmed}
+
+\textbf{Component:} Inji Certify \texttt{release-1.0.x} \quad \textbf{Spec:} OID4VCI 1.0 Final §8.3.1.2
+
+\textbf{Evidence.} For an unknown \texttt{credential\_configuration\_id} Certify answers
+\texttt{invalid\_credential\_request}; the spec defines \texttt{unknown\_credential\_configuration}
+(module \texttt{fail-unknown-credential-configuration}, plan \texttt{89gcoUu8shPu1}).
+
+%---------------------------------------------------------
+\finding{F-15 --- Authenticated wallets' proofs rejected in the pre-authorized flow}{\sevmed{} \quad \confirmed{} \textnormal{(behaviour)}}
+
+\textbf{Component:} Inji Certify \texttt{release-1.0.x} \quad \textbf{Spec:} OID4VCI 1.0 Final, App. F.1
+
+\textbf{Evidence.} The suite authenticates to the token endpoint with \texttt{private\_key\_jwt} as
+\texttt{oidf-conformance-wallet}. Certify issues the access token with an \emph{empty}
+\texttt{client\_id}, then rejects the wallet's valid proof: \texttt{JWT iss claim has value
+oidf-conformance-wallet, must be <empty>}. Four modules stop here.
+
+\textbf{Two readings --- the classification is not settled.} App. F.1 requires the proof's
+\texttt{iss} to be omitted only when the token came from \emph{anonymous} pre-authorized access.
+(a) A defect: an authenticated client should have its \texttt{client\_id} bound into the token, and
+its proof accepted. (b) A design limit: Certify supports only anonymous pre-authorized access ---
+in which case it should refuse or not advertise client authentication rather than silently
+ignore it. Either way, a wallet that authenticates cannot obtain a credential. A question for
+the maintainers before any report.
+
+%---------------------------------------------------------
+\subsection*{Observations on Inji Certify --- not findings}
+\begin{itemize}\tightlist
+  \item \textbf{Token not DPoP-bound.} The pre-authorized token came back as
+        \texttt{token\_type: Bearer} with no \texttt{cnf}, although the wallet sent a DPoP proof.
+        The head contains DPoP code; whether it applies to this grant is unverified.
+  \item \textbf{Unauthenticated configuration API.} \texttt{POST /credential-configurations} accepted
+        a new credential with no credentials, on an instance reachable through the public
+        tunnel. Possibly by design for this local profile; unverified for a production profile.
+  \item \textbf{No signed issuer metadata} --- an optional OID4VCI feature.
+  \item The TLS cipher warning in one module concerns ngrok's TLS termination, not Certify.
+\end{itemize}
 
 \newpage
 %=========================================================

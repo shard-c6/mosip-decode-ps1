@@ -2,9 +2,10 @@
   "schemaVersion": "1.0",
   "updatedAt": "2026-10-02T09:00:00Z",
   "componentVersions": {
-    "inji-verify": "1.0.0-alpha.1"
+    "inji-verify": "1.0.0-alpha.1",
+    "inji-certify": "release-1.0.x (MOSIP QA image, digest sha256:2c72a78c)"
   },
-  "note": "Inji Verify 1.0.0-alpha.1 baseline (the target version), from the full plan run of 2 October. All 11 modules the plan contains for this variant: 4 PASSED; 7 REVIEW, each resolved by the harness against Verify's own verdict and consistent with what the test required. Two of the 11 (request-uri-*) are not applicable to the url_query variant and are marked exercised:false. invalid-session-transcript is mdoc-only and not in this plan.",
+  "note": "Inji Verify 1.0.0-alpha.1 baseline (the target version), from the full plan run of 2 October. All 11 modules the plan contains for this variant: 4 PASSED; 7 REVIEW, each resolved by the harness against Verify's own verdict and consistent with what the test required. Two of the 11 (request-uri-*) are not applicable to the url_query variant and are marked exercised:false. invalid-session-transcript is mdoc-only and not in this plan. Inji Certify (added 26 October): all 15 modules the OID4VCI 1.0 Final issuer plan has for the pre-authorized / SD-JWT / DPoP / private_key_jwt variant, through the gateway metadata shim for F-12. 3 PASSED, each checked against Certify's log to be rejected for the right reason; 3 SKIPPED; 1 WARNING; 8 FAILED, each traced to F-13, F-14 or F-15, or to an optional feature Certify does not offer.",
   "components": {
     "inji-verify": {
       "oid4vp-1final-verifier-test-plan": {
@@ -114,7 +115,98 @@
       }
     },
     "inji-certify": {
-      "_comment": "Not yet exercised."
+      "oid4vci-1_0-issuer-test-plan": {
+        "oid4vci-1_0-issuer-metadata-test": {
+          "expected": "WARNING",
+          "reason": "Finishes with warnings only: unknown properties in issuer and AS metadata (e.g. interactive_authorization_endpoint), and the ldp_vc FarmerCredential, a format the plan does not test.",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-metadata-test-OxG8rD7ilzzBn6M.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-metadata-test-signed": {
+          "expected": "FAILED",
+          "reason": "Certify does not serve signed issuer metadata (an optional OID4VCI feature): no application/jwt response.",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-metadata-test-signed-96NJTwMmJG6tM9h.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-happy-flow": {
+          "expected": "FAILED",
+          "reason": "F-13: Certify rejects the credential request because the test adds an unknown parameter, which OID4VCI 1.0 s8.2 says MUST be ignored. Reached through the gateway metadata shim (F-12).",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-happy-flow-zEyvLGtOAH7V1py.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-happy-flow-additional-requests": {
+          "expected": "FAILED",
+          "reason": "F-15: valid proofs rejected - Certify issues the pre-authorized token with an empty client_id although the client authenticated, then requires proof iss to equal it. Through the shim (F-12).",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-happy-flow-additional-requests-2j8fGoA110O8fuE.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-happy-flow-multiple-clients": {
+          "expected": "FAILED",
+          "reason": "F-15, as happy-flow-additional-requests. Through the shim (F-12).",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-happy-flow-multiple-clients-1c9aC2M4LdgZ1mY.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-happy-flow-skip-notification": {
+          "expected": "FAILED",
+          "reason": "F-15, as happy-flow-additional-requests. Through the shim (F-12).",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-happy-flow-skip-notification-y1kYaqSTa18ZZxq.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-batch-issuance": {
+          "expected": "SKIPPED",
+          "reason": "Skipped by the suite: Certify does not advertise batch issuance.",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-batch-issuance-NbWHcDdWk7uXeqn.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-fail-invalid-nonce": {
+          "expected": "PASSED",
+          "reason": "Certify rejects the invalid nonce - for the right reason, per its log ('c_nonce is invalid or expired', checked before the proof).",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-fail-invalid-nonce-lEdrj9VSSfzXZH2.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-fail-invalid-jwt-proof-signature": {
+          "expected": "PASSED",
+          "reason": "Certify rejects the bad proof signature - for the right reason, per its log ('JWT proof verification failed', not the F-15 iss check).",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-fail-invalid-jwt-proof-signature-QYjaPEv7dExTZSp.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-fail-invalid-key-attestation-signature": {
+          "expected": "SKIPPED",
+          "reason": "Skipped by the suite: Certify does not use key attestations.",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-fail-invalid-key-attestation-signature-ynrXobTmOlhrqlG.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-fail-missing-proof": {
+          "expected": "PASSED",
+          "reason": "Certify rejects the request without a proof (request validation error) - for the right reason.",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-fail-missing-proof-Xr0tnwjDjujxImE.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-fail-unsupported-encryption-algorithm": {
+          "expected": "SKIPPED",
+          "reason": "Skipped by the suite: Certify does not advertise credential response encryption.",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-fail-unsupported-encryption-algorithm-qmgXXm3q26eKF2f.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-fail-unknown-credential-configuration": {
+          "expected": "FAILED",
+          "reason": "F-14: Certify answers with error invalid_credential_request; OID4VCI 1.0 defines unknown_credential_configuration.",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-fail-unknown-credential-configuration-4osdgq5saHrNDsl.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-fail-unknown-credential-identifier": {
+          "expected": "FAILED",
+          "reason": "F-13: credential_identifier is rejected as an unrecognised field, so the defined error unknown_credential_identifier is never returned.",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-fail-unknown-credential-identifier-nROCWVRPy7ZEoA5.json",
+          "recordedAt": "2026-10-26"
+        },
+        "oid4vci-1_0-issuer-fail-on-access-token-in-query": {
+          "expected": "FAILED",
+          "reason": "F-15: fails at the credential request that precedes the check this module targets. Through the shim (F-12).",
+          "evidence": "logs/2026-10-26/oid4vci-1_0-issuer-fail-on-access-token-in-query-ftxcEV31xUmpcCV.json",
+          "recordedAt": "2026-10-26"
+        }
+      }
     }
   }
 }

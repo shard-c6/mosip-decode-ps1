@@ -76,6 +76,11 @@ CI (`.github/workflows/conformance.yml`) runs the harness's tests and validates 
 every push. The full conformance job runs on demand once `PUBLIC_HOST` and `NGROK_AUTHTOKEN`
 are added as repository secrets.
 
+**Results on Inji Certify (release-1.0.x):** the 15-module OID4VCI 1.0 issuer plan runs unattended
+(pre-authorized code, SD-JWT, DPoP): 3 pass, 3 skip for features Certify doesn't offer, and the
+rest fail for four reasons now documented as findings F-12 to F-15. Bring it up with
+`scripts/stack.sh up certify` (or `combined`) and run `./run-conformance.sh --component certify`.
+
 **Results on Inji Verify 1.0.0-alpha.1:** all 11 modules the OID4VP 1.0 Final verifier plan
 has for our variant finish with 0 failures; 9 are genuinely exercised and all consistent with
 conformance, 2 do not apply to the variant. Details in `docs/findings/findings.tex`.
