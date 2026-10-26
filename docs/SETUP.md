@@ -1,5 +1,9 @@
 # Setup — first time only
 
+> **Since 26 October the stack runs from `docker/docker-compose.yml`.** Sections 1–4 here
+> (Docker, git, clones, ngrok) still apply; for the stack itself use `scripts/stack.sh` and
+> the README's quick start. Problems: [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
+
 Everything you need to go from a clean laptop to a working conformance-testing
 environment. Do this once. For day-to-day start/stop, see [RUNBOOK.md](RUNBOOK.md).
 

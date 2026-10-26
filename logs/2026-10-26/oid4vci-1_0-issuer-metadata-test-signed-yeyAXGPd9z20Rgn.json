@@ -1,0 +1,302 @@
+[
+  {
+    "_id": "yeyAXGPd9z20Rgn-MPBWTGCr8IojJX7NFL1up7Q1rTc9SrYP",
+    "msg": "Test instance yeyAXGPd9z20Rgn created",
+    "result": "INFO",
+    "baseUrl": "https://localhost.emobix.co.uk:8443/test/a/injicertify-shardul",
+    "variant": {
+      "sender_constrain": "dpop",
+      "client_auth_type": "private_key_jwt",
+      "vci_authorization_code_flow_variant": "issuer_initiated",
+      "credential_format": "sd_jwt_vc",
+      "authorization_request_type": "simple",
+      "fapi_request_method": "unsigned",
+      "grant_management": "disabled",
+      "vci_grant_type": "pre_authorization_code",
+      "vci_credential_encryption": "plain",
+      "fapi_profile": "vci"
+    },
+    "alias": "injicertify-shardul",
+    "description": "Inji Certify release-1.0.x - OID4VCI 1.0 Final alpha issuer - pre-authorized code, SD-JWT",
+    "planId": "QYRHeZCoMVQRG",
+    "config": {
+      "vci": {
+        "credential_configuration_id": "MockIdentitySdJwtCredential",
+        "static_tx_code": "4815",
+        "credential_issuer_url": "https://sphere-dust-sandlot.ngrok-free.dev"
+      },
+      "client": {
+        "client_id": "oidf-conformance-wallet",
+        "dpop_signing_alg": "ES256",
+        "jwks": {
+          "keys": [
+            {
+              "kty": "EC",
+              "crv": "P-256",
+              "alg": "ES256",
+              "use": "sig",
+              "kid": "yJNsWPXB1d0E6NBW",
+              "x": "ZqKFvSb_GAHaYAqW77fN6Be3BWyNDetm9Lmx7TPm8-E",
+              "y": "kRU9xwryORyZBVSv3AbVmhxCp0gYUnYGJsCURCyLaZY",
+              "d": "<redacted: private key material>"
+            }
+          ]
+        }
+      },
+      "client2": {
+        "client_id": "oidf-conformance-wallet-2",
+        "dpop_signing_alg": "ES256",
+        "jwks": {
+          "keys": [
+            {
+              "kty": "EC",
+              "crv": "P-256",
+              "alg": "ES256",
+              "use": "sig",
+              "kid": "2kiF4L-jWaE4I2dy",
+              "x": "pM4CeuwCzru9aujwh54ArxcZktg4g-ckuYlBx17AoKI",
+              "y": "nrkf5Hl-UPfcnsuCSj6-lbdTG6_1BomuoJsOPMQd1Yk",
+              "d": "<redacted: private key material>"
+            }
+          ]
+        }
+      },
+      "alias": "injicertify-shardul",
+      "description": "Inji Certify release-1.0.x - OID4VCI 1.0 Final alpha issuer - pre-authorized code, SD-JWT"
+    },
+    "baseMtlsUrl": "https://localhost.emobix.co.uk:8444/test-mtls/a/injicertify-shardul",
+    "testName": "oid4vci-1_0-issuer-metadata-test-signed",
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "TEST-RUNNER",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832361
+  },
+  {
+    "_id": "yeyAXGPd9z20Rgn-GoDr9qlKTU7ByLKzMrSF99yxP2iaaRbu",
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "oid4vci-1_0-issuer-metadata-test-signed",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832362,
+    "msg": "Setup Done"
+  },
+  {
+    "_id": "yeyAXGPd9z20Rgn-7qrV5GTsh1FbkfMJc5otxPrsLrsuAQVL",
+    "msg": "Fetch Credential Issuer Metadata",
+    "startBlock": true,
+    "blockId": "d9222c",
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "-START-BLOCK-",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832362
+  },
+  {
+    "_id": "yeyAXGPd9z20Rgn-9UbEV19JWRu1Vhes85w066kKsyTVrzjs",
+    "msg": "Set Accept header to request signed credential issuer metadata",
+    "blockId": "d9222c",
+    "headers": {
+      "Accept": "application/jwt"
+    },
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "VCIRequestSignedCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832362
+  },
+  {
+    "_id": "yeyAXGPd9z20Rgn-fw3kMdgknnc5qKmw9ol6uLIeUCOtkyFF",
+    "msg": "Using credential issuer metadata endpoint",
+    "blockId": "d9222c",
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.2"
+    ],
+    "credential_issuer_metadata_endpoint_url": "https://sphere-dust-sandlot.ngrok-free.dev/.well-known/openid-credential-issuer",
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "VCIGetDynamicCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832363
+  },
+  {
+    "_id": "yeyAXGPd9z20Rgn-P98Vq8ntkPAzA58YErfMZut1UZlSCJg7",
+    "request_uri": "https://sphere-dust-sandlot.ngrok-free.dev/.well-known/openid-credential-issuer",
+    "request_method": "GET",
+    "request_headers": {
+      "Accept": "application/jwt",
+      "Accept-Language": "en, en-gb;q=0.9, de;q=0.8, fr;q=0.7, *;q=0.5",
+      "Content-Length": "0"
+    },
+    "request_body": "",
+    "msg": "HTTP request",
+    "http": "request",
+    "blockId": "d9222c",
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "VCIGetDynamicCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832365
+  },
+  {
+    "_id": "yeyAXGPd9z20Rgn-ARkc3GfsVaE4EDHLRHZJwGyJGVaCGqGk",
+    "response_status_code": "200 OK",
+    "response_status_text": "OK",
+    "response_headers": {
+      "access-control-allow-headers": "Content-Type, Authorization, Cache-Control",
+      "access-control-allow-methods": "GET, POST, OPTIONS",
+      "access-control-allow-origin": "*",
+      "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+      "content-length": "0",
+      "date": "Mon, 26 Oct 2026 16:57:12 GMT",
+      "expires": "0",
+      "ngrok-agent-ips": "2409:40c2:4036:26fd:126:ab0a:ba59:b2bc",
+      "pragma": "no-cache",
+      "server": "nginx/1.30.6",
+      "vary": [
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "x-robots-tag": "noindex, nofollow",
+      "x-xss-protection": "0"
+    },
+    "response_body": "",
+    "msg": "HTTP response",
+    "http": "response",
+    "blockId": "d9222c",
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "VCIGetDynamicCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832658
+  },
+  {
+    "_id": "yeyAXGPd9z20Rgn-gN3Hy6fvCEaN0kHUeO0JZx3pxmZaPIwU",
+    "msg": "Credential issuer metadata response indicates unsigned metadata",
+    "blockId": "d9222c",
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.2"
+    ],
+    "contentType": null,
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "VCIGetDynamicCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832659
+  },
+  {
+    "_id": "yeyAXGPd9z20Rgn-FmUmiYDvwdMD237vfKILys7GKWqPxNoC",
+    "msg": "Fetched credential issuer metadata from https://sphere-dust-sandlot.ngrok-free.dev/.well-known/openid-credential-issuer",
+    "result": "SUCCESS",
+    "blockId": "d9222c",
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.2"
+    ],
+    "contentType": null,
+    "status": 200,
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "VCIGetDynamicCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832659
+  },
+  {
+    "_id": "yeyAXGPd9z20Rgn-N2AZeZ6ZAm3NsxyDZObfT3w3vuDIO2IL",
+    "msg": "Process Credential Issuer Metadata Response",
+    "startBlock": true,
+    "blockId": "d3a6f0",
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "-START-BLOCK-",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832660
+  },
+  {
+    "_id": "yeyAXGPd9z20Rgn-7Zk1jqzKk4v7ZDNVDchVUgBYZq7ZQkl6",
+    "msg": "Couldn't find content-type header in endpoint_response",
+    "result": "FAILURE",
+    "blockId": "d3a6f0",
+    "requirements": [
+      "RFC8414-3.2"
+    ],
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "EnsureContentTypeApplicationJwt",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832660
+  },
+  {
+    "_id": "yeyAXGPd9z20Rgn-UancaF3hNmuQ0aSK3Ye4S1Fq5RmCdoBY",
+    "result": "FAILURE",
+    "msg": "If present, a string is expected for credential_issuer_metadata_endpoint_response body but JsonNull was found",
+    "blockId": "d3a6f0",
+    "error_class": "net.openid.conformance.testmodule.Environment$UnexpectedTypeException",
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.2"
+    ],
+    "stacktrace": [
+      "net.openid.conformance.testmodule.Environment.getString(Environment.java:318)",
+      "net.openid.conformance.vci10issuer.condition.VCIDecodeSignedCredentialIssuerMetadata.evaluate(VCIDecodeSignedCredentialIssuerMetadata.java:43)",
+      "net.openid.conformance.condition.AbstractCondition.execute(AbstractCondition.java:153)",
+      "net.openid.conformance.testmodule.AbstractTestModule.call(AbstractTestModule.java:490)",
+      "net.openid.conformance.testmodule.AbstractTestModule.callAndStopOnFailure(AbstractTestModule.java:224)",
+      "net.openid.conformance.vci10issuer.VCIIssuerMetadataSignedTest.checkIssuerMetadataResponse(VCIIssuerMetadataSignedTest.java:54)",
+      "net.openid.conformance.vci10issuer.VCIIssuerMetadataTest.lambda$start$0(VCIIssuerMetadataTest.java:74)",
+      "net.openid.conformance.logging.TestInstanceEventLog.runBlock(TestInstanceEventLog.java:151)",
+      "net.openid.conformance.vci10issuer.VCIIssuerMetadataTest.start(VCIIssuerMetadataTest.java:71)",
+      "net.openid.conformance.runner.TestRunner.lambda$createTest$1(TestRunner.java:445)",
+      "net.openid.conformance.runner.TestExecutionManager$BackgroundTask.call(TestExecutionManager.java:42)",
+      "java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)",
+      "java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)",
+      "java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)",
+      "java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)",
+      "java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)",
+      "java.base/java.lang.Thread.run(Thread.java:1583)"
+    ],
+    "error": "If present, a string is expected for credential_issuer_metadata_endpoint_response body but JsonNull was found",
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "VCIDecodeSignedCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832661
+  },
+  {
+    "_id": "yeyAXGPd9z20Rgn-wdl54BHUoN3ElwyLLKVjIQj5EH9WrkU0",
+    "msg": "Test was interrupted before it could complete. The failure 'VCIDecodeSignedCredentialIssuerMetadata: If present, a string is expected for credential_issuer_metadata_endpoint_response body but JsonNull was found' means the test cannot continue.",
+    "result": "INTERRUPTED",
+    "testId": "yeyAXGPd9z20Rgn",
+    "src": "oid4vci-1_0-issuer-metadata-test-signed",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793033832663
+  }
+]

@@ -1,5 +1,9 @@
 # Runbook — starting, using and shutting down the stacks
 
+> **Superseded on 26 October** by the Compose stack: `scripts/stack.sh up|down|status`, or
+> `run-full-stack-conformance.sh` for everything at once. See [ARCHITECTURE.md](ARCHITECTURE.md)
+> and [TROUBLESHOOTING.md](TROUBLESHOOTING.md). Kept because the 0.18.2 evidence was produced this way.
+
 Day-to-day operations. First-time install is in [SETUP.md](SETUP.md).
 
 **Read the shutdown section before you start anything.** Leaving these containers running

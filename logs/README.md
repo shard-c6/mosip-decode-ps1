@@ -126,6 +126,19 @@ one gate. Plans `uzQR679oonrne` (Inji Verify, 11 modules) and `q4RAMcjJWpAhF` (I
 errors or review mismatches. The same result file fed to both api-testrig classes gives 12 of 12
 (`OpenIDConformanceTest` in Inji Verify) and 16 of 16 (in Inji Certify) in MOSIP's EmailableReport.
 
+### 2026-10-26 — runner mode in the api-testrigs, and the one-command run
+
+- Plan `QYRHeZCoMVQRG` (Certify, 2 modules, then stopped): first attempt by Inji Certify's
+  `OpenIDConformanceTest` to run the runner itself. TestNG was started without MOSIP's launcher,
+  so the testrig's base URL was empty and the runner was given a relative endpoint; it stopped at
+  the first offer. Led to the class checking for an absolute URL first. Not a conformance result.
+- Plans `UByUkX1NUvsK6` (Inji Certify, 15 modules) and `OF4joC3VfcDh7` (Inji Verify, 11 modules):
+  each api-testrig class ran the runner against its own base URL. 16 of 16 and 12 of 12 TestNG
+  tests pass; both gates pass.
+- Plans `g590BHmwSppVo` (Inji Verify) and `sYMCFZ5C9a6RA` (Inji Certify):
+  `./run-full-stack-conformance.sh --combined` — stack up, both plans, result, consolidated
+  report and badge. Gate passes.
+
 ## Outstanding
 
 Signed exports for anything reported upstream. The two `request-uri-*` modules, which need a

@@ -154,6 +154,9 @@ components don't pass everything.
 | File | Contents |
 |---|---|
 | `docs/handbook/handbook.tex` | **Start here.** Start-to-end guide, record of every step, day-by-day planner to 2 Nov. One font (LM Mono) throughout |
+| `docs/STATUS.md` | Every problem-statement requirement, where it is met, the evidence, what is left |
+| `docs/ARCHITECTURE.md` | Architecture diagram, API automation, per-component handoff, gate, testrig bridge |
+| `docs/SELF-CERTIFICATION.md` / `docs/TROUBLESHOOTING.md` | Path to OpenID certification (HAIP plans) / known problems and fixes |
 | `docs/CONTEXT.md` | Full state, decisions and rationale, corrections made |
 | `docs/findings/findings.tex` | Findings catalogue + 7 open questions for mentors |
 | `docs/SETUP.md` | First-time setup, macOS and Windows |

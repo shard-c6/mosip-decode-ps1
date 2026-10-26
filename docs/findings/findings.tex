@@ -721,6 +721,35 @@ each came out identical, module for module and check for check, to their standal
 gate passes with no regressions, unknown modules, harness errors or review mismatches. That one
 file, fed to both api-testrig classes, gives 12 of 12 and 16 of 16 passing tests.
 
+\subsubsection*{Closing the gaps against the problem statement}
+A requirement-by-requirement check against the problem statement's text
+(\texttt{docs/STATUS.md}) found four things short of what it asks, each now closed:
+\begin{itemize}\tightlist
+  \item \textbf{Task (iii), runner mode never run live.} Both classes had only read result files.
+        Run in runner mode, the Certify class first handed the runner a relative endpoint: with
+        TestNG started directly the testrig's configuration is never loaded and its base URL is
+        empty. The class now fails setup with a clear message unless it has an absolute URL, and
+        accepts the URL as a JVM property. Then, live: the Certify class ran the runner (plan
+        \texttt{UByUkX1NUvsK6}) and reported 16 of 16; the Verify class (plan
+        \texttt{OF4joC3VfcDh7}) 12 of 12. A property of our test setup, not of either component;
+        not a finding.
+  \item \textbf{Task (iv), no human-readable consolidated report.} \texttt{--report} now writes
+        one report (HTML and Markdown) covering every component in the run, and a status badge.
+  \item \textbf{Task (v) and deliverable (c), two commands, not one.}
+        \texttt{run-full-stack-conformance.sh} brings the stack up, runs, reports and shuts down;
+        run end to end in combined mode (plans \texttt{g590BHmwSppVo}, \texttt{sYMCFZ5C9a6RA}).
+  \item \textbf{Deliverable (d), CI ran Verify only.} The workflow, renamed to the problem
+        statement's \texttt{full-stack-conformance.yml}, now runs verify, certify or combined on
+        demand, combined weekly, and puts the report in the run summary. Not yet run on GitHub: it
+        needs the two repository secrets.
+\end{itemize}
+Documentation (deliverable (e)) written: \texttt{ARCHITECTURE.md} with the architecture diagram,
+\texttt{SELF-CERTIFICATION.md}, \texttt{TROUBLESHOOTING.md}. Checking the OpenID Foundation's
+certification pages showed that certification requires the HAIP test plans (OID4VP with
+\texttt{direct\_post.jwt}; OID4VCI with the authorization code flow and client attestation),
+which neither component can run yet; the plans we run are the right ones for catching
+regressions but are not the certification run. Recorded in the guide.
+
 \subsubsection*{Status at end of Day 7}
 All five mandatory tasks are demonstrated end to end: (i) one Compose stack for the suite and
 both components; (ii) the runner; (iii) \texttt{OpenIDConformanceTest} in both api-testrigs;
