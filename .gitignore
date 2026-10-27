@@ -38,3 +38,6 @@ docker/.env
 
 # Output of run-full-stack-conformance.sh
 results/
+
+# Signed suite exports: they contain test private keys, so never committed (submission cloud folder)
+evidence/

@@ -141,6 +141,9 @@ Step by step:
    testrigs and CI read, and with `--report` the consolidated human-readable report and badge
    (`runner/report.py`). Exit status is the gate's verdict.
 
+`python -m runner.diff before.json after.json` compares two runs module by module (result,
+verdict, failing checks), e.g. a release against the previous one.
+
 `--combined` runs every configured component in one invocation and produces **one**
 document, **one** gate and **one** report covering both: the problem statement's combined
 mode. `--component` runs one. `--only MODULE…` runs a subset of a plan.

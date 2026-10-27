@@ -755,6 +755,35 @@ All five mandatory tasks are demonstrated end to end: (i) one Compose stack for 
 both components; (ii) the runner; (iii) \texttt{OpenIDConformanceTest} in both api-testrigs;
 (iv) the combined run; (v) one command each. GitHub Actions in place. No findings changed.
 
+
+\subsection{Day 8 --- Tuesday, 27 October 2026}
+
+\subsubsection*{Fresh-clone test}
+A clean clone from GitHub, set up by following only the README. Three gaps found and fixed:
+the per-developer settings (ngrok domain, client id, the two sets of test keys) were described
+only in the handbook, now in the README with an example file to copy; \texttt{cryptography},
+needed to generate the issuer plan's client keys, was missing from \texttt{requirements.txt};
+a missing key file ended in a Python traceback, now a clear setup error (exit status 2). The
+clean clone, with newly generated keys, then ran the one-command combined run: gate passes,
+and the new result diff shows it identical to the 26 October combined run across all 26
+modules.
+
+\subsubsection*{Result diff (good-to-have iv)}
+\texttt{python -m runner.diff} compares two runs module by module --- suite result, gate
+verdict, and which checks did not succeed (by condition, ignoring messages that change every
+run). It confirms what was checked by hand on Day 7: the combined run equals both standalone
+runs.
+
+\subsubsection*{Signed exports}
+Exported the suite's signed zips for the evidence plans (one signature per module) into a
+gitignored \texttt{evidence/} folder for the submission. They are not committed: the suite
+deliberately leaves private keys in its logs, a signature prevents redacting them, and these
+contain our test keys. The keys are test-only and are regenerated after sharing.
+
+\subsubsection*{Status at end of Day 8}
+All mandatory tasks and all good-to-haves done; reproducible from a fresh clone. Left: slide
+deck, video, contribution record, college IDs, submission email. No findings changed.
+
 \newpage
 %=========================================================
 \section{Findings Catalogue}

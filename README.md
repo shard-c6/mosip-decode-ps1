@@ -106,6 +106,8 @@ ngrok http --url=https://YOUR-NGROK-DOMAIN 3000          # in another terminal (
 open results/report/report.html
 ```
 
+Compare two runs with `python -m runner.diff results-before.json results/conformance.json`.
+
 With the stack already up (`scripts/stack.sh up verify|certify|combined`), run just the
 plans with `./run-conformance.sh --component verify|certify` or `--combined`, and stop the
 stack with `scripts/stack.sh down`. Problems: [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).

@@ -141,5 +141,16 @@ errors or review mismatches. The same result file fed to both api-testrig classe
 
 ## Outstanding
 
-Signed exports for anything reported upstream. The two `request-uri-*` modules, which need a
-signed by-reference request (`release-1.0.x` head).
+The two `request-uri-*` modules, which need a signed by-reference request (`release-1.0.x` head).
+
+Signed exports of the evidence plans (27 Oct) are in the gitignored `evidence/` folder, not
+here: they contain the suite's copy of our test private keys, which a signature prevents
+redacting. See `docs/STATUS.md`.
+
+### 2026-10-27 — fresh-clone test
+
+Plans `QsTB0J2hoDsWi` (Inji Verify) and `YxYPKLEUz0Zv0` (Inji Certify): a clean clone from
+GitHub, set up from the README alone with newly generated keys, ran
+`./run-full-stack-conformance.sh --combined`. Gate passes; `python -m runner.diff` against the
+26 Oct combined run: no differences across all 26 modules. Its logs stayed in the throwaway
+clone and are not copied here; the result is reproduced, not new evidence.

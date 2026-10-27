@@ -1,17 +1,16 @@
 # Status against the problem statement
 
-*As of 26 October 2026. Deadline 2 November 2026.*
+*As of 27 October 2026. Deadline 2 November 2026.*
 
 Problem statement 1, MOSIP Decode 2026: **Automated Conformance Testing for Inji Certify and
 Inji Verify against the OpenID Suite.** This page checks each thing the problem statement
 asks for against what exists, and points at the evidence. The architecture is in
 [ARCHITECTURE.md](ARCHITECTURE.md).
 
-**In one line:** all five mandatory tasks are done and have been demonstrated on a live
-stack; of the good-to-haves, CI, selective execution, expected failures and documentation
-are done, result diff is not; the bonus (parallel execution) is not. What remains before
-submission is mostly the submission material itself: slide deck, video, fresh-clone test,
-college IDs, the email.
+**In one line:** all five mandatory tasks and all five good-to-haves are done and have been
+demonstrated on a live stack, and a fresh clone reproduces the results from the README
+alone; the bonus (parallel execution) is not done. What remains before submission is the
+submission material itself: slide deck, video, college IDs, the email.
 
 ---
 
@@ -42,7 +41,7 @@ upload of that report to its bucket needs a MOSIP deployment; it was not exercis
 | i | GitHub Actions CI/CD | `.github/workflows/full-stack-conformance.yml`: harness tests + stack validation on every push (green); full conformance run on demand (verify / certify / combined) and weekly, failing the build on a regression | **Done.** The full run needs two repository secrets (`PUBLIC_HOST`, `NGROK_AUTHTOKEN`) and has not yet run on GitHub; without them it is skipped, not failed |
 | ii | Selective component/plan execution | `--component verify`, `--component certify`, `--combined`; plus `--only MODULE…` for a subset of a plan | **Done** |
 | iii | Expected failures | `configs/contract/expected-failures.json`: every known failure with a reason and its evidence log; per-version baselines; the gate fails only on regressions | **Done** |
-| iv | Result diff between runs | — (done by hand on 26 Oct to show the combined run matches the standalone runs) | **Not done** |
+| iv | Result diff between runs | `python -m runner.diff before.json after.json [--component NAME]`: module by module, what changed in result, verdict or failing checks; exit 1 on any difference | **Done.** Used to show the combined run equals both standalone runs, and that a fresh clone reproduces the combined run exactly |
 | v | Documentation | [ARCHITECTURE.md](ARCHITECTURE.md), [SELF-CERTIFICATION.md](SELF-CERTIFICATION.md), [TROUBLESHOOTING.md](TROUBLESHOOTING.md), [CONTRACT.md](CONTRACT.md), README, findings, handbook | **Done** (runner API reference is the CLI `--help` plus CONTRACT.md) |
 
 ## Bonus
@@ -67,7 +66,7 @@ upload of that report to its bucket needs a MOSIP deployment; it was not exercis
 |---|---|
 | Source code, with git history | Done: this repository + the two fork branches |
 | Working prototype / demo | Done: the stack, the runner, the report; reproducible from a clone |
-| Usage and installation instructions | README + ARCHITECTURE + TROUBLESHOOTING. **A fresh-clone test is still to do** |
+| Usage and installation instructions | README + ARCHITECTURE + TROUBLESHOOTING. **Fresh-clone tested 27 Oct**: a clean clone from GitHub, following only the README (new keys, settings from the example file), ran `--combined` end to end; `runner.diff` shows it identical to the 26 Oct run across all 26 modules |
 | API documentation | CONTRACT.md (the result format), ARCHITECTURE.md §2 (suite API use), CLI `--help` |
 | Slide deck | **To do** |
 | Video, 2–5 minutes | **To do** |
@@ -130,6 +129,15 @@ exercised, all consistent with conformance; baseline recorded.
   extended to Certify and combined runs.
 - Architecture, status, self-certification and troubleshooting documents.
 
+**27 Oct.**
+
+- Fresh-clone test. It found three gaps, all fixed: per-developer settings only in the
+  handbook (now in the README, with `configs/runner.local.example.json`), `cryptography`
+  missing from `requirements.txt`, and a traceback instead of a clear message on a missing
+  key. Then the clean clone reproduced the combined run exactly.
+- Result diff (`runner/diff.py`).
+- Signed exports of the evidence plans, kept out of git (see below).
+
 Commits: this repository's `git log`; forks: `ab3feb4`, `e591115` (inji-verify) and
 `8375fbc`, `7a87fc3` (inji-certify) on `feature/openid-conformance-test`.
 
@@ -137,12 +145,18 @@ Commits: this repository's `git log`; forks: `ab3feb4`, `e591115` (inji-verify) 
 
 ## What is left, in order
 
-1. **Fresh-clone test** of the README instructions on a clean checkout (catches anything
-   that only works on this laptop).
-2. **Slide deck** and **video** (2–5 min): the architecture diagram, one combined run, the
+1. **Slide deck** and **video** (2–5 min): the architecture diagram, one combined run, the
    report, the testrig report, the findings.
-3. **Signed evidence exports** from the suite UI for anything to be reported upstream.
-4. **Contribution record**: make the team split in the docs match the history.
-5. **College IDs, cloud folder, submission email** to decode@mosip.io by 1 November.
-6. Optional, if time: result diff between runs (good-to-have iv); file F-10 upstream (needs
-   the team's decision).
+2. **Contribution record**: make the team split in the docs match the history.
+3. **College IDs, cloud folder, submission email** to decode@mosip.io by 1 November. The
+   signed exports in `evidence/` go in the cloud folder.
+4. Optional: file F-10 upstream (needs the team's decision).
+
+**On the signed exports.** `evidence/` (gitignored) holds the suite's signed export of each
+evidence plan: `uzQR679oonrne` and `q4RAMcjJWpAhF` (the combined run), `2WXPDhBNMwyCL`
+(Verify, Compose stack, same results as the 2 Oct baseline) and `89gcoUu8shPu1` (Certify
+baseline), one signature per module. The suite deliberately does not redact private keys
+from its logs, and a signed export cannot be redacted without breaking the signature, so the
+zips contain our **test** keys. That is why they are not in git. After sharing them,
+regenerate the test keys (README, *Per-developer settings*). The 2 Oct plan `nupFFSGqySsbb`
+was on the earlier hand-built stack's database and is not exportable from this one.
