@@ -676,6 +676,11 @@ every item are in \texttt{docs/findings/findings.tex}; this is the index to it.
         reported on every run without keeping the gate red.
   \item Both forks merged with upstream \texttt{release-1.0.x}; testrig classes 13 of 13 and
         15 of 15 on the new stack.
+  \item Inji Verify moved to MOSIP's QA build of \texttt{release-1.0.x} (commit \texttt{429293f}),
+        pinned by digest: identical results on all 26 modules, F-10 and F-16 still present
+        (F-16 re-checked in the shipped code). Baseline evidence moved to it; testrig 13 of 13
+        and 15 of 15. To run the old release instead, set \texttt{VERIFY\_SERVICE\_IMAGE} and
+        \texttt{VERIFY\_UI\_IMAGE} in \texttt{docker/.env} (see \texttt{.env.example}).
 \end{enumerate}
 
 \newpage

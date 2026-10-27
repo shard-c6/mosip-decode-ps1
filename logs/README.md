@@ -172,3 +172,16 @@ clone and are not copied here; the result is reproduced, not new evidence.
 - Plans `QpHhlq7hq6TLz` (Inji Verify, 13 of 13) and `pygcrOj5sEs4Q` (Inji Certify, 15 of 15):
   the api-testrig classes, rebuilt on the forks merged with upstream `release-1.0.x`, running
   the runner themselves.
+
+### 2026-10-27 — Inji Verify release-1.0.x QA build
+
+Inji Verify moved from `1.0.0-alpha.1` to MOSIP's QA image of `release-1.0.x` (commit `429293f`);
+suite and Inji Certify unchanged.
+
+- Plan `3Z0H96UD635fo` (Inji Verify, 12 modules): the first run on the new build. `runner.diff`
+  against the alpha.1 run above: no differences. **Source of the current Inji Verify baseline**:
+  its 12 logs are in `2026-10-27/` (test IDs in `configs/contract/expected-failures.json`). The
+  Inji Certify plan from the same run (`y1ck1VcTYMzq9`) repeats earlier results; logs not kept.
+- Plans `zDI8B7cVXSPw1` and `JRXxlFuVDAWpn`: after moving the baseline. Identical; logs not kept.
+- Plans `iRyPNlpQkxF2v` (Inji Verify, 13 of 13) and `Cc8WoTsp8a4MI` (Inji Certify, 15 of 15): the
+  api-testrig classes on the new build. Logs not kept.

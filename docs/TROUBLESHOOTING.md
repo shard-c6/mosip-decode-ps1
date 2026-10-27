@@ -34,7 +34,7 @@ All should print 200.
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| Every presentation answered with HTTP 500 | Inji Verify 1.0.0-alpha.1's shipped database script is out of date (finding F-10) | Use our `docker/inji-verify/db-init/init.sql`, mounted by the compose file. With an old volume, `stack.sh down` and remove the `verify-db` volume so the script runs again |
+| Every presentation answered with HTTP 500 | Inji Verify 1.0's shipped database script is out of date (finding F-10; still so on `release-1.0.x`, 26 Oct) | Use our `docker/inji-verify/db-init/init.sql`, mounted by the compose file. With an old volume, `stack.sh down` and remove the `verify-db` volume so the script runs again |
 | Happy flow fails on client id checks | `clientId` not set for your ngrok host | `configs/runner.local.json`: `"clientId": "redirect_uri:https://<your-host>/v1/verify/v2/vp-submission/direct-post"` |
 | A request expires before delivery | Verify's requests live 300 s | The runner creates them just in time; if a module sits a long time in `WAITING`, re-run it with `--only <module>` |
 | Test needs a signing key | Suite's test credential key missing | `python ../conformance-suite/scripts/generate-vp-test-cert.py --hostname $PUBLIC_HOST --output configs/keys/vp-signing-jwk.json --ca-output configs/keys/vp-test-ca.pem` |

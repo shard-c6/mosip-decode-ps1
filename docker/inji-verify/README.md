@@ -2,6 +2,8 @@
 
 Both files are copied from [mosip/inji-verify](https://github.com/mosip/inji-verify) at tag
 `v1.0.0-alpha.1` (`docker-compose/`), licensed MPL-2.0, and modified as follows. They are
+still correct for the `release-1.0.x` build the stack now runs: its own `init.sql` still lacks the
+columns below, and only drops the unused `presentation_definition` table, which we keep. They are
 kept here so the stack runs from a fresh clone with no manual edits to Inji Verify.
 
 ## `db-init/init.sql`

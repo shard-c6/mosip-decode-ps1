@@ -1,7 +1,8 @@
 # Draft upstream issue — Docker Compose database script is out of date (1.0)
 
 **Target**: `mosip/inji-verify` · **Covers**: F-10 · **Status**: draft, not filed
-**Present on**: `v1.0.0-alpha.1` and `release-1.0.x` head (`6a6ab3b`, 1 October 2026)
+**Present on**: `v1.0.0-alpha.1`, `release-1.0.x` head (`6a6ab3b`, 1 October 2026), and still on
+`release-1.0.x` head `5b7bead` (26 October 2026) and MOSIP's QA image built from it (`429293f`)
 **Do not file until**: Shardul has read it through, and the mentors have confirmed where Inji
 issues should go (GitHub issues, or another tracker).
 

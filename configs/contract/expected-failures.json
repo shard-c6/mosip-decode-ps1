@@ -1,18 +1,18 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-10-27T05:10:00Z",
+  "updatedAt": "2026-10-27T08:30:00Z",
   "componentVersions": {
-    "inji-verify": "1.0.0-alpha.1",
+    "inji-verify": "1.0.x (MOSIP QA build of release-1.0.x, commit 429293f, digest sha256:5e10da40)",
     "inji-certify": "release-1.0.x (MOSIP QA image, digest sha256:2c72a78c)"
   },
-  "note": "Inji Verify 1.0.0-alpha.1 baseline (the target version), from the full plan run of 2 October. All 11 modules the plan contains for this variant: 4 PASSED; 7 REVIEW, each resolved by the harness against Verify's own verdict and consistent with what the test required. Two of the 11 (request-uri-*) are not applicable to the url_query variant and are marked exercised:false. invalid-session-transcript is mdoc-only and not in this plan. Inji Certify (added 26 October): all 15 modules the OID4VCI 1.0 Final issuer plan has for the pre-authorized / SD-JWT / DPoP / private_key_jwt variant, through the gateway metadata shim for F-12. 3 PASSED, each checked against Certify's log to be rejected for the right reason; 3 SKIPPED; 1 WARNING; 8 FAILED, each traced to F-13, F-14 or F-15, or to an optional feature Certify does not offer. Moved to the 27 Oct 2026 suite build (pinned in docker/docker-compose.yml): the verifier plan dropped request-uri-fetched-twice and request-uri-method-post and added present-revoked-credential, present-credential-without-status and wrong-vct; the issuer plan dropped fail-unsupported-encryption-algorithm. Every module common to both suites gave the same result. The earlier baseline is in git history.",
+  "note": "Inji Verify 1.0.0-alpha.1 baseline (the target version), from the full plan run of 2 October. All 11 modules the plan contains for this variant: 4 PASSED; 7 REVIEW, each resolved by the harness against Verify's own verdict and consistent with what the test required. Two of the 11 (request-uri-*) are not applicable to the url_query variant and are marked exercised:false. invalid-session-transcript is mdoc-only and not in this plan. Inji Certify (added 26 October): all 15 modules the OID4VCI 1.0 Final issuer plan has for the pre-authorized / SD-JWT / DPoP / private_key_jwt variant, through the gateway metadata shim for F-12. 3 PASSED, each checked against Certify's log to be rejected for the right reason; 3 SKIPPED; 1 WARNING; 8 FAILED, each traced to F-13, F-14 or F-15, or to an optional feature Certify does not offer. Moved to the 27 Oct 2026 suite build (pinned in docker/docker-compose.yml): the verifier plan dropped request-uri-fetched-twice and request-uri-method-post and added present-revoked-credential, present-credential-without-status and wrong-vct; the issuer plan dropped fail-unsupported-encryption-algorithm. Every module common to both suites gave the same result. The earlier baseline is in git history. Moved Inji Verify from the published 1.0.0-alpha.1 to MOSIP's QA build of release-1.0.x (commit 429293f, 15 Oct 2026; vc-verifier 1.10.0-SNAPSHOT), pinned in docker/docker-compose.yml: all 12 modules gave the same result and the same checks as on alpha.1, and the evidence now points at the run on the new build. F-10 and F-16 are both still present on it.",
   "components": {
     "inji-verify": {
       "oid4vp-1final-verifier-test-plan": {
         "oid4vp-1final-verifier-happy-flow": {
           "expected": "REVIEW",
           "reason": "All checks pass. REVIEW resolved by the harness: Verify's own verdict accepted the valid presentation (allChecksSuccessful=true). The 27 Oct suite also warns that Verify did not fetch the credential's status list (EnsureVerifierFetchedRevocationList, SD-JWT VC s3.4 / Token Status List s8.3): Verify does not check revocation for SD-JWT credentials (F-16).",
-          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-happy-flow-fMxzQk1qjgFKlaJ.json",
+          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-happy-flow-fOwYpOUJraBC1To.json",
           "recordedAt": "2026-10-27",
           "reviewResolution": {
             "expected": "accept",
@@ -23,7 +23,7 @@
         "oid4vp-1final-verifier-minimal-cnf-jwk": {
           "expected": "REVIEW",
           "reason": "Credential with a minimal cnf JWK. REVIEW resolved: Verify accepted it, as required. The 27 Oct suite also warns that Verify did not fetch the credential's status list (EnsureVerifierFetchedRevocationList, SD-JWT VC s3.4 / Token Status List s8.3): Verify does not check revocation for SD-JWT credentials (F-16).",
-          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-minimal-cnf-jwk-eGNvPaFZCvXDyF2.json",
+          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-minimal-cnf-jwk-gL5u8ZzB60eL2Q4.json",
           "recordedAt": "2026-10-27",
           "reviewResolution": {
             "expected": "accept",
@@ -34,7 +34,7 @@
         "oid4vp-1final-verifier-invalid-kb-jwt-signature": {
           "expected": "REVIEW",
           "reason": "Forged key-binding JWT signature. Verify answers direct_post 200 then verifies; REVIEW resolved: Verify's verdict rejected it (allChecksSuccessful=false), as required.",
-          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-invalid-kb-jwt-signature-V8O4tr84SWq2nRX.json",
+          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-invalid-kb-jwt-signature-mRNuOGP4jpbG8Ds.json",
           "recordedAt": "2026-10-02",
           "reviewResolution": {
             "expected": "reject",
@@ -45,7 +45,7 @@
         "oid4vp-1final-verifier-invalid-credential-signature": {
           "expected": "REVIEW",
           "reason": "Forged issuer signature on the credential. REVIEW resolved: Verify's verdict rejected it, as required.",
-          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-invalid-credential-signature-R7r9vitOs0OMGiG.json",
+          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-invalid-credential-signature-BCeKTHCnp5nsmeV.json",
           "recordedAt": "2026-10-02",
           "reviewResolution": {
             "expected": "reject",
@@ -56,7 +56,7 @@
         "oid4vp-1final-verifier-invalid-sd-hash": {
           "expected": "REVIEW",
           "reason": "Tampered sd_hash. REVIEW resolved: Verify's verdict rejected it, as required.",
-          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-invalid-sd-hash-jP5ItCI3EM9AT2w.json",
+          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-invalid-sd-hash-1PBVNDhtMIiNgMZ.json",
           "recordedAt": "2026-10-02",
           "reviewResolution": {
             "expected": "reject",
@@ -67,31 +67,31 @@
         "oid4vp-1final-verifier-invalid-kb-jwt-nonce": {
           "expected": "PASSED",
           "reason": "Wrong KB-JWT nonce. Verify rejects synchronously at direct_post (HTTP 400, 'Nonce validation failed'); the suite sees it and passes.",
-          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-invalid-kb-jwt-nonce-79k2ff0JPhb1Db6.json",
+          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-invalid-kb-jwt-nonce-cgl1Ll6wQAFvO8m.json",
           "recordedAt": "2026-10-02"
         },
         "oid4vp-1final-verifier-invalid-kb-jwt-aud": {
           "expected": "PASSED",
           "reason": "Wrong KB-JWT aud. Rejected synchronously (HTTP 400, 'Client id validation failed'); suite passes.",
-          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-invalid-kb-jwt-aud-ACAbYUZ9qjIYl6E.json",
+          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-invalid-kb-jwt-aud-QdsenIzucdRNriR.json",
           "recordedAt": "2026-10-02"
         },
         "oid4vp-1final-verifier-kb-jwt-iat-in-past": {
           "expected": "PASSED",
           "reason": "KB-JWT iat too old. Rejected synchronously (HTTP 400); suite passes.",
-          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-kb-jwt-iat-in-past-wXtLgQRsyy2VjF2.json",
+          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-kb-jwt-iat-in-past-2i6EaFu9McYQ62k.json",
           "recordedAt": "2026-10-02"
         },
         "oid4vp-1final-verifier-kb-jwt-iat-in-future": {
           "expected": "PASSED",
           "reason": "KB-JWT iat in the future. Rejected synchronously (HTTP 400); suite passes.",
-          "evidence": "logs/2026-10-02/oid4vp-1final-verifier-kb-jwt-iat-in-future-LJnVhzjO72E8sEe.json",
+          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-kb-jwt-iat-in-future-Qw3WOMjldDKLBMq.json",
           "recordedAt": "2026-10-02"
         },
         "oid4vp-1final-verifier-present-revoked-credential": {
           "expected": "FAILED",
           "reason": "F-16: presented a credential whose status list marks it revoked; Verify never fetches the status list and its own verdict accepts the credential (allChecksSuccessful=true). MOSIP's vc-verifier implements status checks only for LDP credentials; for SD-JWT the check is unsupported.",
-          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-present-revoked-credential-r1i7jlHHrzwZDTc.json",
+          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-present-revoked-credential-QUqh8cb3kj8UZ2y.json",
           "recordedAt": "2026-10-27",
           "findingRef": "F-16",
           "reviewResolution": {
@@ -104,7 +104,7 @@
         "oid4vp-1final-verifier-present-credential-without-status": {
           "expected": "REVIEW",
           "reason": "Credential with no status claim. REVIEW resolved: Verify accepted it, as required.",
-          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-present-credential-without-status-Y9R2Ru9ZNOgZx6U.json",
+          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-present-credential-without-status-9WIEfHeP30Kzb7u.json",
           "recordedAt": "2026-10-27",
           "reviewResolution": {
             "expected": "accept",
@@ -115,7 +115,7 @@
         "oid4vp-1final-verifier-wrong-vct": {
           "expected": "PASSED",
           "reason": "Credential of a type (vct) other than the one requested. Verify rejects it synchronously at direct_post (HTTP 400); the suite sees the rejection and passes.",
-          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-wrong-vct-oRYhmanHgNGolE0.json",
+          "evidence": "logs/2026-10-27/oid4vp-1final-verifier-wrong-vct-Hprpd4589WX6tEr.json",
           "recordedAt": "2026-10-27"
         }
       }

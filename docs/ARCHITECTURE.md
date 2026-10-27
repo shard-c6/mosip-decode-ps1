@@ -254,7 +254,7 @@ deployment and has not been exercised here.
 
 | Component | Version | Why this one |
 |---|---|---|
-| Inji Verify | `injistack/inji-verify-service` / `-ui` **1.0.0-alpha.1** | Newest published build of the 1.0 line the problem statement targets |
+| Inji Verify | `injistackqa/inji-verify-service` / `-ui`, **release-1.0.x** QA build (commit `429293f`, 15 Oct), pinned by digest | Newest build of the 1.0 line the problem statement targets (to become `1.0.0-rc.1`). The published `1.0.0-alpha.1` gives identical results and can be selected in `docker/.env` |
 | Inji Certify | `injistackqa/inji-certify-with-plugins`, **release-1.0.x** QA build, pinned by digest | The published 1.0.0-alpha.1 has no DPoP, which the OID4VCI 1.0 issuer plan requires |
 | Conformance suite | OpenID Foundation images, local, dev profile | No account or API token needed locally |
 

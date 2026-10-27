@@ -13,12 +13,12 @@
     {
       "component": "inji-verify",
       "role": "verifier",
-      "version": "1.0.0-alpha.1",
+      "version": "1.0.x (MOSIP QA build of release-1.0.x, commit 429293f, digest sha256:5e10da40)",
       "endpoint": "http://localhost:8080/v1/verify",
       "planName": "oid4vp-1final-verifier-test-plan",
       "specification": "OID4VP 1.0 Final (alpha verifier tests)",
       "alias": "injiverify-shardul",
-      "description": "Inji Verify 1.0.0-alpha.1 - OID4VP 1.0 Final alpha verifier - automated run",
+      "description": "Inji Verify 1.0.x (release-1.0.x QA build) - OID4VP 1.0 Final alpha verifier - automated run",
       "variant": {
         "credential_format": "sd_jwt_vc",
         "client_id_prefix": "redirect_uri",

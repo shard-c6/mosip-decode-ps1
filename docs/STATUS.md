@@ -77,7 +77,7 @@ upload of that report to its bucket needs a MOSIP deployment; it was not exercis
 
 ## Results so far
 
-| | Inji Verify 1.0.0-alpha.1 | Inji Certify 1.0 (release-1.0.x) |
+| | Inji Verify 1.0 (release-1.0.x QA build, 15 Oct) | Inji Certify 1.0 (release-1.0.x QA build) |
 |---|---|---|
 | Suite | Conformance suite build of 27 Oct 2026, pinned by digest | same |
 | Plan | OID4VP 1.0 Final verifier, 12 modules | OID4VCI 1.0 issuer, 14 modules |
@@ -89,6 +89,11 @@ upload of that report to its bucket needs a MOSIP deployment; it was not exercis
 On the earlier suite build (19 September), used until 27 October, the verifier plan had 11
 modules (4 PASSED, 7 REVIEW) and the issuer plan 15. Every module the two builds share gives
 the same result; the change is three verifier modules added, three dropped across the two plans.
+
+Inji Verify was moved on 27 October from the published `1.0.0-alpha.1` to MOSIP's QA build of
+`release-1.0.x` (commit `429293f`, the build that will become `1.0.0-rc.1`; it moves the service
+logic into a new `verify-core` module and updates `vc-verifier` to 1.10.0-SNAPSHOT). All 12
+modules give exactly the same results and checks on both. F-10 and F-16 are still present.
 
 Findings: 16 catalogued in `docs/findings/findings.tex`. F-01–F-09 against Inji Verify
 0.18.2 (several fixed on the 1.0 line); F-10, F-11 and F-16 on Inji Verify 1.0; F-12–F-15 on
@@ -151,6 +156,13 @@ exercised, all consistent with conformance; baseline recorded.
 - Both forks merged with upstream `release-1.0.x` (no conflicts); testrig classes rebuilt
   (`1.0.0-rc.1-SNAPSHOT`) and passing in runner mode on the new stack: Verify 13/13,
   Certify 15/15.
+- **Inji Verify moved to the `release-1.0.x` QA build** (pinned by digest; `1.0.0-alpha.1` still
+  selectable from `docker/.env`). `runner.diff` against the alpha.1 run: no differences across
+  26 modules. F-16 re-checked in the shipped `vc-verifier` 1.10.0-SNAPSHOT bytecode: SD-JWT
+  status checking still throws "not supported", and Verify still reads that as not revoked.
+  Baseline evidence moved to the new build; testrig classes 13/13 and 15/15 on it.
+- Fixed the result summary's `skipped` count, which counted modules missing from the baseline
+  instead of modules the suite skipped (Certify's 2 skips showed as 0).
 
 Commits: this repository's `git log`; forks: `ab3feb4`, `e591115` (inji-verify) and
 `8375fbc`, `7a87fc3` (inji-certify) on `feature/openid-conformance-test`.

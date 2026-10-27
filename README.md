@@ -133,7 +133,8 @@ to its standalone run).
 and [shard-c6/inji-certify](https://github.com/shard-c6/inji-certify/tree/feature/openid-conformance-test/api-test),
 reports each conformance module and the gate as a test, from a result file or by running the runner.
 
-**Results on Inji Verify 1.0.0-alpha.1** (suite build of 27 October, pinned): 11 of the 12
+**Results on Inji Verify 1.0** (MOSIP's QA build of `release-1.0.x`, pinned; the published
+`1.0.0-alpha.1` gives identical results) on the suite build of 27 October, pinned: 11 of the 12
 modules the OID4VP 1.0 Final verifier plan has for our variant are consistent with conformance;
 one finds a real defect, F-16: a revoked credential is accepted. Details in
 `docs/findings/findings.tex`.

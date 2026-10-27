@@ -148,10 +148,11 @@ def test_harness_error_fails_the_gate_even_when_the_baseline_expects_failure():
 
 
 def test_committed_1_0_baseline_records_the_first_passing_run():
-    """The target-version baseline: happy-flow passes all checks on 1.0.0-alpha.1 (2 Oct)."""
+    """The target-version baseline: happy-flow passes all checks on the 1.0 line (1.0.0-alpha.1
+    from 2 Oct, the release-1.0.x QA build from 27 Oct)."""
     path = Path(__file__).resolve().parent.parent / "configs/contract/expected-failures.json"
     b = gate.Baseline.load(path)
-    assert b.data.get("componentVersions", {}).get("inji-verify") == "1.0.0-alpha.1"
+    assert b.data.get("componentVersions", {}).get("inji-verify", "").startswith("1.0.x (MOSIP QA build of release-1.0.x")
     assert b.expected_for("inji-verify", PLAN, MODULE) == "REVIEW"
     # A return to FAILED on the target version must now fail the build.
     components = components_with("FAILED")

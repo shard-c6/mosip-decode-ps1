@@ -84,7 +84,10 @@ services:
 
   verify-service:
     profiles: [verify]
-    image: injistack/inji-verify-service:${VERIFY_TAG:-1.0.0-alpha.1}
+    # MOSIP's QA build of release-1.0.x (commit 429293f, built 15 Oct 2026), pinned by digest
+    # for the same reason as the suite. To re-run the earlier release instead, set
+    # VERIFY_SERVICE_IMAGE=injistack/inji-verify-service:1.0.0-alpha.1 (and the UI below).
+    image: ${VERIFY_SERVICE_IMAGE:-injistackqa/inji-verify-service@sha256:5e10da40e7ef68b04d0196f23abf45bb40ccc242d4672e2f4bd56a9b3b72eea6}
     platform: linux/amd64
     user: root
     ports:
@@ -112,7 +115,7 @@ services:
 
   verify-ui:
     profiles: [verify]
-    image: injistack/inji-verify-ui:${VERIFY_TAG:-1.0.0-alpha.1}
+    image: ${VERIFY_UI_IMAGE:-injistackqa/inji-verify-ui@sha256:51961ddcdf7657bd10baee6a3fecc58e839194be03aba77ee66c1d091f14a269}
     platform: linux/amd64
     # Reached through the gateway on port 3000, not published directly.
     environment:
@@ -125,6 +128,10 @@ services:
       CLIENT_ID: inji-verify-ui
       CLIENT_ID_DID: decentralized_identifier:did:web:${PUBLIC_HOST:-PUBLIC_HOST-not-set}:v1:verify
       DISPLAY_TIMEOUT: "120000"
+      # New in release-1.0.x; values as in upstream's own compose. Neither is on the
+      # conformance path, which talks to the service API directly.
+      CLIENT_ID_X509: x509_san_dns:test.example.com
+      ENABLE_DC_API: "false"
     volumes:
       # Our copy, with the conformance credential added. See docker/inji-verify/README.md.
       - ./inji-verify/config.json:/usr/share/nginx/html/assets/config.json:ro
