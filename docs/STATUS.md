@@ -68,8 +68,8 @@ upload of that report to its bucket needs a MOSIP deployment; it was not exercis
 | Working prototype / demo | Done: the stack, the runner, the report; reproducible from a clone |
 | Usage and installation instructions | README + ARCHITECTURE + TROUBLESHOOTING. **Fresh-clone tested 27 Oct**: a clean clone from GitHub, following only the README (new keys, settings from the example file), ran `--combined` end to end; `runner.diff` shows it identical to the 26 Oct run across all 26 modules |
 | API documentation | CONTRACT.md (the result format), ARCHITECTURE.md §2 (suite API use), CLI `--help` |
-| Slide deck | **To do** |
-| Video, 2–5 minutes | **To do** |
+| Slide deck | **Drafted 27 Oct**, 12 slides (a private claude.ai deck; exports to PowerPoint or PDF) |
+| Video, 2–5 minutes | **To record**: shot list in [DEMO-SCRIPT.md](DEMO-SCRIPT.md) |
 | Each student's college ID | **To do** |
 | Submission email to decode@mosip.io (team, problem statement, URLs) | **To do**, by 1 November |
 
@@ -145,8 +145,7 @@ Commits: this repository's `git log`; forks: `ab3feb4`, `e591115` (inji-verify) 
 
 ## What is left, in order
 
-1. **Slide deck** and **video** (2–5 min): the architecture diagram, one combined run, the
-   report, the testrig report, the findings.
+1. **Review the deck** and **record the video** (2–5 min) following [DEMO-SCRIPT.md](DEMO-SCRIPT.md).
 2. **Contribution record**: make the team split in the docs match the history.
 3. **College IDs, cloud folder, submission email** to decode@mosip.io by 1 November. The
    signed exports in `evidence/` go in the cloud folder.
