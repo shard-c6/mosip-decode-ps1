@@ -664,6 +664,20 @@ every item are in \texttt{docs/findings/findings.tex}; this is the index to it.
   \item Wrote the architecture (with diagram), self-certification and troubleshooting documents.
 \end{enumerate}
 
+\noindent\textbf{27 October.}
+\begin{enumerate}\tightlist
+  \item Fresh-clone test (three gaps fixed), result diff, signed exports; slide deck drafted.
+  \item First full run on GitHub Actions: passed, but on a newer suite (CI pulled
+        \texttt{latest}). Suite pinned by digest to that build; baseline moved after checking each
+        new module's log; local run identical to CI. How to update the pin:
+        \texttt{docs/TROUBLESHOOTING.md}.
+  \item F-16: a revoked SD-JWT credential is accepted by Inji Verify; root cause traced into
+        MOSIP's \texttt{vc-verifier}. Gate rule narrowed so this known, suite-failed defect is
+        reported on every run without keeping the gate red.
+  \item Both forks merged with upstream \texttt{release-1.0.x}; testrig classes 13 of 13 and
+        15 of 15 on the new stack.
+\end{enumerate}
+
 \newpage
 %==========================================================================
 \section{Planner, to 2 November}

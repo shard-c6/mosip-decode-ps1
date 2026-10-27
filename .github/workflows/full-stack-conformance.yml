@@ -35,6 +35,10 @@ on:
         type: choice
         options: [combined, verify, certify]
         default: combined
+      latest_suite:
+        description: "Also compare against the newest conformance suite (never fails the build)"
+        type: boolean
+        default: false
   schedule:
     - cron: "30 2 * * 1"   # Mondays 02:30 UTC
 
@@ -137,6 +141,36 @@ jobs:
           if [ "$COMPONENT" = combined ]; then selection=(--combined); else selection=(--component "$COMPONENT"); fi
           ./run-full-stack-conformance.sh "${selection[@]}" --tunnel --out results
 
+      # The run above uses the suite pinned in docker-compose.yml. This one tries the newest
+      # suite and reports what would change, so a new suite release is seen the week it
+      # lands; moving the pin stays a deliberate step (docs/TROUBLESHOOTING.md). Same job, so
+      # the two runs never compete for the one ngrok domain.
+      - name: Newest suite, compared with the pinned one (informational)
+        if: >-
+          always() && steps.secrets.outputs.ready == 'true'
+          && (github.event_name == 'schedule' || inputs.latest_suite)
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          digest() { docker pull -q "$1" >/dev/null && docker image inspect "$1" --format '{{index .RepoDigests 0}}' | cut -d@ -f2; }
+          SUITE_DIGEST=$(digest registry.gitlab.com/openid/conformance-suite:latest)
+          SUITE_NGINX_DIGEST=$(digest registry.gitlab.com/openid/conformance-suite/nginx:latest)
+          export SUITE_DIGEST SUITE_NGINX_DIGEST
+          {
+            echo "## Newest conformance suite"
+            echo
+            echo "Suite \`$SUITE_DIGEST\`, nginx \`$SUITE_NGINX_DIGEST\`."
+          } >> "$GITHUB_STEP_SUMMARY"
+          if grep -q "$SUITE_DIGEST" docker/docker-compose.yml; then
+            echo "Same as the pinned suite; nothing to compare." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if [ "$COMPONENT" = combined ]; then selection=(--combined); else selection=(--component "$COMPONENT"); fi
+          ./run-full-stack-conformance.sh "${selection[@]}" --tunnel --out results-latest-suite || true
+          python -m runner.diff results/conformance.json results-latest-suite/conformance.json \
+            --markdown results-latest-suite/diff.md || true
+          cat results-latest-suite/diff.md >> "$GITHUB_STEP_SUMMARY"
+
       - name: Show the consolidated report in the run summary
         if: always() && steps.secrets.outputs.ready == 'true'
         run: |
@@ -149,5 +183,6 @@ jobs:
           name: conformance-${{ env.COMPONENT }}-${{ github.run_id }}
           path: |
             results/
+            results-latest-suite/
             logs/
           if-no-files-found: warn

@@ -780,9 +780,46 @@ gitignored \texttt{evidence/} folder for the submission. They are not committed:
 deliberately leaves private keys in its logs, a signature prevents redacting them, and these
 contain our test keys. The keys are test-only and are regenerated after sharing.
 
+\subsubsection*{First full run on GitHub Actions --- and a moving suite}
+With the two repository secrets added, the full combined run ran on GitHub (run 6): stack up,
+public tunnel, both plans, gate passed, report attached. Its result was \emph{not} identical to
+ours. CI pulled the suite's \texttt{latest} image, published that morning; our machine had the
+19 September build. Every module the two builds share gave the same result, but the verifier
+plan changed: \texttt{request-uri-fetched-twice} and \texttt{request-uri-method-post} dropped,
+\texttt{present-revoked-credential}, \texttt{present-credential-without-status} and
+\texttt{wrong-vct} added; the issuer plan dropped \texttt{fail-unsupported-encryption-algorithm}.
+The gate passed only because modules without a baseline are reported, not failed.
+
+\textbf{Decision.} Test against the latest suite, but pin it by digest
+(\texttt{docker/docker-compose.yml}): a baseline means nothing against a suite that can change
+overnight. Updating is documented in \texttt{TROUBLESHOOTING.md}. Locally, the pinned build
+(plans \texttt{dk7WTeEpVfDCW}, \texttt{9soA2jgYi4lki}) gave a result identical to CI run 6 across
+all 26 modules. Baseline moved to it, every new entry checked against its log; then plans
+\texttt{tsEPVoEXK87hL} and \texttt{kQsIvua57Vdib}: gate passes, no module without a baseline.
+
+\textbf{F-16 found.} \texttt{present-revoked-credential} fails, and Verify's own verdict accepts
+the revoked credential. Traced through both code bases before recording it (catalogue, F-16).
+
+\textbf{Gate rule, narrowed.} A verdict contradiction always failed the gate, so the target
+version would have stayed red until MOSIP fixes F-16 --- and a gate that is always red gets
+ignored. The baseline may now acknowledge a contradiction, but only when the suite itself
+already failed the module and the entry names the finding. A contradiction the suite cannot see
+(a REVIEW, such as a forged credential accepted) still always fails. Four tests pin this; the
+known defect is printed on every run and at the top of the report.
+
+\subsubsection*{Inji forks brought up to date}
+Both forks' \texttt{feature/openid-conformance-test} merged with upstream \texttt{release-1.0.x}
+(Verify 18 commits, Certify 11; no conflicts). Upstream renamed the next release
+\texttt{1.0.0-rc.1}. Both api-testrig classes rebuilt and ran the runner against the new stack:
+Verify 13 of 13 (plan \texttt{QpHhlq7hq6TLz}), Certify 15 of 15 (plan \texttt{pygcrOj5sEs4Q}).
+The images under test are unchanged: Certify's pinned QA build (12 October) is still the newest
+published; for Verify a QA build of \texttt{release-1.0.x} (21 October) is newer than
+\texttt{1.0.0-alpha.1} and is the next step, kept separate so a changed result can be attributed.
+
 \subsubsection*{Status at end of Day 8}
-All mandatory tasks and all good-to-haves done; reproducible from a fresh clone. Left: slide
-deck, video, contribution record, college IDs, submission email. No findings changed.
+All mandatory tasks and all good-to-haves done; reproducible from a fresh clone; the full run
+proven on GitHub Actions. One new finding (F-16). Left: Verify's newer QA build, slide deck,
+video, contribution record, college IDs, submission email.
 
 \newpage
 %=========================================================
@@ -1184,6 +1221,34 @@ its proof accepted. (b) A design limit: Certify supports only anonymous pre-auth
 in which case it should refuse or not advertise client authentication rather than silently
 ignore it. Either way, a wallet that authenticates cannot obtain a credential. A question for
 the maintainers before any report.
+
+\finding{F-16 --- Revoked SD-JWT credentials are accepted: the status check silently does nothing}{\sevhigh{} \quad \confirmed}
+
+\textbf{Component:} Inji Verify 1.0.0-alpha.1 and \texttt{release-1.0.x}, through MOSIP's
+\texttt{vc-verifier} (1.9.0 and \texttt{develop}) \quad \textbf{Spec:} SD-JWT VC s3.4; Token
+Status List s8.3
+
+\textbf{Evidence.} Suite build of 27 October, module \texttt{present-revoked-credential}
+(\texttt{logs/2026-10-27/...-r1i7jlHHrzwZDTc.json}): the credential carries a status-list
+reference marking it revoked. \texttt{EnsureVerifierFetchedRevocationList}: \emph{the verifier did
+not fetch the revocation list}. Verify's own verdict, fetched by the harness:
+\texttt{allChecksSuccessful=true} --- the revoked credential is reported valid. Every other
+SD-JWT module now carries the same warning.
+
+\textbf{Root cause, in the source.} Verify asks for the \texttt{revoked} status of each credential
+(\texttt{VerifiablePresentationSubmissionServiceImpl.verifyAndGetCredentialStatus}).
+\texttt{vc-verifier} implements status checking only for LDP credentials
+(\texttt{LdpStatusChecker}); the SD-JWT type inherits the default, which throws
+\texttt{UnsupportedOperationException}. \texttt{CredentialsVerifier.getCredentialStatus} catches
+that, logs a warning and returns an \emph{empty} status map; Verify's
+\texttt{Utils.checkIfVCIsRevoked} reads an empty map as not revoked. The check fails open, and
+nothing in the verdict says it was skipped.
+
+\textbf{Classification.} An implementation gap (status lists for SD-JWT are not implemented),
+made worse by the fail-open handling: a verifier that cannot check revocation should say so in
+its verdict rather than report the credential valid. The fix belongs in \texttt{vc-verifier}
+(a Token Status List checker for SD-JWT), with Verify surfacing an unchecked status. In the gate
+this module is baselined FAILED and acknowledged as F-16.
 
 %---------------------------------------------------------
 \subsection*{Observations on Inji Certify --- not findings}

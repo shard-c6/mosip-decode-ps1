@@ -58,6 +58,7 @@ All should print 200.
 | Exit 1, `GATE FAILED`, a **regression** | A module got worse than its baseline | Open the module's log (`logUrl` in the result, or `logs/<date>/`). Real regression: fix the component. Expected change: update `configs/contract/expected-failures.json` **with a reason** |
 | Exit 1, **harness error** | The runner could not run a module (e.g. could not reach a component) | Not a conformance result. Check the stack's health first |
 | Exit 1, **review mismatch** | A negative test the verifier should have rejected was accepted (or the reverse) | Treat as a real defect until shown otherwise |
+| A **known defect** line in the gate output (e.g. F-16) | The verifier's verdict contradicts the test, but the suite already failed the module and the baseline names the finding (`acknowledgedMismatch`) | Nothing to do; it is reported on every run. Remove the acknowledgement once MOSIP fixes the defect |
 | A module listed as having **no baseline** | New module in the plan, or a new plan | Run it, check the result is understood, then add it to the baseline |
 | `httpx is not installed` | Python dependencies | `python3 -m pip install -r requirements.txt` |
 
@@ -70,3 +71,24 @@ All should print 200.
 | `Conformance runner failed with exit status …` | The runner itself failed; its output is printed above | Read it; usually the stack is down |
 | `NullPointerException` in `EmailableReport` after the tests | MOSIP's report listener expects files that only exist under the testrig's own launcher | Harmless when TestNG is run directly; the test results themselves are complete |
 | Build fails in a git worktree (`git-commit-id-plugin`) | The plugin cannot read a worktree's `.git` file | `mvn … -Dmaven.gitcommitid.skip=true` |
+
+## Updating the conformance suite
+
+The suite is pinned by image digest in `docker/docker-compose.yml`, because "latest" changes
+whenever the OpenID Foundation publishes and the baseline only means something against a
+known suite. A newer suite can add, drop or tighten modules: the 27 Oct build added three
+verifier modules (one of which found F-16) and dropped three.
+
+1. `docker pull registry.gitlab.com/openid/conformance-suite:latest` and the same for
+   `…/conformance-suite/nginx:latest`; note each `RepoDigests` value
+   (`docker image inspect … --format '{{index .RepoDigests 0}}'`).
+2. Try it without editing anything: put `SUITE_DIGEST=sha256:…` and
+   `SUITE_NGINX_DIGEST=sha256:…` in `docker/.env`, then `scripts/stack.sh down` and
+   `scripts/stack.sh up combined`.
+3. `./run-conformance.sh --combined --output results/new-suite.json`, then
+   `python -m runner.diff <last result> results/new-suite.json --component inji-verify`
+   (and `inji-certify`). Every difference is either a module added or dropped, a new check,
+   or a changed result: explain each one before touching the baseline.
+4. Update `configs/contract/expected-failures.json` (entries for new modules, remove dropped
+   ones, `suite.image`), move the default digests in `docker-compose.yml`, remove the two lines
+   from `docker/.env`, and run again: the gate should pass with no "no baseline" modules.

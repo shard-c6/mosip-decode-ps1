@@ -79,15 +79,20 @@ upload of that report to its bucket needs a MOSIP deployment; it was not exercis
 
 | | Inji Verify 1.0.0-alpha.1 | Inji Certify 1.0 (release-1.0.x) |
 |---|---|---|
-| Plan | OID4VP 1.0 Final verifier, 11 modules | OID4VCI 1.0 issuer, 15 modules |
+| Suite | Conformance suite build of 27 Oct 2026, pinned by digest | same |
+| Plan | OID4VP 1.0 Final verifier, 12 modules | OID4VCI 1.0 issuer, 14 modules |
 | Variant | sd_jwt_vc · url_query · redirect_uri · direct_post | pre-authorized code, issuer-initiated · sd_jwt_vc · DPoP · private_key_jwt |
-| Suite results | 4 PASSED, 7 REVIEW, 0 failed | 3 PASSED, 1 WARNING, 3 SKIPPED, 8 FAILED |
-| What that means | 9 genuinely exercised, all consistent with conformance once each REVIEW is settled by Verify's own verdict; 2 (`request-uri-*`) do not apply to this variant | The 3 passes are negative tests, each checked in Certify's log to be rejected for the right reason; 3 skips are optional features Certify does not offer; every failure traced to findings F-12–F-15 or an optional feature |
-| Gate | Passes against the baseline | Passes against the baseline |
+| Suite results | 5 PASSED, 6 REVIEW, 1 FAILED | 3 PASSED, 1 WARNING, 2 SKIPPED, 8 FAILED |
+| What that means | 11 consistent with conformance once each REVIEW is settled by Verify's own verdict. **1 real defect, F-16**: a revoked credential is accepted, because Verify never checks the status of SD-JWT credentials | The 3 passes are negative tests, each checked in Certify's log to be rejected for the right reason; 2 skips are optional features Certify does not offer; every failure traced to findings F-12–F-15 or an optional feature |
+| Gate | Passes against the baseline; F-16 reported on every run as a known defect | Passes against the baseline |
 
-Findings: 15 catalogued in `docs/findings/findings.tex`. F-01–F-09 against Inji Verify
-0.18.2 (several fixed on the 1.0 line); F-10, F-11 on Inji Verify 1.0; F-12–F-15 on Inji
-Certify 1.0. None has been filed upstream yet; F-10 (with its fix) is drafted in
+On the earlier suite build (19 September), used until 27 October, the verifier plan had 11
+modules (4 PASSED, 7 REVIEW) and the issuer plan 15. Every module the two builds share gives
+the same result; the change is three verifier modules added, three dropped across the two plans.
+
+Findings: 16 catalogued in `docs/findings/findings.tex`. F-01–F-09 against Inji Verify
+0.18.2 (several fixed on the 1.0 line); F-10, F-11 and F-16 on Inji Verify 1.0; F-12–F-15 on
+Inji Certify 1.0. None has been filed upstream yet; F-10 (with its fix) is drafted in
 `docs/upstream/`.
 
 ---
@@ -137,6 +142,15 @@ exercised, all consistent with conformance; baseline recorded.
   key. Then the clean clone reproduced the combined run exactly.
 - Result diff (`runner/diff.py`).
 - Signed exports of the evidence plans, kept out of git (see below).
+- First full run on GitHub Actions (run 6): passed, but on a newer suite than ours, because the
+  workflow pulled `latest`. Suite now **pinned by digest** to the 27 Oct build; baseline moved
+  to it and every new module checked against its log; local run identical to CI run 6.
+- **F-16**: Inji Verify accepts a revoked SD-JWT credential (status check not implemented in
+  MOSIP's `vc-verifier`, and the gap fails open). Gate rule narrowed so a known defect the suite
+  itself fails, recorded as a finding, is reported but does not keep the gate red.
+- Both forks merged with upstream `release-1.0.x` (no conflicts); testrig classes rebuilt
+  (`1.0.0-rc.1-SNAPSHOT`) and passing in runner mode on the new stack: Verify 13/13,
+  Certify 15/15.
 
 Commits: this repository's `git log`; forks: `ab3feb4`, `e591115` (inji-verify) and
 `8375fbc`, `7a87fc3` (inji-certify) on `feature/openid-conformance-test`.

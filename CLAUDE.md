@@ -42,10 +42,10 @@ pushes, opens a PR or spends someone's quota is confirmed with the user first.
 |---|---|
 | Working root | `~/projects/MOSIP` — this repo plus five sibling clones |
 | ngrok domain (Shardul) | `sphere-dust-sandlot.ngrok-free.dev` — **per-developer; Mukta has her own** |
-| Conformance suite | `https://localhost.emobix.co.uk:8443` (v5.3.1) — self-signed cert, use `curl -k` |
+| Conformance suite | `https://localhost.emobix.co.uk:8443` (image pinned by digest in `docker/docker-compose.yml`, 27 Oct 2026 build) — self-signed cert, use `curl -k` |
 | Inji Verify | UI `:3000`, API `:8080`, context path `/v1/verify` |
 | Test plan ID | `lN7C4DH1HvYmc` · alias `injiverify-shardul` |
-| Versions | **Target: Inji 1.0 line** (`1.0.0-alpha.1` published; `release-1.0.x` branch). Tested so far: Verify 0.18.2 · Certify not yet run · Java 21 · Maven 3.9.16 |
+| Versions | **Target: Inji 1.0 line** (`1.0.0-alpha.1` published; `release-1.0.x` branch). Tested: Verify 0.18.2 and 1.0.0-alpha.1 · Certify release-1.0.x (QA image, pinned) · Java 21 · Maven 3.9.16 |
 
 Sibling clones: `inji-verify` · `inji-certify` · `mosip-functional-tests` ·
 `conformance-suite` · `conformance-suite-automated-testing-tutorial`
