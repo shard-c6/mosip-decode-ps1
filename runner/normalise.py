@@ -175,7 +175,7 @@ def summarise(modules: list[dict[str, Any]]) -> dict[str, int]:
         "passed": sum(1 for m in modules if m.get("result") == "PASSED"),
         "failed": sum(1 for m in modules if m.get("result") == "FAILED"),
         "warning": sum(1 for m in modules if m.get("result") == "WARNING"),
-        "skipped": sum(1 for m in modules if m.get("verdict") == "SKIP"),
+        "skipped": sum(1 for m in modules if m.get("result") == "SKIPPED"),
         "expectedFailures": sum(
             1 for m in modules if m.get("expected") == "FAILED" and m.get("result") == "FAILED"
         ),

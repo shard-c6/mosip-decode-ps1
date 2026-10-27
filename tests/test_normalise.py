@@ -103,3 +103,16 @@ def test_normalise_module_falls_back_to_testinfo(day1_log):
     )
     assert module["status"] == "INTERRUPTED"
     assert module["result"] == "FAILED"
+
+
+def test_summary_counts_the_suite_skips_not_the_gate_skips():
+    """`skipped` sits with passed/failed/warning as one of the suite's own counts (CONTRACT.md).
+    A module the baseline does not know gets the gate verdict SKIP; that is not a suite skip."""
+    modules = [
+        {"result": "SKIPPED", "verdict": "PASS"},  # suite skipped it; baseline expects that
+        {"result": "PASSED", "verdict": "SKIP"},   # suite ran it; no baseline entry
+        {"result": "FAILED", "verdict": "PASS"},
+    ]
+    summary = normalise.summarise(modules)
+    assert summary["skipped"] == 1
+    assert summary["passed"] + summary["failed"] + summary["warning"] + summary["skipped"] == 3
