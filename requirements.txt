@@ -1,5 +1,7 @@
 # Runtime
 httpx>=0.27
+# scripts/generate-client-jwks.py (the issuer plan's wallet client keys)
+cryptography>=42
 
 # Development
 pytest>=8.0

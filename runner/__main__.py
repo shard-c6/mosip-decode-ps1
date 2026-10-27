@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 from . import __version__, config as config_module, gate, report
-from .orchestrator import run
+from .orchestrator import ModuleFailure, run
 from .redact import redact
 
 DEFAULT_CONFIG = config_module.REPO_ROOT / "configs" / "runner.json"
@@ -113,7 +113,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.endpoint:
         cfg = _override_endpoint(cfg, args.endpoint)
 
-    document = run(cfg, mode)
+    try:
+        document = run(cfg, mode)
+    except ModuleFailure as exc:
+        # Raised before any module runs, e.g. a missing key file: a setup problem, not a result.
+        print(f"setup error: {exc}", file=sys.stderr)
+        return 2
 
     payload = json.dumps(redact(document), indent=2)
     if args.output:

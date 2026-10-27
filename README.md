@@ -74,25 +74,48 @@ cd docs/findings && pdflatex findings.tex && pdflatex findings.tex
 
 ## Running the harness
 
+You need Docker, Python 3 (tested with 3.13), an ngrok account with a free static domain, and this repo
+cloned next to the OpenID conformance suite (only for its key-generation script):
+
 ```bash
+git clone https://github.com/shard-c6/mosip-decode-ps1.git
+git clone --depth 1 https://gitlab.com/openid/conformance-suite.git   # sibling folder
+cd mosip-decode-ps1
 python3 -m pip install -r requirements.txt
-cp docker/.env.example docker/.env          # set PUBLIC_HOST to your ngrok domain
-ngrok http --url=https://YOUR-DOMAIN 3000   # or add --tunnel below
-scripts/stack.sh up verify                  # conformance suite + Inji Verify 1.0, waits until ready
-./run-conformance.sh --component verify     # the OID4VP 1.0 Final verifier plan
-scripts/stack.sh down
 ```
+
+### Per-developer settings (once; all gitignored)
+
+Both components put their public address into what the suite must reach, so each developer
+uses their own ngrok domain and their own test keys. Replace `YOUR-NGROK-DOMAIN` throughout.
+
+```bash
+cp docker/.env.example docker/.env                       # set PUBLIC_HOST=YOUR-NGROK-DOMAIN
+cp configs/runner.local.example.json configs/runner.local.json   # replace YOUR-NGROK-DOMAIN, YOURNAME
+mkdir -p configs/keys
+python3 ../conformance-suite/scripts/generate-vp-test-cert.py --hostname YOUR-NGROK-DOMAIN \
+  --output configs/keys/vp-signing-jwk.json --ca-output configs/keys/vp-test-ca.pem   # verifier plan
+python3 scripts/generate-client-jwks.py                  # issuer plan's two wallet clients
+```
+
+### Run
+
+```bash
+ngrok http --url=https://YOUR-NGROK-DOMAIN 3000          # in another terminal (or pass --tunnel)
+./run-full-stack-conformance.sh --combined               # or --component verify | --component certify
+open results/report/report.html
+```
+
+With the stack already up (`scripts/stack.sh up verify|certify|combined`), run just the
+plans with `./run-conformance.sh --component verify|certify` or `--combined`, and stop the
+stack with `scripts/stack.sh down`. Problems: [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).
 
 Exit status is the gate's verdict: `0` when nothing regressed against the recorded
 baseline, `1` on a regression or a harness error, `2` on a configuration error.
 
-The suite's test credential needs a signing key, and a passing run needs a `redirect_uri:`
-client id. Both are per-developer and kept out of git; see the
-[handbook](docs/handbook/handbook.pdf), Part 2, Step 5.
-
-CI (`.github/workflows/conformance.yml`) runs the harness's tests and validates the stack on
-every push. The full conformance job runs on demand once `PUBLIC_HOST` and `NGROK_AUTHTOKEN`
-are added as repository secrets.
+CI (`.github/workflows/full-stack-conformance.yml`) runs the harness's tests and validates
+the stack on every push. The full conformance run (verify, certify or combined) runs on
+demand and weekly once `PUBLIC_HOST` and `NGROK_AUTHTOKEN` are added as repository secrets.
 
 **Results on Inji Certify (release-1.0.x):** the 15-module OID4VCI 1.0 issuer plan runs unattended
 (pre-authorized code, SD-JWT, DPoP): 3 pass, 3 skip for features Certify doesn't offer, and the

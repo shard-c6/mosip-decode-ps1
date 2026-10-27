@@ -1,0 +1,21 @@
+{
+  "_comment": "Copy to configs/runner.local.json (gitignored) and replace YOUR-NGROK-DOMAIN. Deep-merged over configs/runner.json.",
+  "components": [
+    {
+      "component": "inji-verify",
+      "alias": "injiverify-YOURNAME",
+      "verifierRequest": {
+        "clientId": "redirect_uri:https://YOUR-NGROK-DOMAIN/v1/verify/v2/vp-submission/direct-post"
+      }
+    },
+    {
+      "component": "inji-certify",
+      "alias": "injicertify-YOURNAME",
+      "planConfig": {
+        "vci": {
+          "credential_issuer_url": "https://YOUR-NGROK-DOMAIN"
+        }
+      }
+    }
+  ]
+}

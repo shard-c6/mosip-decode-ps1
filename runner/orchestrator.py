@@ -74,8 +74,8 @@ def resolve_plan_config(plan_config: dict[str, Any], repo_root: Path) -> dict[st
                 path = path if path.is_absolute() else repo_root / path
                 if not path.exists():
                     raise ModuleFailure(
-                        f"key file not found at {path}. See docs/handbook Part 2, Step 5, for "
-                        "generating the suite's test keys:\n"
+                        f"key file not found at {path}. See the README, 'Per-developer settings', for "
+                        "generating the test keys:\n"
                         "  python3 ../conformance-suite/scripts/generate-vp-test-cert.py "
                         "--hostname <your-ngrok-domain> --output configs/keys/vp-signing-jwk.json "
                         "--ca-output configs/keys/vp-test-ca.pem\n"
