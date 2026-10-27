@@ -179,7 +179,7 @@ Everything technical is done; the rest is Shardul's, step by step, in
 
 1. **Review the deck** (updated 27 Oct with the final numbers and F-16).
 2. **Record the video** (2–5 min) following [DEMO-SCRIPT.md](DEMO-SCRIPT.md).
-3. **Contribution record**: decide how the team split is described; the docs then follow.
+3. **Contribution record**: done (neutral team line; September plan kept). Mukta's task: [TASK-MUKTA.md](TASK-MUKTA.md).
 4. **College IDs, cloud folder, submission email** to decode@mosip.io by 1 November. The
    signed exports in `evidence/` go in the cloud folder; replace the test keys after sharing.
 5. Optional: report F-10 and F-16 upstream (needs the team's decision).

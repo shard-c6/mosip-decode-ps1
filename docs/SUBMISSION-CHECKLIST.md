@@ -19,14 +19,11 @@ accounts. In order:
 - [ ] Length between 2 and 5 minutes.
 - [ ] Upload it: YouTube (unlisted) or the cloud folder. Keep the link.
 
-## 3. Decide the contribution record (10 min) — by 30 Oct
+## 3. Contribution record — done 27 Oct
 
-The docs still show the original split, with Mukta owning platform and delivery work. In
-practice Shardul did all of it. Pick one and tell Claude, who will update the docs to match:
-
-- [ ] **Say it plainly:** Mukta was part of the team and the planning; Shardul built and ran everything.
-- [ ] **Neutral:** list the work, not who did it.
-- [ ] **Something else** in your own words.
+README credits the team without roles; PLAN.md keeps the September split as the plan of record.
+Mukta has a short task, [TASK-MUKTA.md](TASK-MUKTA.md): send her the link. If she does it, her
+fixes are committed with her named on the commit (muktavarak@gmail.com).
 
 ## 4. College IDs (10 min) — by 31 Oct
 

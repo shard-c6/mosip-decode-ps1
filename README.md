@@ -3,7 +3,7 @@
 Automated conformance-testing harness for **Inji Certify** and **Inji Verify** against the
 OpenID Foundation conformance suite.
 
-**Team**: Shardul Chogale (conformance engine and evidence) · Mukta Varak (platform and delivery)
+**Team**: Shardul Chogale · Mukta Varak
 
 **Problem statement**: *Automated Conformance Testing for Inji Certify and Inji Verify
 against OpenID Suite* (Medium complexity)
@@ -176,10 +176,9 @@ The `OpenIDConformanceTest` work lands on branches of these forks, shaped so eac
 opened as an upstream pull request. `api-test/` lives inside `inji-verify` and
 `inji-certify` — not in `mosip-functional-tests`, which carries only `apitest-commons`.
 
-- Shardul: [inji-verify](https://github.com/shard-c6/inji-verify) ·
+- Forks: [inji-verify](https://github.com/shard-c6/inji-verify) ·
   [inji-certify](https://github.com/shard-c6/inji-certify) ·
   [mosip-functional-tests](https://github.com/shard-c6/mosip-functional-tests)
-- Mukta: <!-- TODO: add once her forks exist -->
 
 ---
 

@@ -129,9 +129,9 @@ whole submission.
 
 ### Contribution split
 
-Both of us contribute roughly equally — **Shardul ~49%, Mukta ~51%** on the estimate below.
-That is the outcome of assigning work by skill, not a target we decorated the plan to hit,
-and it is recorded here so the division is documented rather than inferred.
+This is the team's plan of record, as agreed on 23 September. It divides the estimated effort
+roughly equally (24 and 27 points below). That is the outcome of assigning work by skill, not
+a target we decorated the plan to hit.
 
 **It was not balanced when first drafted.** The initial allocation ran about 60/40 toward
 Shardul, because Inji Certify's environment was left unassigned and the reporting-side
