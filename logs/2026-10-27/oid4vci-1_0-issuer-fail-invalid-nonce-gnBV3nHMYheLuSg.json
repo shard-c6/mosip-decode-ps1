@@ -1,0 +1,3053 @@
+[
+  {
+    "_id": "gnBV3nHMYheLuSg-kaO9uZHJ7EpKENv9VdBHKhYt6IrAvOLG",
+    "msg": "Test instance gnBV3nHMYheLuSg created",
+    "result": "INFO",
+    "baseUrl": "https://localhost.emobix.co.uk:8443/test/a/injicertify-shardul",
+    "variant": {
+      "sender_constrain": "dpop",
+      "client_auth_type": "private_key_jwt",
+      "vci_authorization_code_flow_variant": "issuer_initiated",
+      "credential_format": "sd_jwt_vc",
+      "authorization_request_type": "simple",
+      "fapi_request_method": "unsigned",
+      "grant_management": "disabled",
+      "vci_grant_type": "pre_authorization_code",
+      "vci_credential_encryption": "plain",
+      "fapi_profile": "vci"
+    },
+    "alias": "injicertify-shardul",
+    "description": "Inji Certify release-1.0.x - OID4VCI 1.0 Final alpha issuer - pre-authorized code, SD-JWT",
+    "planId": "9soA2jgYi4lki",
+    "config": {
+      "vci": {
+        "credential_configuration_id": "MockIdentitySdJwtCredential",
+        "static_tx_code": "4815",
+        "credential_issuer_url": "https://sphere-dust-sandlot.ngrok-free.dev"
+      },
+      "client": {
+        "client_id": "oidf-conformance-wallet",
+        "dpop_signing_alg": "ES256",
+        "jwks": {
+          "keys": [
+            {
+              "kty": "EC",
+              "crv": "P-256",
+              "alg": "ES256",
+              "use": "sig",
+              "kid": "yJNsWPXB1d0E6NBW",
+              "x": "ZqKFvSb_GAHaYAqW77fN6Be3BWyNDetm9Lmx7TPm8-E",
+              "y": "kRU9xwryORyZBVSv3AbVmhxCp0gYUnYGJsCURCyLaZY",
+              "d": "<redacted: private key material>"
+            }
+          ]
+        }
+      },
+      "client2": {
+        "client_id": "oidf-conformance-wallet-2",
+        "dpop_signing_alg": "ES256",
+        "jwks": {
+          "keys": [
+            {
+              "kty": "EC",
+              "crv": "P-256",
+              "alg": "ES256",
+              "use": "sig",
+              "kid": "2kiF4L-jWaE4I2dy",
+              "x": "pM4CeuwCzru9aujwh54ArxcZktg4g-ckuYlBx17AoKI",
+              "y": "nrkf5Hl-UPfcnsuCSj6-lbdTG6_1BomuoJsOPMQd1Yk",
+              "d": "<redacted: private key material>"
+            }
+          ]
+        }
+      },
+      "alias": "injicertify-shardul",
+      "description": "Inji Certify release-1.0.x - OID4VCI 1.0 Final alpha issuer - pre-authorized code, SD-JWT"
+    },
+    "baseMtlsUrl": "https://localhost.emobix.co.uk:8444/test-mtls/a/injicertify-shardul",
+    "testName": "oid4vci-1_0-issuer-fail-invalid-nonce",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "TEST-RUNNER",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077770694
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-hAll4PU5GcJKa1GZLWA5a1cDajL5iYGB",
+    "msg": "Created redirect URI",
+    "result": "SUCCESS",
+    "redirect_uri": "https://localhost.emobix.co.uk:8443/test/a/injicertify-shardul/callback",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CreateRedirectUri",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077770695
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-HdLQnvZSrUuMa8hi5fAtzvILg8fuXNtl",
+    "msg": "Using credential issuer metadata endpoint",
+    "credential_issuer_metadata_endpoint_url": "https://sphere-dust-sandlot.ngrok-free.dev/.well-known/openid-credential-issuer",
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.2"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIGetDynamicCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077770695
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-npqNhI74ltBXcb5lXDS2vNV8aN91DUaL",
+    "request_uri": "https://sphere-dust-sandlot.ngrok-free.dev/.well-known/openid-credential-issuer",
+    "request_method": "GET",
+    "request_headers": {
+      "Accept": "application/json",
+      "Accept-Language": "en, en-gb;q=0.9, de;q=0.8, fr;q=0.7, *;q=0.5",
+      "Content-Length": "0"
+    },
+    "request_body": "",
+    "msg": "HTTP request",
+    "http": "request",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIGetDynamicCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077770697
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-VnsR4WWlRhRazQ1eZ3u3SIkaPoGTsVbN",
+    "response_status_code": "200 OK",
+    "response_status_text": "OK",
+    "response_headers": {
+      "access-control-allow-headers": "Content-Type, Authorization, Cache-Control",
+      "access-control-allow-methods": "GET, POST, OPTIONS",
+      "access-control-allow-origin": "*",
+      "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+      "content-type": "application/json",
+      "date": "Tue, 27 Oct 2026 05:09:30 GMT",
+      "expires": "0",
+      "ngrok-agent-ips": "2409:40c2:4036:26fd:126:ab0a:ba59:b2bc",
+      "pragma": "no-cache",
+      "server": "nginx/1.30.6",
+      "vary": [
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "x-robots-tag": "noindex, nofollow",
+      "x-xss-protection": "0",
+      "transfer-encoding": "chunked"
+    },
+    "response_body": "{\"display\":[{\"name\":\"Farmer Issuer\",\"locale\":\"en\"}],\"credential_issuer\":\"https://sphere-dust-sandlot.ngrok-free.dev\",\"authorization_servers\":[\"https://sphere-dust-sandlot.ngrok-free.dev\"],\"credential_endpoint\":\"https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/issuance/credential\",\"nonce_endpoint\":\"https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/nonce\",\"credential_configurations_supported\":{\"FarmerCredential\":{\"format\":\"ldp_vc\",\"scope\":\"mock_identity_vc_ldp\",\"cryptographic_binding_methods_supported\":[\"did:jwk\"],\"credential_signing_alg_values_supported\":[\"EdDSA\"],\"proof_types_supported\":{\"jwt\":{\"proof_signing_alg_values_supported\":[\"RS256\",\"ES256\"]}},\"credential_definition\":{\"type\":[\"FarmerCredential\",\"VerifiableCredential\"],\"@context\":[\"https://www.w3.org/2018/credentials/v1\"]},\"credential_metadata\":{\"display\":[{\"logo\":{\"uri\":\"https://mosip.github.io/inji-config/logos/agro-vertias-logo.png\",\"alt_text\":\"Farmer Credential Logo\"},\"name\":\"Farmer Verifiable Credential\",\"locale\":\"en\",\"text_color\":\"#FFFFFF\",\"background_color\":\"#12107c\",\"background_image\":{\"uri\":\"https://mosip.github.io/inji-config/logos/agro-vertias-logo.png\"}}],\"claims\":[{\"path\":[\"phone\"],\"display\":[{\"name\":\"Phone Number\",\"locale\":\"en\"}]},{\"path\":[\"gender\"],\"display\":[{\"name\":\"Gender\",\"locale\":\"en\"}]},{\"path\":[\"fullName\"],\"display\":[{\"name\":\"Full Name\",\"locale\":\"en\"}]},{\"path\":[\"dateOfBirth\"],\"display\":[{\"name\":\"Date of Birth\",\"locale\":\"en\"}]}]}},\"MockIdentitySdJwtCredential\":{\"format\":\"dc+sd-jwt\",\"scope\":\"mock_identity_vc_sdjwt\",\"vct\":\"MockVerifiableCredentialSdJwt\",\"cryptographic_binding_methods_supported\":[\"did:jwk\",\"did:key\"],\"credential_signing_alg_values_supported\":[\"ES256\"],\"proof_types_supported\":{\"jwt\":{\"proof_signing_alg_values_supported\":[\"RS256\",\"PS256\",\"ES256\",\"EdDSA\"]}},\"credential_metadata\":{\"display\":[{\"logo\":{\"uri\":\"https://inji.github.io/inji-config/logos/mosipid-logo.png\",\"alt_text\":\"a square logo of a MOSIP\"},\"name\":\"Mock Identity Credential (SD-JWT)\",\"locale\":\"en\",\"text_color\":\"#FFFFFF\",\"background_color\":\"#12107c\",\"background_image\":{\"uri\":\"https://api.dev-int-inji.mosip.net/inji/mosip-logo.png\"}}],\"claims\":[{\"path\":[\"UIN\"],\"display\":[{\"name\":\"UIN\",\"locale\":\"en\"}]},{\"path\":[\"email\"],\"display\":[{\"name\":\"Email Id\",\"locale\":\"en\"}]},{\"path\":[\"phone\"],\"display\":[{\"name\":\"Phone Number\",\"locale\":\"en\"}]},{\"path\":[\"gender\"],\"display\":[{\"name\":\"Gender\",\"locale\":\"en\"}]},{\"path\":[\"region\"],\"display\":[{\"name\":\"Region\",\"locale\":\"en\"}]},{\"path\":[\"fullName\"],\"display\":[{\"name\":\"Full Name\",\"locale\":\"en\"}]},{\"path\":[\"postalCode\"],\"display\":[{\"name\":\"Postal Code\",\"locale\":\"en\"}]},{\"path\":[\"dateOfBirth\"],\"display\":[{\"name\":\"Date of Birth\",\"locale\":\"en\"}]}]}}}}",
+    "msg": "HTTP response",
+    "http": "response",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIGetDynamicCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771000
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-0N3idhlyE1UWEgr9NpIHStCjHgGmPfC5",
+    "msg": "Credential issuer metadata response indicates unsigned metadata",
+    "contentType": "application/json",
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.2"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIGetDynamicCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771001
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-oRWWFlbTrMi7FZREDJ94rEGyLqFeckk5",
+    "msg": "Fetched credential issuer metadata from https://sphere-dust-sandlot.ngrok-free.dev/.well-known/openid-credential-issuer",
+    "result": "SUCCESS",
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.2"
+    ],
+    "contentType": "application/json",
+    "status": 200,
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIGetDynamicCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771002
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-FCGPNn3FKg3erwOEaTVhQ3yp629DQfOu",
+    "display": [
+      {
+        "name": "Farmer Issuer",
+        "locale": "en"
+      }
+    ],
+    "credential_issuer": "https://sphere-dust-sandlot.ngrok-free.dev",
+    "authorization_servers": [
+      "https://sphere-dust-sandlot.ngrok-free.dev"
+    ],
+    "credential_endpoint": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/issuance/credential",
+    "nonce_endpoint": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/nonce",
+    "credential_configurations_supported": {
+      "FarmerCredential": {
+        "format": "ldp_vc",
+        "scope": "mock_identity_vc_ldp",
+        "cryptographic_binding_methods_supported": [
+          "did:jwk"
+        ],
+        "credential_signing_alg_values_supported": [
+          "EdDSA"
+        ],
+        "proof_types_supported": {
+          "jwt": {
+            "proof_signing_alg_values_supported": [
+              "RS256",
+              "ES256"
+            ]
+          }
+        },
+        "credential_definition": {
+          "type": [
+            "FarmerCredential",
+            "VerifiableCredential"
+          ],
+          "@context": [
+            "https://www.w3.org/2018/credentials/v1"
+          ]
+        },
+        "credential_metadata": {
+          "display": [
+            {
+              "logo": {
+                "uri": "https://mosip.github.io/inji-config/logos/agro-vertias-logo.png",
+                "alt_text": "Farmer Credential Logo"
+              },
+              "name": "Farmer Verifiable Credential",
+              "locale": "en",
+              "text_color": "#FFFFFF",
+              "background_color": "#12107c",
+              "background_image": {
+                "uri": "https://mosip.github.io/inji-config/logos/agro-vertias-logo.png"
+              }
+            }
+          ],
+          "claims": [
+            {
+              "path": [
+                "phone"
+              ],
+              "display": [
+                {
+                  "name": "Phone Number",
+                  "locale": "en"
+                }
+              ]
+            },
+            {
+              "path": [
+                "gender"
+              ],
+              "display": [
+                {
+                  "name": "Gender",
+                  "locale": "en"
+                }
+              ]
+            },
+            {
+              "path": [
+                "fullName"
+              ],
+              "display": [
+                {
+                  "name": "Full Name",
+                  "locale": "en"
+                }
+              ]
+            },
+            {
+              "path": [
+                "dateOfBirth"
+              ],
+              "display": [
+                {
+                  "name": "Date of Birth",
+                  "locale": "en"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "MockIdentitySdJwtCredential": {
+        "format": "dc+sd-jwt",
+        "scope": "mock_identity_vc_sdjwt",
+        "vct": "MockVerifiableCredentialSdJwt",
+        "cryptographic_binding_methods_supported": [
+          "did:jwk",
+          "did:key"
+        ],
+        "credential_signing_alg_values_supported": [
+          "ES256"
+        ],
+        "proof_types_supported": {
+          "jwt": {
+            "proof_signing_alg_values_supported": [
+              "RS256",
+              "PS256",
+              "ES256",
+              "EdDSA"
+            ]
+          }
+        },
+        "credential_metadata": {
+          "display": [
+            {
+              "logo": {
+                "uri": "https://inji.github.io/inji-config/logos/mosipid-logo.png",
+                "alt_text": "a square logo of a MOSIP"
+              },
+              "name": "Mock Identity Credential (SD-JWT)",
+              "locale": "en",
+              "text_color": "#FFFFFF",
+              "background_color": "#12107c",
+              "background_image": {
+                "uri": "https://api.dev-int-inji.mosip.net/inji/mosip-logo.png"
+              }
+            }
+          ],
+          "claims": [
+            {
+              "path": [
+                "UIN"
+              ],
+              "display": [
+                {
+                  "name": "UIN",
+                  "locale": "en"
+                }
+              ]
+            },
+            {
+              "path": [
+                "email"
+              ],
+              "display": [
+                {
+                  "name": "Email Id",
+                  "locale": "en"
+                }
+              ]
+            },
+            {
+              "path": [
+                "phone"
+              ],
+              "display": [
+                {
+                  "name": "Phone Number",
+                  "locale": "en"
+                }
+              ]
+            },
+            {
+              "path": [
+                "gender"
+              ],
+              "display": [
+                {
+                  "name": "Gender",
+                  "locale": "en"
+                }
+              ]
+            },
+            {
+              "path": [
+                "region"
+              ],
+              "display": [
+                {
+                  "name": "Region",
+                  "locale": "en"
+                }
+              ]
+            },
+            {
+              "path": [
+                "fullName"
+              ],
+              "display": [
+                {
+                  "name": "Full Name",
+                  "locale": "en"
+                }
+              ]
+            },
+            {
+              "path": [
+                "postalCode"
+              ],
+              "display": [
+                {
+                  "name": "Postal Code",
+                  "locale": "en"
+                }
+              ]
+            },
+            {
+              "path": [
+                "dateOfBirth"
+              ],
+              "display": [
+                {
+                  "name": "Date of Birth",
+                  "locale": "en"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.2"
+    ],
+    "msg": "Successfully parsed credential issuer metadata",
+    "result": "SUCCESS",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIParseCredentialIssuerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771002
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-FK90AqNJ1fodkRoJJ3JNYfFdliVR18hg",
+    "msg": "Extracted TLS configuration from credential issuer URL",
+    "tls": {
+      "testHost": "sphere-dust-sandlot.ngrok-free.dev",
+      "testPort": 443
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIExtractTlsInfoFromCredentialIssuer",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771002
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-AlcgpYf6YGwFBuNVhX5TbhLBlDdt5lQH",
+    "msg": "Found explicit authorization_servers list with 1 entries.",
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.3",
+      "RFC8414-3.1"
+    ],
+    "authorization_servers": [
+      "https://sphere-dust-sandlot.ngrok-free.dev"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIFetchOAuthorizationServerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771003
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-UCuOxYuuDQUHcYygq4uzH5BEWSWhnBUR",
+    "authorization_server_metadata_url": "https://sphere-dust-sandlot.ngrok-free.dev/.well-known/oauth-authorization-server",
+    "msg": "Derived authorization server 0 metadata endpoint URL from OAuth authorization server issuer.",
+    "authorization_server_issuer": "https://sphere-dust-sandlot.ngrok-free.dev",
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.3",
+      "RFC8414-3.1"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIFetchOAuthorizationServerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771003
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-wHdhvZs4l4wEdjINcUwytadxFvM6Rgcb",
+    "authorization_server_metadata_url": "https://sphere-dust-sandlot.ngrok-free.dev/.well-known/oauth-authorization-server",
+    "msg": "Fetching metadata from authorization server: 0",
+    "authorization_server_issuer": "https://sphere-dust-sandlot.ngrok-free.dev",
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.3",
+      "RFC8414-3.1"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIFetchOAuthorizationServerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771003
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-qKACwxZ0is81Z0mLexPohWUwDifnZbJs",
+    "request_uri": "https://sphere-dust-sandlot.ngrok-free.dev/.well-known/oauth-authorization-server",
+    "request_method": "GET",
+    "request_headers": {
+      "Accept": "text/plain, application/json, application/yaml, application/*+json, */*",
+      "Content-Length": "0"
+    },
+    "request_body": "",
+    "msg": "HTTP request",
+    "http": "request",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIFetchOAuthorizationServerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771005
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-52Y4SkvoO8Waf00fhPBSLEVzP7k5xZjB",
+    "response_status_code": "200 OK",
+    "response_status_text": "OK",
+    "response_headers": {
+      "access-control-allow-headers": "Content-Type, Authorization, Cache-Control",
+      "access-control-allow-methods": "GET, OPTIONS",
+      "access-control-allow-origin": "*",
+      "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+      "content-type": "application/json",
+      "date": "Tue, 27 Oct 2026 05:09:31 GMT",
+      "expires": "0",
+      "ngrok-agent-ips": "2409:40c2:4036:26fd:126:ab0a:ba59:b2bc",
+      "pragma": "no-cache",
+      "server": "nginx/1.30.6",
+      "vary": [
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "x-robots-tag": "noindex, nofollow",
+      "x-xss-protection": "0",
+      "transfer-encoding": "chunked"
+    },
+    "response_body": "{\"issuer\":\"https://sphere-dust-sandlot.ngrok-free.dev\",\"authorization_endpoint\":\"https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/oauth/iae\",\"token_endpoint\":\"https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/oauth/token\",\"jwks_uri\":\"https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/.well-known/jwks.json\",\"grant_types_supported\":[\"authorization_code\",\"urn:ietf:params:oauth:grant-type:pre-authorized_code\"],\"response_types_supported\":[\"code\"],\"code_challenge_methods_supported\":[\"S256\"],\"interactive_authorization_endpoint\":\"https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/oauth/iae\",\"require_interactive_authorization_request\":true}",
+    "msg": "HTTP response",
+    "http": "response",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIFetchOAuthorizationServerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771334
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-5AQCoyVBOgltwluWyCKb3gwxavA7YoK6",
+    "authorization_server_metadata_url": "https://sphere-dust-sandlot.ngrok-free.dev/.well-known/oauth-authorization-server",
+    "msg": "Fetched metadata from authorization server: 0",
+    "authorization_server_issuer": "https://sphere-dust-sandlot.ngrok-free.dev",
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.3",
+      "RFC8414-3.1"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIFetchOAuthorizationServerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771336
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-2MfNMbyb05yUZX5dzGNK2YrplzRStxbR",
+    "msg": "Fetched authorization server metadata from single server",
+    "result": "SUCCESS",
+    "authorization_server_metadata_list": [
+      {
+        "issuer": "https://sphere-dust-sandlot.ngrok-free.dev",
+        "authorization_endpoint": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/oauth/iae",
+        "token_endpoint": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/oauth/token",
+        "jwks_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/.well-known/jwks.json",
+        "grant_types_supported": [
+          "authorization_code",
+          "urn:ietf:params:oauth:grant-type:pre-authorized_code"
+        ],
+        "response_types_supported": [
+          "code"
+        ],
+        "code_challenge_methods_supported": [
+          "S256"
+        ],
+        "interactive_authorization_endpoint": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/oauth/iae",
+        "require_interactive_authorization_request": true
+      }
+    ],
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.3",
+      "RFC8414-3.1"
+    ],
+    "authorization_server": "https://sphere-dust-sandlot.ngrok-free.dev",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIFetchOAuthorizationServerMetadata",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771336
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-WKiIShylmgBW6ERPp9NdPqwbigKuzbqc",
+    "msg": "Select authorization server metadata",
+    "result": "SUCCESS",
+    "available_authorization_servers": [
+      "https://sphere-dust-sandlot.ngrok-free.dev"
+    ],
+    "requirements": [
+      "OID4VCI-1FINAL-12.2.3"
+    ],
+    "authorization_server_metadata": {
+      "issuer": "https://sphere-dust-sandlot.ngrok-free.dev",
+      "authorization_endpoint": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/oauth/iae",
+      "token_endpoint": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/oauth/token",
+      "jwks_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/.well-known/jwks.json",
+      "grant_types_supported": [
+        "authorization_code",
+        "urn:ietf:params:oauth:grant-type:pre-authorized_code"
+      ],
+      "response_types_supported": [
+        "code"
+      ],
+      "code_challenge_methods_supported": [
+        "S256"
+      ],
+      "interactive_authorization_endpoint": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/oauth/iae",
+      "require_interactive_authorization_request": true
+    },
+    "selected_authorization_server": "https://sphere-dust-sandlot.ngrok-free.dev",
+    "index": 0,
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCISelectOAuthorizationServer",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771337
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-SkOilWpgLGG1mjGQEIUzS7VZvnYeHOCe",
+    "msg": "Found required server configuration keys",
+    "result": "SUCCESS",
+    "required": [
+      "authorization_endpoint",
+      "token_endpoint",
+      "issuer"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CheckServerConfiguration",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771337
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-KhOqo8FbrGpowk9gNpHnK2Iu5JyZCfbo",
+    "client_id": "oidf-conformance-wallet",
+    "dpop_signing_alg": "ES256",
+    "jwks": {
+      "keys": [
+        {
+          "kty": "EC",
+          "crv": "P-256",
+          "alg": "ES256",
+          "use": "sig",
+          "kid": "yJNsWPXB1d0E6NBW",
+          "x": "ZqKFvSb_GAHaYAqW77fN6Be3BWyNDetm9Lmx7TPm8-E",
+          "y": "kRU9xwryORyZBVSv3AbVmhxCp0gYUnYGJsCURCyLaZY",
+          "d": "<redacted: private key material>"
+        }
+      ]
+    },
+    "msg": "Found a static client object",
+    "result": "SUCCESS",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "GetStaticClientConfiguration",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771338
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-4cIrjWZP9kSQPIO1KgoRI8FZcAnQsVLD",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIGenerateClientJwksIfMissing",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771338,
+    "msg": "Client JWKS already present in configuration, skipping generation"
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-bYcyhOxafPzb0ISKIkEKKK99CGw7z8Ir",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIGenerateClientJwksIfMissing",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771339,
+    "msg": "Client2 JWKS already present in configuration, skipping generation"
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-avoAEO8vI2IKABGXcTm7wv336vVtSwGb",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "RegisterCredentialTrustAnchor",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771339,
+    "msg": "No credential trust anchor configured, skipping registration"
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-8D0V8yUXGYOunTOoaP0uoCqkAQ13qWFV",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "RegisterStatusListTrustAnchor",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771339,
+    "msg": "No status list trust anchor configured, skipping registration"
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-qAuH0JW0CjqZvL0c2mW4KVa0oIhJ8ds8",
+    "msg": "Extracted credential_configuration_id from config",
+    "vci_credential_configuration_id": "MockIdentitySdJwtCredential",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIAddCredentialConfigurationIdToEnv",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771340
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-cDNue6w2PrQos0VGWf2Jkr93bMI1Yd5n",
+    "msg": "Emitting credential_configuration for MockIdentitySdJwtCredential",
+    "credential_configuration": {
+      "format": "dc+sd-jwt",
+      "scope": "mock_identity_vc_sdjwt",
+      "vct": "MockVerifiableCredentialSdJwt",
+      "cryptographic_binding_methods_supported": [
+        "did:jwk",
+        "did:key"
+      ],
+      "credential_signing_alg_values_supported": [
+        "ES256"
+      ],
+      "proof_types_supported": {
+        "jwt": {
+          "proof_signing_alg_values_supported": [
+            "RS256",
+            "PS256",
+            "ES256",
+            "EdDSA"
+          ]
+        }
+      },
+      "credential_metadata": {
+        "display": [
+          {
+            "logo": {
+              "uri": "https://inji.github.io/inji-config/logos/mosipid-logo.png",
+              "alt_text": "a square logo of a MOSIP"
+            },
+            "name": "Mock Identity Credential (SD-JWT)",
+            "locale": "en",
+            "text_color": "#FFFFFF",
+            "background_color": "#12107c",
+            "background_image": {
+              "uri": "https://api.dev-int-inji.mosip.net/inji/mosip-logo.png"
+            }
+          }
+        ],
+        "claims": [
+          {
+            "path": [
+              "UIN"
+            ],
+            "display": [
+              {
+                "name": "UIN",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "email"
+            ],
+            "display": [
+              {
+                "name": "Email Id",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "phone"
+            ],
+            "display": [
+              {
+                "name": "Phone Number",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "gender"
+            ],
+            "display": [
+              {
+                "name": "Gender",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "region"
+            ],
+            "display": [
+              {
+                "name": "Region",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "fullName"
+            ],
+            "display": [
+              {
+                "name": "Full Name",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "postalCode"
+            ],
+            "display": [
+              {
+                "name": "Postal Code",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "dateOfBirth"
+            ],
+            "display": [
+              {
+                "name": "Date of Birth",
+                "locale": "en"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIResolveRequestedCredentialConfiguration",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771340
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-1CrQAzRZ7o1urRTzpqKiAOKc8mk1EZp0",
+    "expected_format": "dc+sd-jwt",
+    "msg": "Format of the resolved credential configuration matches the expected format",
+    "credential_configuration": {
+      "format": "dc+sd-jwt",
+      "scope": "mock_identity_vc_sdjwt",
+      "vct": "MockVerifiableCredentialSdJwt",
+      "cryptographic_binding_methods_supported": [
+        "did:jwk",
+        "did:key"
+      ],
+      "credential_signing_alg_values_supported": [
+        "ES256"
+      ],
+      "proof_types_supported": {
+        "jwt": {
+          "proof_signing_alg_values_supported": [
+            "RS256",
+            "PS256",
+            "ES256",
+            "EdDSA"
+          ]
+        }
+      },
+      "credential_metadata": {
+        "display": [
+          {
+            "logo": {
+              "uri": "https://inji.github.io/inji-config/logos/mosipid-logo.png",
+              "alt_text": "a square logo of a MOSIP"
+            },
+            "name": "Mock Identity Credential (SD-JWT)",
+            "locale": "en",
+            "text_color": "#FFFFFF",
+            "background_color": "#12107c",
+            "background_image": {
+              "uri": "https://api.dev-int-inji.mosip.net/inji/mosip-logo.png"
+            }
+          }
+        ],
+        "claims": [
+          {
+            "path": [
+              "UIN"
+            ],
+            "display": [
+              {
+                "name": "UIN",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "email"
+            ],
+            "display": [
+              {
+                "name": "Email Id",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "phone"
+            ],
+            "display": [
+              {
+                "name": "Phone Number",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "gender"
+            ],
+            "display": [
+              {
+                "name": "Gender",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "region"
+            ],
+            "display": [
+              {
+                "name": "Region",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "fullName"
+            ],
+            "display": [
+              {
+                "name": "Full Name",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "postalCode"
+            ],
+            "display": [
+              {
+                "name": "Postal Code",
+                "locale": "en"
+              }
+            ]
+          },
+          {
+            "path": [
+              "dateOfBirth"
+            ],
+            "display": [
+              {
+                "name": "Date of Birth",
+                "locale": "en"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "actual_format": "dc+sd-jwt",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIEnsureResolvedCredentialConfigurationMatchesSelection",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771341
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-SO9WFOqeE4TA5XbwkEt71kI1S8gxVHwI",
+    "msg": "Using credential scope value to reference credential_configuration_id",
+    "result": "SUCCESS",
+    "credential_configuration_id": "MockIdentitySdJwtCredential",
+    "scope": "mock_identity_vc_sdjwt",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIDetermineCredentialConfigurationTransferMethod",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771342
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-zF2vVDulqIjX3Z5TfN05fxTtDh26MFhS",
+    "msg": "Selected first available proof type to use jwt",
+    "proof_type": {
+      "proof_signing_alg_values_supported": [
+        "RS256",
+        "PS256",
+        "ES256",
+        "EdDSA"
+      ]
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIResolveCredentialProofTypeToUse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771342
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-IQhWzOsQmAKickN3cRIMUzutxoU38Zvl",
+    "msg": "Skip checking Key Attestation JWKS: Key attestation not required for selected proof type jwt",
+    "proof_type": {
+      "proof_signing_alg_values_supported": [
+        "RS256",
+        "PS256",
+        "ES256",
+        "EdDSA"
+      ]
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCICheckKeyAttestationJwksIfKeyAttestationIsRequired",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771342
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-0fnkwLVez0gAoqgeJKbuNyw2Xy0hN0dL",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIGenerateClientJwksIfMissing",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771343,
+    "msg": "Client JWKS already present in configuration, skipping generation"
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-dko76Xc36IFPfCT1g1oMqkKhaOIS5LhH",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIGenerateClientJwksIfMissing",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771343,
+    "msg": "Client2 JWKS already present in configuration, skipping generation"
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-4fbIjWk3n8qk0ft5ggV6iV981z8KLmtF",
+    "signing_key_count": 1,
+    "msg": "Validated 1 signing key(s) in client JWKS",
+    "requirements": [
+      "RFC7517-1.1"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIValidateClientJWKsPrivatePart",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771345
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-uS4AZXUtXQipbail7nzioc3JZJEGC6sf",
+    "msg": "Valid client JWKs for VCI: keys are valid JSON, contain the required fields, the private/public exponents match and are correctly encoded using unpadded base64url. Multiple signing keys are allowed for VCI attestation proof type.",
+    "result": "SUCCESS",
+    "requirements": [
+      "RFC7517-1.1"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIValidateClientJWKsPrivatePart",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771346
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-FnP6Wq4rCfHqH9bwT5b8acuyfGcEPYQD",
+    "client_jwks": {
+      "keys": [
+        {
+          "kty": "EC",
+          "crv": "P-256",
+          "alg": "ES256",
+          "use": "sig",
+          "kid": "yJNsWPXB1d0E6NBW",
+          "x": "ZqKFvSb_GAHaYAqW77fN6Be3BWyNDetm9Lmx7TPm8-E",
+          "y": "kRU9xwryORyZBVSv3AbVmhxCp0gYUnYGJsCURCyLaZY",
+          "d": "<redacted: private key material>"
+        }
+      ]
+    },
+    "msg": "Extracted client JWK",
+    "result": "SUCCESS",
+    "client_public_jwks": {
+      "keys": [
+        {
+          "kty": "EC",
+          "use": "sig",
+          "crv": "P-256",
+          "kid": "yJNsWPXB1d0E6NBW",
+          "x": "ZqKFvSb_GAHaYAqW77fN6Be3BWyNDetm9Lmx7TPm8-E",
+          "y": "kRU9xwryORyZBVSv3AbVmhxCp0gYUnYGJsCURCyLaZY",
+          "alg": "ES256"
+        }
+      ]
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "ExtractJWKsFromStaticClientConfiguration",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771346
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-MHEDV47jFXMbhFKQ7aH9fIAVkUd8q2jS",
+    "msg": "All keys contain kids",
+    "result": "SUCCESS",
+    "requirements": [
+      "OIDCC-10.1"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CheckForKeyIdInClientJWKs",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771346
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-axtZlhBOmChwLtiPMr0KHWXmTg0AYQKK",
+    "msg": "Distinct 'kid' value in all keys of client_jwks",
+    "result": "SUCCESS",
+    "see": "https://bitbucket.org/openid/connect/issues/1127",
+    "requirements": [
+      "RFC7517-4.5"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CheckDistinctKeyIdValueInClientJWKs",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771347
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-Roo4iuPGXuwBfzScWlE9kmagDuZ394ON",
+    "msg": "Keys in client JWKS all have permitted 'alg'",
+    "result": "SUCCESS",
+    "requirements": [
+      "FAPI2-SP-FINAL-5.4"
+    ],
+    "permitted": [
+      "PS256",
+      "ES256",
+      "EdDSA",
+      "Ed25519"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "FAPI2CheckKeyAlgInClientJWKs",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771347
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-TPxYjMYRgSUpd1pSB83jpkbjRzk5tFNY",
+    "client_jwks": {
+      "keys": [
+        {
+          "kty": "EC",
+          "crv": "P-256",
+          "alg": "ES256",
+          "use": "sig",
+          "kid": "yJNsWPXB1d0E6NBW",
+          "x": "ZqKFvSb_GAHaYAqW77fN6Be3BWyNDetm9Lmx7TPm8-E",
+          "y": "kRU9xwryORyZBVSv3AbVmhxCp0gYUnYGJsCURCyLaZY",
+          "d": "<redacted: private key material>"
+        }
+      ]
+    },
+    "msg": "Validated minimum key lengths for client_jwks",
+    "result": "SUCCESS",
+    "requirements": [
+      "FAPI2-SP-FINAL-5.4.1-3",
+      "FAPI2-SP-FINAL-5.4.1-2"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "FAPI2FinalEnsureMinimumClientKeyLength",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771347
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-M3eueIBlqN7Wi7aYRKcfQPmc9rxUMOqQ",
+    "msg": "Use credential endpoint from credential issuer metadata",
+    "credential_endpoint": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/issuance/credential",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIResolveCredentialEndpointToUse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771348
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-2LTEdT9I59tJUKBZ2ZgzfMNrqKU4CJbs",
+    "msg": "Set protected resource URL",
+    "result": "SUCCESS",
+    "protected_resource_url": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/issuance/credential",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "SetProtectedResourceUrlToSingleResourceEndpoint",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771348
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-f2ghfyevVVuDbTK7g6xMwc0dwcpC2GP5",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "oid4vci-1_0-issuer-fail-invalid-nonce",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771349,
+    "msg": "Setup Done"
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-IjQ47AV6acMxduYLJKaal2O3aXUSWeIZ",
+    "msg": "Waiting for call to credential offer endpoint, see exposed values.",
+    "requirements": [
+      "OID4VCI-1FINAL-4.1"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIWaitForCredentialOffer",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771349
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-E86FRaWYPkLjcU5iITREumZNSg5TfCbG",
+    "msg": "Incoming HTTP request to /test/a/injicertify-shardul/credential_offer",
+    "incoming_headers": {
+      "host": "localhost.emobix.co.uk",
+      "x-forwarded-uri": "/test/a/injicertify-shardul/credential_offer?credential_offer_uri=https%3A%2F%2Fsphere-dust-sandlot.ngrok-free.dev%2Fv1%2Fcertify%2Fcredential-offer-data%2F9d18ea94-aaf4-4af1-8f46-b8a904613a24",
+      "forwarded": "by=172.18.0.9;for=172.65.251.78;host=localhost.emobix.co.uk;proto=https",
+      "connection": "close",
+      "accept": "*/*",
+      "accept-encoding": "gzip, deflate, br",
+      "user-agent": "python-httpx/0.28.1",
+      "content-type": "application/json",
+      "cookie": "JSESSIONID=3DDE2CC932A09A02A68DEA5F00B1B0F2"
+    },
+    "incoming_path": "/test/a/injicertify-shardul/credential_offer",
+    "incoming_body_form_params": null,
+    "incoming_method": "GET",
+    "incoming_tls_version": "TLSv1.3",
+    "incoming_tls_cert": null,
+    "incoming_query_string_params": {
+      "credential_offer_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/credential-offer-data/9d18ea94-aaf4-4af1-8f46-b8a904613a24"
+    },
+    "incoming_body": null,
+    "incoming_tls_chain": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "http": "incoming",
+    "incoming_body_json_parse_error": null,
+    "incoming_tls_cipher": "TLS_AES_256_GCM_SHA384",
+    "incoming_body_json": null,
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "oid4vci-1_0-issuer-fail-invalid-nonce",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771762
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-MlsOwE7qiZjvlWpg9EJSeifqyDkx1TIU",
+    "msg": "Found credential_offer_uri in query params",
+    "result": "SUCCESS",
+    "credential_offer_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/credential-offer-data/9d18ea94-aaf4-4af1-8f46-b8a904613a24",
+    "requirements": [
+      "OID4VCI-1FINAL-4.1"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIValidateCredentialOfferRequestParams",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771764
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-E8xvwrVLoDQHtwuz5C3OG7HR8g2CnRpI",
+    "request_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/credential-offer-data/9d18ea94-aaf4-4af1-8f46-b8a904613a24",
+    "request_method": "GET",
+    "request_headers": {
+      "Accept": "text/plain, application/json, application/yaml, application/*+json, */*",
+      "Content-Length": "0"
+    },
+    "request_body": "",
+    "msg": "HTTP request",
+    "http": "request",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIFetchCredentialOfferFromCredentialOfferUri",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077771766
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-Xp67fPwiQcOwfCmmPSc0ZXfKjP6fMXWv",
+    "response_status_code": "200 OK",
+    "response_status_text": "OK",
+    "response_headers": {
+      "access-control-allow-headers": "Content-Type, Authorization, Cache-Control",
+      "access-control-allow-methods": "GET, POST, OPTIONS",
+      "access-control-allow-origin": "*",
+      "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+      "content-type": "application/json",
+      "date": "Tue, 27 Oct 2026 05:09:31 GMT",
+      "expires": "0",
+      "ngrok-agent-ips": "2409:40c2:4036:26fd:126:ab0a:ba59:b2bc",
+      "pragma": "no-cache",
+      "server": "nginx/1.30.6",
+      "vary": [
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "x-robots-tag": "noindex, nofollow",
+      "x-xss-protection": "0",
+      "transfer-encoding": "chunked"
+    },
+    "response_body": "{\"credential_issuer\":\"https://sphere-dust-sandlot.ngrok-free.dev\",\"credential_configuration_ids\":[\"MockIdentitySdJwtCredential\"],\"grants\":{\"urn:ietf:params:oauth:grant-type:pre-authorized_code\":{\"pre-authorized_code\":\"qShPENRRNqoOy7whanSdZcBtbjVn3WLg\",\"tx_code\":{\"length\":4,\"input_mode\":\"numeric\",\"description\":\"Please enter the transaction code provided to you\"}}}}",
+    "msg": "HTTP response",
+    "http": "response",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIFetchCredentialOfferFromCredentialOfferUri",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772062
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-A06m1gvnySMFdwIkmVyw0MPx76K3fsT2",
+    "credential_offer": {
+      "status": 200,
+      "endpoint_name": "credential-offer",
+      "headers": {
+        "access-control-allow-headers": "Content-Type, Authorization, Cache-Control",
+        "access-control-allow-methods": "GET, POST, OPTIONS",
+        "access-control-allow-origin": "*",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "content-type": "application/json",
+        "date": "Tue, 27 Oct 2026 05:09:31 GMT",
+        "expires": "0",
+        "ngrok-agent-ips": "2409:40c2:4036:26fd:126:ab0a:ba59:b2bc",
+        "pragma": "no-cache",
+        "server": "nginx/1.30.6",
+        "vary": [
+          "Origin",
+          "Access-Control-Request-Method",
+          "Access-Control-Request-Headers"
+        ],
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-robots-tag": "noindex, nofollow",
+        "x-xss-protection": "0",
+        "transfer-encoding": "chunked"
+      },
+      "body": "{\"credential_issuer\":\"https://sphere-dust-sandlot.ngrok-free.dev\",\"credential_configuration_ids\":[\"MockIdentitySdJwtCredential\"],\"grants\":{\"urn:ietf:params:oauth:grant-type:pre-authorized_code\":{\"pre-authorized_code\":\"qShPENRRNqoOy7whanSdZcBtbjVn3WLg\",\"tx_code\":{\"length\":4,\"input_mode\":\"numeric\",\"description\":\"Please enter the transaction code provided to you\"}}}}"
+    },
+    "msg": "Fetched credential offer from credential offer uri",
+    "result": "SUCCESS",
+    "credential_offer_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/credential-offer-data/9d18ea94-aaf4-4af1-8f46-b8a904613a24",
+    "requirements": [
+      "OID4VCI-1FINAL-4.1.3"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIFetchCredentialOfferFromCredentialOfferUri",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772063
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-1XL5guw1fZgnChf9L7I6744crbDVQsas",
+    "credential_offer": "{\"credential_issuer\":\"https://sphere-dust-sandlot.ngrok-free.dev\",\"credential_configuration_ids\":[\"MockIdentitySdJwtCredential\"],\"grants\":{\"urn:ietf:params:oauth:grant-type:pre-authorized_code\":{\"pre-authorized_code\":\"qShPENRRNqoOy7whanSdZcBtbjVn3WLg\",\"tx_code\":{\"length\":4,\"input_mode\":\"numeric\",\"description\":\"Please enter the transaction code provided to you\"}}}}",
+    "msg": "Found credential offer",
+    "result": "SUCCESS",
+    "requirements": [
+      "OID4VCI-1FINAL-4.1"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIValidateCredentialOffer",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772064
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-zVN04w0rNsjrP6UvmtdxpUQcdMmu6PS7",
+    "msg": "OID4VCI Credential Offer input is valid",
+    "result": "SUCCESS",
+    "input": {
+      "credential_issuer": "https://sphere-dust-sandlot.ngrok-free.dev",
+      "credential_configuration_ids": [
+        "MockIdentitySdJwtCredential"
+      ],
+      "grants": {
+        "urn:ietf:params:oauth:grant-type:pre-authorized_code": {
+          "pre-authorized_code": "qShPENRRNqoOy7whanSdZcBtbjVn3WLg",
+          "tx_code": {
+            "length": 4,
+            "input_mode": "numeric",
+            "description": "Please enter the transaction code provided to you"
+          }
+        }
+      }
+    },
+    "schema_link": "/json-schemas/oid4vci/credential_offer-1_0.json",
+    "requirements": [
+      "OID4VCI-1FINAL-4.1"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIValidateCredentialOffer",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772066
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-PAyaE4bQ2nChUiS3qeZHwvCGQRmXitbh",
+    "credential_offer": {
+      "credential_issuer": "https://sphere-dust-sandlot.ngrok-free.dev",
+      "credential_configuration_ids": [
+        "MockIdentitySdJwtCredential"
+      ],
+      "grants": {
+        "urn:ietf:params:oauth:grant-type:pre-authorized_code": {
+          "pre-authorized_code": "qShPENRRNqoOy7whanSdZcBtbjVn3WLg",
+          "tx_code": {
+            "length": 4,
+            "input_mode": "numeric",
+            "description": "Please enter the transaction code provided to you"
+          }
+        }
+      }
+    },
+    "msg": "Parsed credential offer",
+    "result": "SUCCESS",
+    "requirements": [
+      "OID4VCI-1FINAL-4.1"
+    ],
+    "credential_configuration_ids": [
+      "MockIdentitySdJwtCredential"
+    ],
+    "credential_issuer": "https://sphere-dust-sandlot.ngrok-free.dev",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIValidateCredentialOffer",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772067
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-YXxr8gEvqC3wKBVrRaqf7XyQQYjNffdG",
+    "msg": "Use static_tx_code from config",
+    "tx_code": "4815",
+    "requirements": [
+      "OID4VCI-1FINAL-3.5"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIUseStaticTxCodeFromConfig",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772068
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-U6M2CbrsmifXNgoGS0lKN02C1gqKyvUG",
+    "credential_offer": {
+      "credential_issuer": "https://sphere-dust-sandlot.ngrok-free.dev",
+      "credential_configuration_ids": [
+        "MockIdentitySdJwtCredential"
+      ],
+      "grants": {
+        "urn:ietf:params:oauth:grant-type:pre-authorized_code": {
+          "pre-authorized_code": "qShPENRRNqoOy7whanSdZcBtbjVn3WLg",
+          "tx_code": {
+            "length": 4,
+            "input_mode": "numeric",
+            "description": "Please enter the transaction code provided to you"
+          }
+        }
+      }
+    },
+    "msg": "Found pre-authorized_code in Pre-authorized code grant",
+    "result": "SUCCESS",
+    "pre-authorized_code": "qShPENRRNqoOy7whanSdZcBtbjVn3WLg",
+    "requirements": [
+      "OID4VCI-1FINAL-3.5",
+      "OID4VCI-1FINAL-4.1.1"
+    ],
+    "tx_code_value": "4815",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIExtractPreAuthorizedCodeAndTxCodeFromCredentialOffer",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772068
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-0rXThb1Vchdh1WSLz031cwUia8EGywry",
+    "msg": "Call token endpoint",
+    "startBlock": true,
+    "blockId": "e6e0fd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "-START-BLOCK-",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772068
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-1gI1TmmFHfNa1uJcNDz1UJ0J9HI2fg11",
+    "grant_type": "urn:ietf:params:oauth:grant-type:pre-authorized_code",
+    "pre-authorized_code": "qShPENRRNqoOy7whanSdZcBtbjVn3WLg",
+    "tx_code": "4815",
+    "msg": "Created token endpoint request with pre-authorized_code",
+    "result": "SUCCESS",
+    "blockId": "e6e0fd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCICreateTokenEndpointRequestForPreAuthorizedCodeGrant",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772069
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-IMpAHRykqQlgEgcU40Q7aOmzeffCZITk",
+    "iss": "oidf-conformance-wallet",
+    "sub": "oidf-conformance-wallet",
+    "aud": "https://sphere-dust-sandlot.ngrok-free.dev",
+    "jti": "PAxXLISjL5r06cTvc4dW",
+    "nbf": 1793077772,
+    "iat": 1793077772,
+    "exp": 1793077832,
+    "msg": "Created client assertion claims",
+    "result": "SUCCESS",
+    "blockId": "e6e0fd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CreateClientAuthenticationAssertionClaimsWithIssAudience",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772069
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-7cc2vsQHr0LOPkoqQhGfwNYtc7ZfCV3H",
+    "msg": "Signed the client assertion",
+    "result": "SUCCESS",
+    "blockId": "e6e0fd",
+    "client_assertion": {
+      "verifiable_jws": "eyJraWQiOiJ5Sk5zV1BYQjFkMEU2TkJXIiwiYWxnIjoiRVMyNTYifQ.eyJzdWIiOiJvaWRmLWNvbmZvcm1hbmNlLXdhbGxldCIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldiIsIm5iZiI6MTc5MzA3Nzc3MiwiaXNzIjoib2lkZi1jb25mb3JtYW5jZS13YWxsZXQiLCJleHAiOjE3OTMwNzc4MzIsImlhdCI6MTc5MzA3Nzc3MiwianRpIjoiUEF4WExJU2pMNXIwNmNUdmM0ZFcifQ.Sa3bUVRQMAucf0hVOS4envlxnTqWi_mIT22ZZACveTtcY-wYf6tR9hKyUqPArHSAdvmVipbDy6PD1g0BiVSY2A",
+      "public_jwk": "{\"kty\":\"EC\",\"use\":\"sig\",\"crv\":\"P-256\",\"kid\":\"yJNsWPXB1d0E6NBW\",\"x\":\"ZqKFvSb_GAHaYAqW77fN6Be3BWyNDetm9Lmx7TPm8-E\",\"y\":\"kRU9xwryORyZBVSv3AbVmhxCp0gYUnYGJsCURCyLaZY\",\"alg\":\"ES256\"}"
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "SignClientAuthenticationAssertion",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772071
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-ADLnH4Ar6ImQndBJMXNbjwywQEKBF89O",
+    "grant_type": "urn:ietf:params:oauth:grant-type:pre-authorized_code",
+    "pre-authorized_code": "qShPENRRNqoOy7whanSdZcBtbjVn3WLg",
+    "tx_code": "4815",
+    "client_assertion": "eyJraWQiOiJ5Sk5zV1BYQjFkMEU2TkJXIiwiYWxnIjoiRVMyNTYifQ.eyJzdWIiOiJvaWRmLWNvbmZvcm1hbmNlLXdhbGxldCIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldiIsIm5iZiI6MTc5MzA3Nzc3MiwiaXNzIjoib2lkZi1jb25mb3JtYW5jZS13YWxsZXQiLCJleHAiOjE3OTMwNzc4MzIsImlhdCI6MTc5MzA3Nzc3MiwianRpIjoiUEF4WExJU2pMNXIwNmNUdmM0ZFcifQ.Sa3bUVRQMAucf0hVOS4envlxnTqWi_mIT22ZZACveTtcY-wYf6tR9hKyUqPArHSAdvmVipbDy6PD1g0BiVSY2A",
+    "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+    "msg": "Added client assertion",
+    "blockId": "e6e0fd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "AddClientAssertionToRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772071
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-Le5QXFEUbcLwV5VEkZvyPvostf6zVIV2",
+    "msg": "Generated dPOP JWKs",
+    "result": "SUCCESS",
+    "blockId": "e6e0fd",
+    "private_jwk": {
+      "kty": "EC",
+      "d": "<redacted: private key material>",
+      "use": "sig",
+      "crv": "P-256",
+      "kid": "itl-Ph97xqznYgUl3Asr96rm51JaE4i7Oax_ytc8MVI",
+      "x": "6DgFNDXKl1AlzybZ4Ha6tjP_O91l37mH-GKObqzttGI",
+      "y": "BZhcZBHqUyRem3SF9qiGONZj1QNbzgBL3ZU9y9Q_ERs",
+      "alg": "ES256"
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "GenerateDpopKey",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772072
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-RzbBvjj3yxDSWGmgZ32mtm79AK7C0vFu",
+    "alg": "ES256",
+    "typ": "dpop+jwt",
+    "jwk": {
+      "kty": "EC",
+      "use": "sig",
+      "crv": "P-256",
+      "kid": "itl-Ph97xqznYgUl3Asr96rm51JaE4i7Oax_ytc8MVI",
+      "x": "6DgFNDXKl1AlzybZ4Ha6tjP_O91l37mH-GKObqzttGI",
+      "y": "BZhcZBHqUyRem3SF9qiGONZj1QNbzgBL3ZU9y9Q_ERs",
+      "alg": "ES256"
+    },
+    "msg": "Created DPoP proof header",
+    "result": "SUCCESS",
+    "blockId": "e6e0fd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CreateDpopHeader",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772072
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-hsBmy18fTDHLCjajhZzYDiocJxAdQu7f",
+    "jti": "iXdlzHP1aCEENdBBGOqs",
+    "iat": 1793077772,
+    "msg": "Created DPoP proof claims",
+    "result": "SUCCESS",
+    "blockId": "e6e0fd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CreateDpopClaims",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772073
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-EZEj7zDm5BSONnzX136W6HsUcnKaBQyy",
+    "jti": "iXdlzHP1aCEENdBBGOqs",
+    "iat": 1793077772,
+    "htm": "POST",
+    "htu": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/oauth/token",
+    "msg": "Added htm/htu to DPoP proof claims",
+    "result": "SUCCESS",
+    "blockId": "e6e0fd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "SetDpopHtmHtuForTokenEndpoint",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772073
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-xmEvXpTzsCwpjf9BH5ZalNSKnra05Tol",
+    "msg": "authorization_server_dpop_nonce not found",
+    "result": "INFO",
+    "blockId": "e6e0fd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "SetDpopProofNonceForAuthorizationServer",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772074
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-fENe46ZkG6NwGppwJTuaZCjAXIWwhpQq",
+    "msg": "No DPOP nonce required",
+    "blockId": "e6e0fd",
+    "requirements": [
+      "DPOP-8.1"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "EnsureDpopNonceContainsAllowedCharactersOnly",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772074
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-ERdfUQAKjoTZ2kYriZZUxczYMJQTwYNB",
+    "msg": "Signed the DPoP proof",
+    "result": "SUCCESS",
+    "blockId": "e6e0fd",
+    "dpop_proof": {
+      "verifiable_jws": "eyJhbGciOiJFUzI1NiIsInR5cCI6ImRwb3Arand0IiwiandrIjp7Imt0eSI6IkVDIiwidXNlIjoic2lnIiwiY3J2IjoiUC0yNTYiLCJraWQiOiJpdGwtUGg5N3hxem5ZZ1VsM0Fzcjk2cm01MUphRTRpN09heF95dGM4TVZJIiwieCI6IjZEZ0ZORFhLbDFBbHp5Ylo0SGE2dGpQX085MWwzN21ILUdLT2JxenR0R0kiLCJ5IjoiQlpoY1pCSHFVeVJlbTNTRjlxaUdPTlpqMVFOYnpnQkwzWlU5eTlRX0VScyIsImFsZyI6IkVTMjU2In19.eyJodG0iOiJQT1NUIiwiaHR1IjoiaHR0cHM6Ly9zcGhlcmUtZHVzdC1zYW5kbG90Lm5ncm9rLWZyZWUuZGV2L3YxL2NlcnRpZnkvb2F1dGgvdG9rZW4iLCJpYXQiOjE3OTMwNzc3NzIsImp0aSI6ImlYZGx6SFAxYUNFRU5kQkJHT3FzIn0.OKNMLy_rsmpAe4vRSMzNMEOI1NqZxuPgU8RM_dsC0TxL8qiRaoKX_1jpt3YONRYsB1yYVKebXAzAUBJcWqf3eQ",
+      "public_jwk": "{\"kty\":\"EC\",\"use\":\"sig\",\"crv\":\"P-256\",\"kid\":\"itl-Ph97xqznYgUl3Asr96rm51JaE4i7Oax_ytc8MVI\",\"x\":\"6DgFNDXKl1AlzybZ4Ha6tjP_O91l37mH-GKObqzttGI\",\"y\":\"BZhcZBHqUyRem3SF9qiGONZj1QNbzgBL3ZU9y9Q_ERs\",\"alg\":\"ES256\"}"
+    },
+    "key": {
+      "kty": "EC",
+      "d": "<redacted: private key material>",
+      "use": "sig",
+      "crv": "P-256",
+      "kid": "itl-Ph97xqznYgUl3Asr96rm51JaE4i7Oax_ytc8MVI",
+      "x": "6DgFNDXKl1AlzybZ4Ha6tjP_O91l37mH-GKObqzttGI",
+      "y": "BZhcZBHqUyRem3SF9qiGONZj1QNbzgBL3ZU9y9Q_ERs",
+      "alg": "ES256"
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "SignDpopProof",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772076
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-ZnxvkKHPtD3WzFIiOiqIlwZh8GVeCZHl",
+    "msg": "Set DPoP header",
+    "result": "SUCCESS",
+    "blockId": "e6e0fd",
+    "DPoP": "eyJhbGciOiJFUzI1NiIsInR5cCI6ImRwb3Arand0IiwiandrIjp7Imt0eSI6IkVDIiwidXNlIjoic2lnIiwiY3J2IjoiUC0yNTYiLCJraWQiOiJpdGwtUGg5N3hxem5ZZ1VsM0Fzcjk2cm01MUphRTRpN09heF95dGM4TVZJIiwieCI6IjZEZ0ZORFhLbDFBbHp5Ylo0SGE2dGpQX085MWwzN21ILUdLT2JxenR0R0kiLCJ5IjoiQlpoY1pCSHFVeVJlbTNTRjlxaUdPTlpqMVFOYnpnQkwzWlU5eTlRX0VScyIsImFsZyI6IkVTMjU2In19.eyJodG0iOiJQT1NUIiwiaHR1IjoiaHR0cHM6Ly9zcGhlcmUtZHVzdC1zYW5kbG90Lm5ncm9rLWZyZWUuZGV2L3YxL2NlcnRpZnkvb2F1dGgvdG9rZW4iLCJpYXQiOjE3OTMwNzc3NzIsImp0aSI6ImlYZGx6SFAxYUNFRU5kQkJHT3FzIn0.OKNMLy_rsmpAe4vRSMzNMEOI1NqZxuPgU8RM_dsC0TxL8qiRaoKX_1jpt3YONRYsB1yYVKebXAzAUBJcWqf3eQ",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "AddDpopHeaderForTokenEndpointRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772076
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-PwY4G8PtNaWHaD30HxgMk1h0IEiCIlw8",
+    "request_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/oauth/token",
+    "request_method": "POST",
+    "request_headers": {
+      "Accept": "application/json",
+      "DPoP": "eyJhbGciOiJFUzI1NiIsInR5cCI6ImRwb3Arand0IiwiandrIjp7Imt0eSI6IkVDIiwidXNlIjoic2lnIiwiY3J2IjoiUC0yNTYiLCJraWQiOiJpdGwtUGg5N3hxem5ZZ1VsM0Fzcjk2cm01MUphRTRpN09heF95dGM4TVZJIiwieCI6IjZEZ0ZORFhLbDFBbHp5Ylo0SGE2dGpQX085MWwzN21ILUdLT2JxenR0R0kiLCJ5IjoiQlpoY1pCSHFVeVJlbTNTRjlxaUdPTlpqMVFOYnpnQkwzWlU5eTlRX0VScyIsImFsZyI6IkVTMjU2In19.eyJodG0iOiJQT1NUIiwiaHR1IjoiaHR0cHM6Ly9zcGhlcmUtZHVzdC1zYW5kbG90Lm5ncm9rLWZyZWUuZGV2L3YxL2NlcnRpZnkvb2F1dGgvdG9rZW4iLCJpYXQiOjE3OTMwNzc3NzIsImp0aSI6ImlYZGx6SFAxYUNFRU5kQkJHT3FzIn0.OKNMLy_rsmpAe4vRSMzNMEOI1NqZxuPgU8RM_dsC0TxL8qiRaoKX_1jpt3YONRYsB1yYVKebXAzAUBJcWqf3eQ",
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Content-Length": "648"
+    },
+    "request_body": "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code&pre-authorized_code=qShPENRRNqoOy7whanSdZcBtbjVn3WLg&tx_code=4815&client_assertion=eyJraWQiOiJ5Sk5zV1BYQjFkMEU2TkJXIiwiYWxnIjoiRVMyNTYifQ.eyJzdWIiOiJvaWRmLWNvbmZvcm1hbmNlLXdhbGxldCIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldiIsIm5iZiI6MTc5MzA3Nzc3MiwiaXNzIjoib2lkZi1jb25mb3JtYW5jZS13YWxsZXQiLCJleHAiOjE3OTMwNzc4MzIsImlhdCI6MTc5MzA3Nzc3MiwianRpIjoiUEF4WExJU2pMNXIwNmNUdmM0ZFcifQ.Sa3bUVRQMAucf0hVOS4envlxnTqWi_mIT22ZZACveTtcY-wYf6tR9hKyUqPArHSAdvmVipbDy6PD1g0BiVSY2A&client_assertion_type=urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer",
+    "msg": "HTTP request",
+    "http": "request",
+    "blockId": "e6e0fd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CallTokenEndpointAllowingDpopNonceErrorAndReturnFullResponse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772079
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-0Djnn2AsR5ROd174yqyWJEqWp3hpOVp1",
+    "response_status_code": "200 OK",
+    "response_status_text": "OK",
+    "response_headers": {
+      "access-control-allow-headers": "Content-Type, Authorization, Cache-Control",
+      "access-control-allow-methods": "GET, POST, OPTIONS",
+      "access-control-allow-origin": "*",
+      "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+      "content-type": "application/json",
+      "date": "Tue, 27 Oct 2026 05:09:32 GMT",
+      "expires": "0",
+      "ngrok-agent-ips": "2409:40c2:4036:26fd:126:ab0a:ba59:b2bc",
+      "pragma": "no-cache",
+      "server": "nginx/1.30.6",
+      "vary": [
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "x-robots-tag": "noindex, nofollow",
+      "x-xss-protection": "0",
+      "transfer-encoding": "chunked"
+    },
+    "response_body": "{\"access_token\":\"eyJraWQiOiJBYzNIZjhlS19saFlJQzZwcUM4azNyQ1RMcTBRYnI5OExoMDdjUktXUHhJIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJ7XCJmdWxsTmFtZVwiOlwiQ29uZm9ybWFuY2UgVGVzdCBIb2xkZXJcIixcImRhdGVPZkJpcnRoXCI6XCIxOTkwLTAxLTAxXCIsXCJnZW5kZXJcIjpcIkZlbWFsZVwiLFwicGhvbmVcIjpcIjk5OTk5OTk5OTlcIixcImVtYWlsXCI6XCJob2xkZXJAZXhhbXBsZS5vcmdcIixcIlVJTlwiOlwiMTIzNDU2Nzg5MFwiLFwicG9zdGFsQ29kZVwiOlwiNDAwMDAxXCIsXCJyZWdpb25cIjpcIk11bWJhaVwifSIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldi92MS9jZXJ0aWZ5L2lzc3VhbmNlL2NyZWRlbnRpYWwiLCJzY29wZSI6Im1vY2tfaWRlbnRpdHlfdmNfc2Rqd3QiLCJpc3MiOiJodHRwczovL3NwaGVyZS1kdXN0LXNhbmRsb3Qubmdyb2stZnJlZS5kZXYiLCJleHAiOjE3OTMwNzgzNzIsImlhdCI6MTc5MzA3Nzc3MiwiY2xpZW50X2lkIjoiIn0.nxyMVbzwnr-btcpFeEAuk8P8WXXaZtyv-ScyL2EGhGwP8NY31YHExeIGWYxPdgHPA4w5UvN3REXG2EjtJ_T99tA555ZbGPqr6rAUafwNgEdzgloe6ogPbHtiKMM9QD-ioRw9EPsk23oLnsly9wHyRQp5M9gcSXPCfTO9o4Y78oUPkYkmjuJI0aQ3NNfp2DIzszi6tsXWBPfqexey2bG31EzISRTlOc0BuPZbgErOsoXQSH8uGDm3o-zt06-aMC7__SdcKqXgJjmoxPODdp3Tq5KvenRwb5kO7fsWNdKuGDfC_KieduGy5hstL8Y_9-ziKKwfxFPZuICshJjLm9K4xQ\",\"token_type\":\"Bearer\",\"expires_in\":600}",
+    "msg": "HTTP response",
+    "http": "response",
+    "blockId": "e6e0fd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CallTokenEndpointAllowingDpopNonceErrorAndReturnFullResponse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772383
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-UyWYE3zct9icSSZrP3o77lbK2ewSMVEe",
+    "status": 200,
+    "endpoint_name": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/oauth/token",
+    "headers": {
+      "access-control-allow-headers": "Content-Type, Authorization, Cache-Control",
+      "access-control-allow-methods": "GET, POST, OPTIONS",
+      "access-control-allow-origin": "*",
+      "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+      "content-type": "application/json",
+      "date": "Tue, 27 Oct 2026 05:09:32 GMT",
+      "expires": "0",
+      "ngrok-agent-ips": "2409:40c2:4036:26fd:126:ab0a:ba59:b2bc",
+      "pragma": "no-cache",
+      "server": "nginx/1.30.6",
+      "vary": [
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "x-robots-tag": "noindex, nofollow",
+      "x-xss-protection": "0",
+      "transfer-encoding": "chunked"
+    },
+    "body": "{\"access_token\":\"eyJraWQiOiJBYzNIZjhlS19saFlJQzZwcUM4azNyQ1RMcTBRYnI5OExoMDdjUktXUHhJIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJ7XCJmdWxsTmFtZVwiOlwiQ29uZm9ybWFuY2UgVGVzdCBIb2xkZXJcIixcImRhdGVPZkJpcnRoXCI6XCIxOTkwLTAxLTAxXCIsXCJnZW5kZXJcIjpcIkZlbWFsZVwiLFwicGhvbmVcIjpcIjk5OTk5OTk5OTlcIixcImVtYWlsXCI6XCJob2xkZXJAZXhhbXBsZS5vcmdcIixcIlVJTlwiOlwiMTIzNDU2Nzg5MFwiLFwicG9zdGFsQ29kZVwiOlwiNDAwMDAxXCIsXCJyZWdpb25cIjpcIk11bWJhaVwifSIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldi92MS9jZXJ0aWZ5L2lzc3VhbmNlL2NyZWRlbnRpYWwiLCJzY29wZSI6Im1vY2tfaWRlbnRpdHlfdmNfc2Rqd3QiLCJpc3MiOiJodHRwczovL3NwaGVyZS1kdXN0LXNhbmRsb3Qubmdyb2stZnJlZS5kZXYiLCJleHAiOjE3OTMwNzgzNzIsImlhdCI6MTc5MzA3Nzc3MiwiY2xpZW50X2lkIjoiIn0.nxyMVbzwnr-btcpFeEAuk8P8WXXaZtyv-ScyL2EGhGwP8NY31YHExeIGWYxPdgHPA4w5UvN3REXG2EjtJ_T99tA555ZbGPqr6rAUafwNgEdzgloe6ogPbHtiKMM9QD-ioRw9EPsk23oLnsly9wHyRQp5M9gcSXPCfTO9o4Y78oUPkYkmjuJI0aQ3NNfp2DIzszi6tsXWBPfqexey2bG31EzISRTlOc0BuPZbgErOsoXQSH8uGDm3o-zt06-aMC7__SdcKqXgJjmoxPODdp3Tq5KvenRwb5kO7fsWNdKuGDfC_KieduGy5hstL8Y_9-ziKKwfxFPZuICshJjLm9K4xQ\",\"token_type\":\"Bearer\",\"expires_in\":600}",
+    "body_json": {
+      "access_token": "eyJraWQiOiJBYzNIZjhlS19saFlJQzZwcUM4azNyQ1RMcTBRYnI5OExoMDdjUktXUHhJIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJ7XCJmdWxsTmFtZVwiOlwiQ29uZm9ybWFuY2UgVGVzdCBIb2xkZXJcIixcImRhdGVPZkJpcnRoXCI6XCIxOTkwLTAxLTAxXCIsXCJnZW5kZXJcIjpcIkZlbWFsZVwiLFwicGhvbmVcIjpcIjk5OTk5OTk5OTlcIixcImVtYWlsXCI6XCJob2xkZXJAZXhhbXBsZS5vcmdcIixcIlVJTlwiOlwiMTIzNDU2Nzg5MFwiLFwicG9zdGFsQ29kZVwiOlwiNDAwMDAxXCIsXCJyZWdpb25cIjpcIk11bWJhaVwifSIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldi92MS9jZXJ0aWZ5L2lzc3VhbmNlL2NyZWRlbnRpYWwiLCJzY29wZSI6Im1vY2tfaWRlbnRpdHlfdmNfc2Rqd3QiLCJpc3MiOiJodHRwczovL3NwaGVyZS1kdXN0LXNhbmRsb3Qubmdyb2stZnJlZS5kZXYiLCJleHAiOjE3OTMwNzgzNzIsImlhdCI6MTc5MzA3Nzc3MiwiY2xpZW50X2lkIjoiIn0.nxyMVbzwnr-btcpFeEAuk8P8WXXaZtyv-ScyL2EGhGwP8NY31YHExeIGWYxPdgHPA4w5UvN3REXG2EjtJ_T99tA555ZbGPqr6rAUafwNgEdzgloe6ogPbHtiKMM9QD-ioRw9EPsk23oLnsly9wHyRQp5M9gcSXPCfTO9o4Y78oUPkYkmjuJI0aQ3NNfp2DIzszi6tsXWBPfqexey2bG31EzISRTlOc0BuPZbgErOsoXQSH8uGDm3o-zt06-aMC7__SdcKqXgJjmoxPODdp3Tq5KvenRwb5kO7fsWNdKuGDfC_KieduGy5hstL8Y_9-ziKKwfxFPZuICshJjLm9K4xQ",
+      "token_type": "Bearer",
+      "expires_in": 600
+    },
+    "msg": "Parsed token endpoint response - no DPoP nonce supplied",
+    "result": "SUCCESS",
+    "blockId": "e6e0fd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CallTokenEndpointAllowingDpopNonceErrorAndReturnFullResponse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772384
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-S6LvTJi9g7bC9cV8TMeOD3GXEcgYXQfd",
+    "msg": "Verify token endpoint response",
+    "startBlock": true,
+    "blockId": "c64955",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "-START-BLOCK-",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772384
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-SIDEd9J4VoOjpouBuTDELj4Wxib5CBLs",
+    "msg": "Token endpoint http status code was 200",
+    "result": "SUCCESS",
+    "blockId": "c64955",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CheckTokenEndpointHttpStatus200",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772384
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-cT5FqRgqukJXZcYVN68wEe08jq5VTnfz",
+    "msg": "No error from token endpoint",
+    "result": "SUCCESS",
+    "blockId": "c64955",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CheckIfTokenEndpointResponseError",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772384
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-1DbltGqNxu1vh0VCt7jVcVYC32DUzmzd",
+    "access_token": "eyJraWQiOiJBYzNIZjhlS19saFlJQzZwcUM4azNyQ1RMcTBRYnI5OExoMDdjUktXUHhJIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJ7XCJmdWxsTmFtZVwiOlwiQ29uZm9ybWFuY2UgVGVzdCBIb2xkZXJcIixcImRhdGVPZkJpcnRoXCI6XCIxOTkwLTAxLTAxXCIsXCJnZW5kZXJcIjpcIkZlbWFsZVwiLFwicGhvbmVcIjpcIjk5OTk5OTk5OTlcIixcImVtYWlsXCI6XCJob2xkZXJAZXhhbXBsZS5vcmdcIixcIlVJTlwiOlwiMTIzNDU2Nzg5MFwiLFwicG9zdGFsQ29kZVwiOlwiNDAwMDAxXCIsXCJyZWdpb25cIjpcIk11bWJhaVwifSIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldi92MS9jZXJ0aWZ5L2lzc3VhbmNlL2NyZWRlbnRpYWwiLCJzY29wZSI6Im1vY2tfaWRlbnRpdHlfdmNfc2Rqd3QiLCJpc3MiOiJodHRwczovL3NwaGVyZS1kdXN0LXNhbmRsb3Qubmdyb2stZnJlZS5kZXYiLCJleHAiOjE3OTMwNzgzNzIsImlhdCI6MTc5MzA3Nzc3MiwiY2xpZW50X2lkIjoiIn0.nxyMVbzwnr-btcpFeEAuk8P8WXXaZtyv-ScyL2EGhGwP8NY31YHExeIGWYxPdgHPA4w5UvN3REXG2EjtJ_T99tA555ZbGPqr6rAUafwNgEdzgloe6ogPbHtiKMM9QD-ioRw9EPsk23oLnsly9wHyRQp5M9gcSXPCfTO9o4Y78oUPkYkmjuJI0aQ3NNfp2DIzszi6tsXWBPfqexey2bG31EzISRTlOc0BuPZbgErOsoXQSH8uGDm3o-zt06-aMC7__SdcKqXgJjmoxPODdp3Tq5KvenRwb5kO7fsWNdKuGDfC_KieduGy5hstL8Y_9-ziKKwfxFPZuICshJjLm9K4xQ",
+    "msg": "Found an access token",
+    "result": "SUCCESS",
+    "blockId": "c64955",
+    "requirements": [
+      "RFC6749-4.1.4"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CheckForAccessTokenValue",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772385
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-oJMVogb7pxEH2B1DtDWPT4oJ0s3e9X5h",
+    "value": "eyJraWQiOiJBYzNIZjhlS19saFlJQzZwcUM4azNyQ1RMcTBRYnI5OExoMDdjUktXUHhJIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJ7XCJmdWxsTmFtZVwiOlwiQ29uZm9ybWFuY2UgVGVzdCBIb2xkZXJcIixcImRhdGVPZkJpcnRoXCI6XCIxOTkwLTAxLTAxXCIsXCJnZW5kZXJcIjpcIkZlbWFsZVwiLFwicGhvbmVcIjpcIjk5OTk5OTk5OTlcIixcImVtYWlsXCI6XCJob2xkZXJAZXhhbXBsZS5vcmdcIixcIlVJTlwiOlwiMTIzNDU2Nzg5MFwiLFwicG9zdGFsQ29kZVwiOlwiNDAwMDAxXCIsXCJyZWdpb25cIjpcIk11bWJhaVwifSIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldi92MS9jZXJ0aWZ5L2lzc3VhbmNlL2NyZWRlbnRpYWwiLCJzY29wZSI6Im1vY2tfaWRlbnRpdHlfdmNfc2Rqd3QiLCJpc3MiOiJodHRwczovL3NwaGVyZS1kdXN0LXNhbmRsb3Qubmdyb2stZnJlZS5kZXYiLCJleHAiOjE3OTMwNzgzNzIsImlhdCI6MTc5MzA3Nzc3MiwiY2xpZW50X2lkIjoiIn0.nxyMVbzwnr-btcpFeEAuk8P8WXXaZtyv-ScyL2EGhGwP8NY31YHExeIGWYxPdgHPA4w5UvN3REXG2EjtJ_T99tA555ZbGPqr6rAUafwNgEdzgloe6ogPbHtiKMM9QD-ioRw9EPsk23oLnsly9wHyRQp5M9gcSXPCfTO9o4Y78oUPkYkmjuJI0aQ3NNfp2DIzszi6tsXWBPfqexey2bG31EzISRTlOc0BuPZbgErOsoXQSH8uGDm3o-zt06-aMC7__SdcKqXgJjmoxPODdp3Tq5KvenRwb5kO7fsWNdKuGDfC_KieduGy5hstL8Y_9-ziKKwfxFPZuICshJjLm9K4xQ",
+    "type": "Bearer",
+    "msg": "Extracted the access token",
+    "result": "SUCCESS",
+    "blockId": "c64955",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "ExtractAccessTokenFromTokenResponse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772385
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-a3OfqItrQ2dxvcY1aw785HCHfeCbgEm1",
+    "expires_in": 600,
+    "requirements": [
+      "RFC6749-5.1"
+    ],
+    "msg": "Extracted 'expires_in'",
+    "result": "SUCCESS",
+    "blockId": "c64955",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "ExtractExpiresInFromTokenEndpointResponse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772385
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-aYE7iBWbuZFvzsjIjxboIH9hIguafDJj",
+    "expires_in": 600,
+    "requirements": [
+      "RFC6749-5.1"
+    ],
+    "msg": "expires_in passed all validation checks",
+    "result": "SUCCESS",
+    "blockId": "c64955",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "ValidateExpiresIn",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772386
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-O4ZBzUUBBQfFWEhqDYwHFcAcIwpquLXU",
+    "msg": "Couldn't find refresh token",
+    "result": "INFO",
+    "blockId": "c64955",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CheckForRefreshTokenValue",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772386
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-lPKD3i8q2TYqzE4rJjCeCXuKZfDMqNiw",
+    "msg": "Skipped evaluation due to missing required element: token_endpoint_response refresh_token",
+    "result": "INFO",
+    "blockId": "c64955",
+    "path": "refresh_token",
+    "requirements": [
+      "RFC6749-10.10"
+    ],
+    "mapped": null,
+    "object": "token_endpoint_response",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "EnsureMinimumRefreshTokenLength",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772387
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-ZC1oG8z98trdSpGCSEAHNmT3Ssfi9TpB",
+    "msg": "Skipped evaluation due to missing required element: token_endpoint_response refresh_token",
+    "result": "INFO",
+    "blockId": "c64955",
+    "path": "refresh_token",
+    "requirements": [
+      "RFC6749-10.10"
+    ],
+    "mapped": null,
+    "object": "token_endpoint_response",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "EnsureMinimumRefreshTokenEntropy",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772387
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-ex7qnHCErHDcm3Rs5eNh6wJ0WTEEUWXv",
+    "msg": "Access token is of sufficient length",
+    "result": "SUCCESS",
+    "blockId": "c64955",
+    "actual": 8264,
+    "requirements": [
+      "FAPI2-SP-FINAL-5.4.1-4"
+    ],
+    "required": 128,
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "EnsureMinimumAccessTokenLength",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772388
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-mAu1PqmPahwHoLeVKyKtI9MGr2l9Ke62",
+    "msg": "Calculated shannon entropy seems sufficient",
+    "result": "SUCCESS",
+    "blockId": "c64955",
+    "actual": 6029.636948533155,
+    "requirements": [
+      "FAPI2-SP-FINAL-5.4.1-4"
+    ],
+    "expected": 96.0,
+    "value": "eyJraWQiOiJBYzNIZjhlS19saFlJQzZwcUM4azNyQ1RMcTBRYnI5OExoMDdjUktXUHhJIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJ7XCJmdWxsTmFtZVwiOlwiQ29uZm9ybWFuY2UgVGVzdCBIb2xkZXJcIixcImRhdGVPZkJpcnRoXCI6XCIxOTkwLTAxLTAxXCIsXCJnZW5kZXJcIjpcIkZlbWFsZVwiLFwicGhvbmVcIjpcIjk5OTk5OTk5OTlcIixcImVtYWlsXCI6XCJob2xkZXJAZXhhbXBsZS5vcmdcIixcIlVJTlwiOlwiMTIzNDU2Nzg5MFwiLFwicG9zdGFsQ29kZVwiOlwiNDAwMDAxXCIsXCJyZWdpb25cIjpcIk11bWJhaVwifSIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldi92MS9jZXJ0aWZ5L2lzc3VhbmNlL2NyZWRlbnRpYWwiLCJzY29wZSI6Im1vY2tfaWRlbnRpdHlfdmNfc2Rqd3QiLCJpc3MiOiJodHRwczovL3NwaGVyZS1kdXN0LXNhbmRsb3Qubmdyb2stZnJlZS5kZXYiLCJleHAiOjE3OTMwNzgzNzIsImlhdCI6MTc5MzA3Nzc3MiwiY2xpZW50X2lkIjoiIn0.nxyMVbzwnr-btcpFeEAuk8P8WXXaZtyv-ScyL2EGhGwP8NY31YHExeIGWYxPdgHPA4w5UvN3REXG2EjtJ_T99tA555ZbGPqr6rAUafwNgEdzgloe6ogPbHtiKMM9QD-ioRw9EPsk23oLnsly9wHyRQp5M9gcSXPCfTO9o4Y78oUPkYkmjuJI0aQ3NNfp2DIzszi6tsXWBPfqexey2bG31EzISRTlOc0BuPZbgErOsoXQSH8uGDm3o-zt06-aMC7__SdcKqXgJjmoxPODdp3Tq5KvenRwb5kO7fsWNdKuGDfC_KieduGy5hstL8Y_9-ziKKwfxFPZuICshJjLm9K4xQ",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "EnsureMinimumAccessTokenEntropy",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772388
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-ffhfmGYQ6Krj59xvNf1iTC11mmfRadXN",
+    "msg": "Test is not targeting Open ID Connect and the token endpoint response does not contain an ID token",
+    "result": "SUCCESS",
+    "blockId": "c64955",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "ExpectNoIdTokenInTokenResponse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772389
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-CuMS51BMIlZT93GlVDakdCTokHGVBfVQ",
+    "msg": "Skipped evaluation due to missing required element: authorization_endpoint_request authorization_details",
+    "result": "INFO",
+    "blockId": "c64955",
+    "path": "authorization_details",
+    "requirements": [
+      "OID4VCI-1FINAL-6.2",
+      "RFC9396-7"
+    ],
+    "mapped": null,
+    "object": "authorization_endpoint_request",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CheckForAuthorizationDetailsInTokenResponse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772389
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-2C1HW6JQWcWXVsYIoJ2ElqtAG6DrJKL9",
+    "msg": "Skipped evaluation due to missing required element: token_endpoint_response authorization_details",
+    "result": "INFO",
+    "blockId": "c64955",
+    "path": "authorization_details",
+    "requirements": [
+      "OID4VCI-1FINAL-6.2",
+      "OID4VCI-1FINAL-5.1.1"
+    ],
+    "mapped": null,
+    "object": "token_endpoint_response",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIValidateOpenidCredentialAuthorizationDetailsInTokenEndpointResponse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772389
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-lbxrGdXqxk43SUHyfuXUAw7r0jXOLdGz",
+    "msg": "Skipped evaluation due to missing required element: token_endpoint_response authorization_details",
+    "result": "INFO",
+    "blockId": "c64955",
+    "path": "authorization_details",
+    "requirements": [
+      "OpenID4VCI-739"
+    ],
+    "mapped": null,
+    "object": "token_endpoint_response",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIEnsureCredentialIdentifiersUnchangedAcrossTokenResponses",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772390
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-GuG2Q62nNw2du65eiVC2rCIRDI90hjgL",
+    "msg": "Skipped evaluation due to missing required element: token_endpoint_response authorization_details",
+    "result": "INFO",
+    "blockId": "c64955",
+    "path": "authorization_details",
+    "requirements": [
+      "OID4VCI-1FINAL-5.1.1",
+      "OID4VCI-1FINAL-6.2"
+    ],
+    "mapped": null,
+    "object": "token_endpoint_response",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIWarnOnAuthorizationDetailsInTokenEndpointResponseConventions",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772390
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-kxcn5VEePAFCaY4M19FYDZaiXOe3zZxo",
+    "msg": "No authorization_details in token endpoint response, leaving previously recorded credential_identifiers (if any) untouched",
+    "blockId": "c64955",
+    "requirements": [
+      "OID4VCI-1FINAL-6.2"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIExtractCredentialIdentifiersFromTokenEndpointResponse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772390
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-XroO7NMacgs5ksu5Nv89CPlE8mPkxd9C",
+    "msg": " Prepare Credential endpoint requests",
+    "startBlock": true,
+    "blockId": "109b03",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "-START-BLOCK-",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772391
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-ns3dLpSJ9wmH1hLqHzQf265lPx4Ms8zk",
+    "msg": "Created empty headers",
+    "blockId": "109b03",
+    "resource_endpoint_request_headers": {},
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CreateEmptyResourceEndpointRequestHeaders",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772391
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-gB56Sdn2eJyfysgm67fLm3HxEcYNSZ7i",
+    "msg": "Added x-fapi-auth-date to resource endpoint request headers",
+    "result": "SUCCESS",
+    "blockId": "109b03",
+    "resource_endpoint_request_headers": {
+      "x-fapi-auth-date": "Tue, 27 Oct 2026 05:09:32 GMT"
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "AddFAPIAuthDateToResourceEndpointRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772391
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-Bu1RmghkBSjc9FotTUi1KxpcFs2sX0m8",
+    "msg": "Added x-fapi-customer-ip-address containing IPv4 address to resource endpoint request headers",
+    "blockId": "109b03",
+    "resource_endpoint_request_headers": {
+      "x-fapi-auth-date": "Tue, 27 Oct 2026 05:09:32 GMT",
+      "x-fapi-customer-ip-address": "198.51.100.119"
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "AddIpV4FapiCustomerIpAddressToResourceEndpointRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772392
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-2fSHjAxHeLbLrCfqCLhLhl8Nr69Gzt7A",
+    "fapi_interaction_id": "b3F11aB3-90b5-4E2e-Bb8C-65a511330A12",
+    "msg": "Created interaction ID",
+    "blockId": "109b03",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CreateRandomFAPIInteractionId",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772392
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-taRbcJpCVPsocEWa3jEyC4Lx8YIaJmWH",
+    "msg": "Added x-fapi-interaction-id to resource endpoint request headers",
+    "result": "SUCCESS",
+    "blockId": "109b03",
+    "resource_endpoint_request_headers": {
+      "x-fapi-auth-date": "Tue, 27 Oct 2026 05:09:32 GMT",
+      "x-fapi-customer-ip-address": "198.51.100.119",
+      "x-fapi-interaction-id": "b3F11aB3-90b5-4E2e-Bb8C-65a511330A12"
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "AddFAPIInteractionIdToResourceEndpointRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772392
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-4OuJWD0gYgrUaKDfmUUODDTNFu82l9vV",
+    "msg": " Call credential issuer nonce endpoint",
+    "startBlock": true,
+    "blockId": "c66fdd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "-START-BLOCK-",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772393
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-zBPLxY9vZXfeUbKi1PbkHfeAxVMC0g86",
+    "request_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/nonce",
+    "request_method": "POST",
+    "request_headers": {
+      "Accept": "text/plain, application/json, application/yaml, application/*+json, */*",
+      "Content-Length": "0"
+    },
+    "request_body": "",
+    "msg": "HTTP request",
+    "http": "request",
+    "blockId": "c66fdd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CallCredentialIssuerNonceEndpoint",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772395
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-oKr5KYF7Nr5HAAOpDba4XQr3IlusgArd",
+    "response_status_code": "200 OK",
+    "response_status_text": "OK",
+    "response_headers": {
+      "access-control-allow-headers": "Content-Type, Authorization, Cache-Control",
+      "access-control-allow-methods": "GET, POST, OPTIONS",
+      "access-control-allow-origin": "*",
+      "cache-control": "no-store",
+      "content-type": "application/json",
+      "date": "Tue, 27 Oct 2026 05:09:32 GMT",
+      "ngrok-agent-ips": "2409:40c2:4036:26fd:126:ab0a:ba59:b2bc",
+      "server": "nginx/1.30.6",
+      "vary": [
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "x-robots-tag": "noindex, nofollow",
+      "x-xss-protection": "0",
+      "transfer-encoding": "chunked"
+    },
+    "response_body": "{\"c_nonce\":\"7415945e-498d-47d9-9b18-6ed2c1cf4067\"}",
+    "msg": "HTTP response",
+    "http": "response",
+    "blockId": "c66fdd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CallCredentialIssuerNonceEndpoint",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772645
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-DU0MFw1CiIxaDXHnInl1EM5KGLW3oBle",
+    "status": 200,
+    "endpoint_name": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/nonce",
+    "headers": {
+      "access-control-allow-headers": "Content-Type, Authorization, Cache-Control",
+      "access-control-allow-methods": "GET, POST, OPTIONS",
+      "access-control-allow-origin": "*",
+      "cache-control": "no-store",
+      "content-type": "application/json",
+      "date": "Tue, 27 Oct 2026 05:09:32 GMT",
+      "ngrok-agent-ips": "2409:40c2:4036:26fd:126:ab0a:ba59:b2bc",
+      "server": "nginx/1.30.6",
+      "vary": [
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "x-robots-tag": "noindex, nofollow",
+      "x-xss-protection": "0",
+      "transfer-encoding": "chunked"
+    },
+    "body": "{\"c_nonce\":\"7415945e-498d-47d9-9b18-6ed2c1cf4067\"}",
+    "body_json": {
+      "c_nonce": "7415945e-498d-47d9-9b18-6ed2c1cf4067"
+    },
+    "requirements": [
+      "OID4VCI-1FINAL-7.1"
+    ],
+    "msg": "Got nonce endpoint response",
+    "result": "SUCCESS",
+    "blockId": "c66fdd",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CallCredentialIssuerNonceEndpoint",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772646
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-QD7Yys94tqx12rhnd83lCNSpYKIAEh51",
+    "msg": " Verify Credential Nonce Endpoint Response",
+    "startBlock": true,
+    "blockId": "35139b",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "-START-BLOCK-",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772646
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-NuVK0OLMQZCKBQh23wBbszyabPot1mXl",
+    "msg": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/nonce endpoint returned the expected http status",
+    "result": "SUCCESS",
+    "blockId": "35139b",
+    "http_status": 200,
+    "requirements": [
+      "OID4VCI-1FINAL-7.2"
+    ],
+    "expected_status": 200,
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "EnsureHttpStatusCodeIs200",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772647
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-tr2MwDKwqpb7BAV4eBgAY6SMCOzapSoi",
+    "msg": "endpoint_response Content-Type: header is application/json",
+    "result": "SUCCESS",
+    "blockId": "35139b",
+    "requirements": [
+      "OID4VCI-1FINAL-7.2"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "EnsureContentTypeJson",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772647
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-u2sSqqynjavVGchoWfmo5Uto0qJfJ2Ma",
+    "msg": "'cache-control' header in nonce endpoint response contains expected value.",
+    "result": "SUCCESS",
+    "blockId": "35139b",
+    "requirements": [
+      "OID4VCI-1FINAL-7.2"
+    ],
+    "cache_control_header": "no-store",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CheckCacheControlHeaderContainsNoStore",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772647
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-Bova9ld6HhES4IM9lfOgiC9hNkTAVPby",
+    "msg": "Found valid NonceResponse",
+    "result": "SUCCESS",
+    "blockId": "35139b",
+    "nonce_response": {
+      "c_nonce": "7415945e-498d-47d9-9b18-6ed2c1cf4067"
+    },
+    "requirements": [
+      "OID4VCI-1FINAL-7.2"
+    ],
+    "nonce": "7415945e-498d-47d9-9b18-6ed2c1cf4067",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIValidateCredentialNonceResponse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772648
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-J0YQWgnqiydSvQhnWBlnu2DQAnQPBwsB",
+    "msg": "Nonce endpoint response contains no unknown fields",
+    "result": "SUCCESS",
+    "blockId": "35139b",
+    "requirements": [
+      "OID4VCI-1FINAL-7.2"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCICheckCredentialNonceResponseForUnknownFields",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772648
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-gSMF9xJ1L7aN0qtyzVl27dyuw2lY8wQK",
+    "msg": "Override actual c_nonce with random value",
+    "blockId": "35139b",
+    "actual_c_nonce": "7415945e-498d-47d9-9b18-6ed2c1cf4067",
+    "requirements": [
+      "OID4VCI-1FINAL-7.2"
+    ],
+    "new_cnonce": "4662ef88-e642-420f-81c5-3066bf0fb541",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIInjectRandomCNonce",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772649
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-NyX1oPRXFOIHwlcDuLL3z0ZUDzZxMIVZ",
+    "msg": " Call Credential Endpoint",
+    "startBlock": true,
+    "blockId": "4e50c5",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "-START-BLOCK-",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772650
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-rErgAOxpylxu6nyB8VloybISU0Ehw7BS",
+    "msg": "Skipping Key attestation generation because proof type jwt does not contain 'key_attestations_required' or proof key type is not 'attestation'",
+    "blockId": "4e50c5",
+    "requirements": [
+      "HAIPA-D.1",
+      "OID4VCI-1FINALA-D.1"
+    ],
+    "proof_type_key": "jwt",
+    "proof_type": {
+      "proof_signing_alg_values_supported": [
+        "RS256",
+        "PS256",
+        "ES256",
+        "EdDSA"
+      ]
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIGenerateKeyAttestationIfNecessary",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772650
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-yx5vG3K7EMainWFRStzn2C8OmJvKR1aZ",
+    "msg": "Generated 1 jwt proof(s)",
+    "result": "SUCCESS",
+    "blockId": "4e50c5",
+    "requirements": [
+      "OID4VCI-1FINALA-F.1"
+    ],
+    "proofs": {
+      "jwt": [
+        "eyJ0eXAiOiJvcGVuaWQ0dmNpLXByb29mK2p3dCIsImFsZyI6IkVTMjU2IiwiandrIjp7Imt0eSI6IkVDIiwidXNlIjoic2lnIiwiY3J2IjoiUC0yNTYiLCJraWQiOiJ5Sk5zV1BYQjFkMEU2TkJXIiwieCI6IlpxS0Z2U2JfR0FIYVlBcVc3N2ZONkJlM0JXeU5EZXRtOUxteDdUUG04LUUiLCJ5Ijoia1JVOXh3cnlPUnlaQlZTdjNBYlZtaHhDcDBnWVVuWUdKc0NVUkN5TGFaWSIsImFsZyI6IkVTMjU2In19.eyJpc3MiOiJvaWRmLWNvbmZvcm1hbmNlLXdhbGxldCIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldiIsImlhdCI6MTc5MzA3Nzc3Miwibm9uY2UiOiI0NjYyZWY4OC1lNjQyLTQyMGYtODFjNS0zMDY2YmYwZmI1NDEifQ.jQP6B2TS1XX0k9CwjGmJY7xhHA3ZzVEb5hBn_XtDH0TVc9mentydUdvWfDUXEDpO95O5JQKYIb5dsfwc4JI4aQ"
+      ]
+    },
+    "key_count": 1,
+    "proof_jwts": [
+      {
+        "verifiable_jws": "eyJ0eXAiOiJvcGVuaWQ0dmNpLXByb29mK2p3dCIsImFsZyI6IkVTMjU2IiwiandrIjp7Imt0eSI6IkVDIiwidXNlIjoic2lnIiwiY3J2IjoiUC0yNTYiLCJraWQiOiJ5Sk5zV1BYQjFkMEU2TkJXIiwieCI6IlpxS0Z2U2JfR0FIYVlBcVc3N2ZONkJlM0JXeU5EZXRtOUxteDdUUG04LUUiLCJ5Ijoia1JVOXh3cnlPUnlaQlZTdjNBYlZtaHhDcDBnWVVuWUdKc0NVUkN5TGFaWSIsImFsZyI6IkVTMjU2In19.eyJpc3MiOiJvaWRmLWNvbmZvcm1hbmNlLXdhbGxldCIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldiIsImlhdCI6MTc5MzA3Nzc3Miwibm9uY2UiOiI0NjYyZWY4OC1lNjQyLTQyMGYtODFjNS0zMDY2YmYwZmI1NDEifQ.jQP6B2TS1XX0k9CwjGmJY7xhHA3ZzVEb5hBn_XtDH0TVc9mentydUdvWfDUXEDpO95O5JQKYIb5dsfwc4JI4aQ",
+        "public_jwk": "{\"kty\":\"EC\",\"use\":\"sig\",\"crv\":\"P-256\",\"kid\":\"yJNsWPXB1d0E6NBW\",\"x\":\"ZqKFvSb_GAHaYAqW77fN6Be3BWyNDetm9Lmx7TPm8-E\",\"y\":\"kRU9xwryORyZBVSv3AbVmhxCp0gYUnYGJsCURCyLaZY\",\"alg\":\"ES256\"}",
+        "kid": "yJNsWPXB1d0E6NBW"
+      }
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIGenerateJwtProof",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772651
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-VxkAHZU2yrOVjLNN3dG7LGPkGUY16SG0",
+    "msg": "No credential_identifiers recorded for credential_configuration_id; continuing with credential_configuration_id",
+    "blockId": "4e50c5",
+    "requirements": [
+      "OID4VCI-1FINAL-8.2"
+    ],
+    "credential_configuration_id": "MockIdentitySdJwtCredential",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCICreateCredentialRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772652
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-IAbANxfJEaTuhe86ANl87vklgSWSNkhT",
+    "msg": "Created credential request",
+    "blockId": "4e50c5",
+    "requirements": [
+      "OID4VCI-1FINAL-8.2"
+    ],
+    "credential_request": {
+      "credential_configuration_id": "MockIdentitySdJwtCredential",
+      "proofs": {
+        "jwt": [
+          "eyJ0eXAiOiJvcGVuaWQ0dmNpLXByb29mK2p3dCIsImFsZyI6IkVTMjU2IiwiandrIjp7Imt0eSI6IkVDIiwidXNlIjoic2lnIiwiY3J2IjoiUC0yNTYiLCJraWQiOiJ5Sk5zV1BYQjFkMEU2TkJXIiwieCI6IlpxS0Z2U2JfR0FIYVlBcVc3N2ZONkJlM0JXeU5EZXRtOUxteDdUUG04LUUiLCJ5Ijoia1JVOXh3cnlPUnlaQlZTdjNBYlZtaHhDcDBnWVVuWUdKc0NVUkN5TGFaWSIsImFsZyI6IkVTMjU2In19.eyJpc3MiOiJvaWRmLWNvbmZvcm1hbmNlLXdhbGxldCIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldiIsImlhdCI6MTc5MzA3Nzc3Miwibm9uY2UiOiI0NjYyZWY4OC1lNjQyLTQyMGYtODFjNS0zMDY2YmYwZmI1NDEifQ.jQP6B2TS1XX0k9CwjGmJY7xhHA3ZzVEb5hBn_XtDH0TVc9mentydUdvWfDUXEDpO95O5JQKYIb5dsfwc4JI4aQ"
+        ]
+      }
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCICreateCredentialRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772652
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-SM2ctiXNjNFtVDdf4g6kyqi3ys5OxFPN",
+    "msg": "Serialized credential request object",
+    "result": "SUCCESS",
+    "blockId": "4e50c5",
+    "requirements": [
+      "OID4VCI-1FINAL-8.2"
+    ],
+    "credential_request_object": {
+      "credential_configuration_id": "MockIdentitySdJwtCredential",
+      "proofs": {
+        "jwt": [
+          "eyJ0eXAiOiJvcGVuaWQ0dmNpLXByb29mK2p3dCIsImFsZyI6IkVTMjU2IiwiandrIjp7Imt0eSI6IkVDIiwidXNlIjoic2lnIiwiY3J2IjoiUC0yNTYiLCJraWQiOiJ5Sk5zV1BYQjFkMEU2TkJXIiwieCI6IlpxS0Z2U2JfR0FIYVlBcVc3N2ZONkJlM0JXeU5EZXRtOUxteDdUUG04LUUiLCJ5Ijoia1JVOXh3cnlPUnlaQlZTdjNBYlZtaHhDcDBnWVVuWUdKc0NVUkN5TGFaWSIsImFsZyI6IkVTMjU2In19.eyJpc3MiOiJvaWRmLWNvbmZvcm1hbmNlLXdhbGxldCIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldiIsImlhdCI6MTc5MzA3Nzc3Miwibm9uY2UiOiI0NjYyZWY4OC1lNjQyLTQyMGYtODFjNS0zMDY2YmYwZmI1NDEifQ.jQP6B2TS1XX0k9CwjGmJY7xhHA3ZzVEb5hBn_XtDH0TVc9mentydUdvWfDUXEDpO95O5JQKYIb5dsfwc4JI4aQ"
+        ]
+      }
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "SerializeVCICredentialRequestObject",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772652
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-3qSIAkQg9lgcGPdQkrmZ9wcizVgG0g6T",
+    "alg": "ES256",
+    "typ": "dpop+jwt",
+    "jwk": {
+      "kty": "EC",
+      "use": "sig",
+      "crv": "P-256",
+      "kid": "itl-Ph97xqznYgUl3Asr96rm51JaE4i7Oax_ytc8MVI",
+      "x": "6DgFNDXKl1AlzybZ4Ha6tjP_O91l37mH-GKObqzttGI",
+      "y": "BZhcZBHqUyRem3SF9qiGONZj1QNbzgBL3ZU9y9Q_ERs",
+      "alg": "ES256"
+    },
+    "msg": "Created DPoP proof header",
+    "result": "SUCCESS",
+    "blockId": "4e50c5",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CreateDpopHeader",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772653
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-AklDEWtnaC7nw261SHuA8Ef9EQYSl5Sy",
+    "jti": "2m0nhvTwaXpovRmLa4hi",
+    "iat": 1793077772,
+    "msg": "Created DPoP proof claims",
+    "result": "SUCCESS",
+    "blockId": "4e50c5",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CreateDpopClaims",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772653
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-9hSD1b2jmhWLultfozCkagGEV5abAW2s",
+    "jti": "2m0nhvTwaXpovRmLa4hi",
+    "iat": 1793077772,
+    "htm": "POST",
+    "htu": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/issuance/credential",
+    "msg": "Added htm/htu to DPoP proof claims",
+    "result": "SUCCESS",
+    "blockId": "4e50c5",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "SetDpopHtmHtuForResourceEndpoint",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772654
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-h9QVHfiWAc66Vb9kzMhV4a1twK3TtnvF",
+    "claims": {
+      "jti": "2m0nhvTwaXpovRmLa4hi",
+      "iat": 1793077772,
+      "htm": "POST",
+      "htu": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/issuance/credential",
+      "ath": "GKt2zfAZ-7tb77DN8ALYOw9H5TIG_Qwl5nj439hgKrk"
+    },
+    "access_token": "eyJraWQiOiJBYzNIZjhlS19saFlJQzZwcUM4azNyQ1RMcTBRYnI5OExoMDdjUktXUHhJIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJ7XCJmdWxsTmFtZVwiOlwiQ29uZm9ybWFuY2UgVGVzdCBIb2xkZXJcIixcImRhdGVPZkJpcnRoXCI6XCIxOTkwLTAxLTAxXCIsXCJnZW5kZXJcIjpcIkZlbWFsZVwiLFwicGhvbmVcIjpcIjk5OTk5OTk5OTlcIixcImVtYWlsXCI6XCJob2xkZXJAZXhhbXBsZS5vcmdcIixcIlVJTlwiOlwiMTIzNDU2Nzg5MFwiLFwicG9zdGFsQ29kZVwiOlwiNDAwMDAxXCIsXCJyZWdpb25cIjpcIk11bWJhaVwifSIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldi92MS9jZXJ0aWZ5L2lzc3VhbmNlL2NyZWRlbnRpYWwiLCJzY29wZSI6Im1vY2tfaWRlbnRpdHlfdmNfc2Rqd3QiLCJpc3MiOiJodHRwczovL3NwaGVyZS1kdXN0LXNhbmRsb3Qubmdyb2stZnJlZS5kZXYiLCJleHAiOjE3OTMwNzgzNzIsImlhdCI6MTc5MzA3Nzc3MiwiY2xpZW50X2lkIjoiIn0.nxyMVbzwnr-btcpFeEAuk8P8WXXaZtyv-ScyL2EGhGwP8NY31YHExeIGWYxPdgHPA4w5UvN3REXG2EjtJ_T99tA555ZbGPqr6rAUafwNgEdzgloe6ogPbHtiKMM9QD-ioRw9EPsk23oLnsly9wHyRQp5M9gcSXPCfTO9o4Y78oUPkYkmjuJI0aQ3NNfp2DIzszi6tsXWBPfqexey2bG31EzISRTlOc0BuPZbgErOsoXQSH8uGDm3o-zt06-aMC7__SdcKqXgJjmoxPODdp3Tq5KvenRwb5kO7fsWNdKuGDfC_KieduGy5hstL8Y_9-ziKKwfxFPZuICshJjLm9K4xQ",
+    "msg": "Added ath to DPoP proof claims",
+    "result": "SUCCESS",
+    "blockId": "4e50c5",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "SetDpopAccessTokenHash",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772654
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-DOUNtIIoXEwGF1ZdSQh7RajI4cfWEK5e",
+    "msg": "resource_server_dpop_nonce not found",
+    "result": "INFO",
+    "blockId": "4e50c5",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "SetDpopProofNonceForResourceEndpoint",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772654
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-p5MIs2EDAGZ6UGxbx1EsG45MPrWoV9We",
+    "msg": "No DPOP nonce required",
+    "blockId": "4e50c5",
+    "requirements": [
+      "DPOP-8.1"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "EnsureDpopNonceContainsAllowedCharactersOnly",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772654
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-Td9NevAWpempB5QF6Z1DLdbSD2b7ecJA",
+    "msg": "Signed the DPoP proof",
+    "result": "SUCCESS",
+    "blockId": "4e50c5",
+    "dpop_proof": {
+      "verifiable_jws": "eyJhbGciOiJFUzI1NiIsInR5cCI6ImRwb3Arand0IiwiandrIjp7Imt0eSI6IkVDIiwidXNlIjoic2lnIiwiY3J2IjoiUC0yNTYiLCJraWQiOiJpdGwtUGg5N3hxem5ZZ1VsM0Fzcjk2cm01MUphRTRpN09heF95dGM4TVZJIiwieCI6IjZEZ0ZORFhLbDFBbHp5Ylo0SGE2dGpQX085MWwzN21ILUdLT2JxenR0R0kiLCJ5IjoiQlpoY1pCSHFVeVJlbTNTRjlxaUdPTlpqMVFOYnpnQkwzWlU5eTlRX0VScyIsImFsZyI6IkVTMjU2In19.eyJodG0iOiJQT1NUIiwiaHR1IjoiaHR0cHM6Ly9zcGhlcmUtZHVzdC1zYW5kbG90Lm5ncm9rLWZyZWUuZGV2L3YxL2NlcnRpZnkvaXNzdWFuY2UvY3JlZGVudGlhbCIsImF0aCI6IkdLdDJ6ZkFaLTd0Yjc3RE44QUxZT3c5SDVUSUdfUXdsNW5qNDM5aGdLcmsiLCJpYXQiOjE3OTMwNzc3NzIsImp0aSI6IjJtMG5odlR3YVhwb3ZSbUxhNGhpIn0.Fui8gWQbejivfshHlpWggUu5UTamMt_uHMe1CUsgE3X10IgMKaxoveB6OF4Aa21BGypkB-6JaewHaqY56PXH3Q",
+      "public_jwk": "{\"kty\":\"EC\",\"use\":\"sig\",\"crv\":\"P-256\",\"kid\":\"itl-Ph97xqznYgUl3Asr96rm51JaE4i7Oax_ytc8MVI\",\"x\":\"6DgFNDXKl1AlzybZ4Ha6tjP_O91l37mH-GKObqzttGI\",\"y\":\"BZhcZBHqUyRem3SF9qiGONZj1QNbzgBL3ZU9y9Q_ERs\",\"alg\":\"ES256\"}"
+    },
+    "key": {
+      "kty": "EC",
+      "d": "<redacted: private key material>",
+      "use": "sig",
+      "crv": "P-256",
+      "kid": "itl-Ph97xqznYgUl3Asr96rm51JaE4i7Oax_ytc8MVI",
+      "x": "6DgFNDXKl1AlzybZ4Ha6tjP_O91l37mH-GKObqzttGI",
+      "y": "BZhcZBHqUyRem3SF9qiGONZj1QNbzgBL3ZU9y9Q_ERs",
+      "alg": "ES256"
+    },
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "SignDpopProof",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772655
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-sJASiG1CpNRd2j6aNUH727gA20b6flvk",
+    "msg": "Set DPoP header",
+    "result": "SUCCESS",
+    "blockId": "4e50c5",
+    "DPoP": "eyJhbGciOiJFUzI1NiIsInR5cCI6ImRwb3Arand0IiwiandrIjp7Imt0eSI6IkVDIiwidXNlIjoic2lnIiwiY3J2IjoiUC0yNTYiLCJraWQiOiJpdGwtUGg5N3hxem5ZZ1VsM0Fzcjk2cm01MUphRTRpN09heF95dGM4TVZJIiwieCI6IjZEZ0ZORFhLbDFBbHp5Ylo0SGE2dGpQX085MWwzN21ILUdLT2JxenR0R0kiLCJ5IjoiQlpoY1pCSHFVeVJlbTNTRjlxaUdPTlpqMVFOYnpnQkwzWlU5eTlRX0VScyIsImFsZyI6IkVTMjU2In19.eyJodG0iOiJQT1NUIiwiaHR1IjoiaHR0cHM6Ly9zcGhlcmUtZHVzdC1zYW5kbG90Lm5ncm9rLWZyZWUuZGV2L3YxL2NlcnRpZnkvaXNzdWFuY2UvY3JlZGVudGlhbCIsImF0aCI6IkdLdDJ6ZkFaLTd0Yjc3RE44QUxZT3c5SDVUSUdfUXdsNW5qNDM5aGdLcmsiLCJpYXQiOjE3OTMwNzc3NzIsImp0aSI6IjJtMG5odlR3YVhwb3ZSbUxhNGhpIn0.Fui8gWQbejivfshHlpWggUu5UTamMt_uHMe1CUsgE3X10IgMKaxoveB6OF4Aa21BGypkB-6JaewHaqY56PXH3Q",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "AddDpopHeaderForResourceEndpointRequest",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772656
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-UtmPr6jwO98u5OxWaRxIHt0U7OXpdcLw",
+    "request_uri": "https://sphere-dust-sandlot.ngrok-free.dev/v1/certify/issuance/credential",
+    "request_method": "POST",
+    "request_headers": {
+      "Accept": "application/json",
+      "Authorization": "Bearer eyJraWQiOiJBYzNIZjhlS19saFlJQzZwcUM4azNyQ1RMcTBRYnI5OExoMDdjUktXUHhJIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJ7XCJmdWxsTmFtZVwiOlwiQ29uZm9ybWFuY2UgVGVzdCBIb2xkZXJcIixcImRhdGVPZkJpcnRoXCI6XCIxOTkwLTAxLTAxXCIsXCJnZW5kZXJcIjpcIkZlbWFsZVwiLFwicGhvbmVcIjpcIjk5OTk5OTk5OTlcIixcImVtYWlsXCI6XCJob2xkZXJAZXhhbXBsZS5vcmdcIixcIlVJTlwiOlwiMTIzNDU2Nzg5MFwiLFwicG9zdGFsQ29kZVwiOlwiNDAwMDAxXCIsXCJyZWdpb25cIjpcIk11bWJhaVwifSIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldi92MS9jZXJ0aWZ5L2lzc3VhbmNlL2NyZWRlbnRpYWwiLCJzY29wZSI6Im1vY2tfaWRlbnRpdHlfdmNfc2Rqd3QiLCJpc3MiOiJodHRwczovL3NwaGVyZS1kdXN0LXNhbmRsb3Qubmdyb2stZnJlZS5kZXYiLCJleHAiOjE3OTMwNzgzNzIsImlhdCI6MTc5MzA3Nzc3MiwiY2xpZW50X2lkIjoiIn0.nxyMVbzwnr-btcpFeEAuk8P8WXXaZtyv-ScyL2EGhGwP8NY31YHExeIGWYxPdgHPA4w5UvN3REXG2EjtJ_T99tA555ZbGPqr6rAUafwNgEdzgloe6ogPbHtiKMM9QD-ioRw9EPsk23oLnsly9wHyRQp5M9gcSXPCfTO9o4Y78oUPkYkmjuJI0aQ3NNfp2DIzszi6tsXWBPfqexey2bG31EzISRTlOc0BuPZbgErOsoXQSH8uGDm3o-zt06-aMC7__SdcKqXgJjmoxPODdp3Tq5KvenRwb5kO7fsWNdKuGDfC_KieduGy5hstL8Y_9-ziKKwfxFPZuICshJjLm9K4xQ",
+      "x-fapi-auth-date": "Tue, 27 Oct 2026 05:09:32 GMT",
+      "x-fapi-customer-ip-address": "198.51.100.119",
+      "x-fapi-interaction-id": "b3F11aB3-90b5-4E2e-Bb8C-65a511330A12",
+      "Content-Type": "application/json",
+      "DPoP": "eyJhbGciOiJFUzI1NiIsInR5cCI6ImRwb3Arand0IiwiandrIjp7Imt0eSI6IkVDIiwidXNlIjoic2lnIiwiY3J2IjoiUC0yNTYiLCJraWQiOiJpdGwtUGg5N3hxem5ZZ1VsM0Fzcjk2cm01MUphRTRpN09heF95dGM4TVZJIiwieCI6IjZEZ0ZORFhLbDFBbHp5Ylo0SGE2dGpQX085MWwzN21ILUdLT2JxenR0R0kiLCJ5IjoiQlpoY1pCSHFVeVJlbTNTRjlxaUdPTlpqMVFOYnpnQkwzWlU5eTlRX0VScyIsImFsZyI6IkVTMjU2In19.eyJodG0iOiJQT1NUIiwiaHR1IjoiaHR0cHM6Ly9zcGhlcmUtZHVzdC1zYW5kbG90Lm5ncm9rLWZyZWUuZGV2L3YxL2NlcnRpZnkvaXNzdWFuY2UvY3JlZGVudGlhbCIsImF0aCI6IkdLdDJ6ZkFaLTd0Yjc3RE44QUxZT3c5SDVUSUdfUXdsNW5qNDM5aGdLcmsiLCJpYXQiOjE3OTMwNzc3NzIsImp0aSI6IjJtMG5odlR3YVhwb3ZSbUxhNGhpIn0.Fui8gWQbejivfshHlpWggUu5UTamMt_uHMe1CUsgE3X10IgMKaxoveB6OF4Aa21BGypkB-6JaewHaqY56PXH3Q",
+      "Content-Length": "673"
+    },
+    "request_body": "{\"credential_configuration_id\":\"MockIdentitySdJwtCredential\",\"proofs\":{\"jwt\":[\"eyJ0eXAiOiJvcGVuaWQ0dmNpLXByb29mK2p3dCIsImFsZyI6IkVTMjU2IiwiandrIjp7Imt0eSI6IkVDIiwidXNlIjoic2lnIiwiY3J2IjoiUC0yNTYiLCJraWQiOiJ5Sk5zV1BYQjFkMEU2TkJXIiwieCI6IlpxS0Z2U2JfR0FIYVlBcVc3N2ZONkJlM0JXeU5EZXRtOUxteDdUUG04LUUiLCJ5Ijoia1JVOXh3cnlPUnlaQlZTdjNBYlZtaHhDcDBnWVVuWUdKc0NVUkN5TGFaWSIsImFsZyI6IkVTMjU2In19.eyJpc3MiOiJvaWRmLWNvbmZvcm1hbmNlLXdhbGxldCIsImF1ZCI6Imh0dHBzOi8vc3BoZXJlLWR1c3Qtc2FuZGxvdC5uZ3Jvay1mcmVlLmRldiIsImlhdCI6MTc5MzA3Nzc3Miwibm9uY2UiOiI0NjYyZWY4OC1lNjQyLTQyMGYtODFjNS0zMDY2YmYwZmI1NDEifQ.jQP6B2TS1XX0k9CwjGmJY7xhHA3ZzVEb5hBn_XtDH0TVc9mentydUdvWfDUXEDpO95O5JQKYIb5dsfwc4JI4aQ\"]}}",
+    "msg": "HTTP request",
+    "http": "request",
+    "blockId": "4e50c5",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CallProtectedResourceAllowingDpopNonceError",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772658
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-nLl7SM4HKYrjQDPrgaeEK4m7XQHcsUDI",
+    "response_status_code": "400 BAD_REQUEST",
+    "response_status_text": "Bad Request",
+    "response_headers": {
+      "access-control-allow-headers": "Content-Type, Authorization, Cache-Control",
+      "access-control-allow-methods": "GET, POST, OPTIONS",
+      "access-control-allow-origin": "*",
+      "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+      "content-type": "application/json",
+      "date": "Tue, 27 Oct 2026 05:09:32 GMT",
+      "expires": "0",
+      "ngrok-agent-ips": "2409:40c2:4036:26fd:126:ab0a:ba59:b2bc",
+      "pragma": "no-cache",
+      "server": "nginx/1.30.6",
+      "vary": [
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "x-robots-tag": "noindex, nofollow",
+      "x-xss-protection": "0",
+      "transfer-encoding": "chunked"
+    },
+    "response_body": "{\"error\":\"invalid_nonce\",\"error_description\":\"c_nonce is invalid or expired\"}",
+    "msg": "HTTP response",
+    "http": "response",
+    "blockId": "4e50c5",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CallProtectedResourceAllowingDpopNonceError",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772968
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-3MUDgpYBnKgYPwCZ90dCxlYl9eru45dc",
+    "status": 400,
+    "endpoint_name": "resource",
+    "headers": {
+      "access-control-allow-headers": "Content-Type, Authorization, Cache-Control",
+      "access-control-allow-methods": "GET, POST, OPTIONS",
+      "access-control-allow-origin": "*",
+      "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+      "content-type": "application/json",
+      "date": "Tue, 27 Oct 2026 05:09:32 GMT",
+      "expires": "0",
+      "ngrok-agent-ips": "2409:40c2:4036:26fd:126:ab0a:ba59:b2bc",
+      "pragma": "no-cache",
+      "server": "nginx/1.30.6",
+      "vary": [
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "DENY",
+      "x-robots-tag": "noindex, nofollow",
+      "x-xss-protection": "0",
+      "transfer-encoding": "chunked"
+    },
+    "body": "{\"error\":\"invalid_nonce\",\"error_description\":\"c_nonce is invalid or expired\"}",
+    "requirements": [
+      "OID4VCI-1FINAL-8",
+      "FAPI2-SP-FINAL-5.3.4-2"
+    ],
+    "msg": "Got a response from the resource endpoint",
+    "result": "SUCCESS",
+    "blockId": "4e50c5",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "CallProtectedResourceAllowingDpopNonceError",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772968
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-UBPsCNIsUMsHgJvMNIbLNhFG87TXASIn",
+    "msg": " Verify Credential Endpoint Response",
+    "startBlock": true,
+    "blockId": "7fb7fb",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "-START-BLOCK-",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772969
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-LJHPlnNu0wL4z2wALsqByoHNpvZ08LmA",
+    "msg": "resource endpoint returned the expected http status",
+    "result": "SUCCESS",
+    "blockId": "7fb7fb",
+    "http_status": 400,
+    "requirements": [
+      "OID4VCI-1FINAL-8.3.1"
+    ],
+    "expected_status": 400,
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "EnsureHttpStatusCodeIs400",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772969
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-VKdyemrgaNOLBSLmbCTJF1LSDhLh1DVQ",
+    "msg": "No unexpected keys in credential error response",
+    "result": "SUCCESS",
+    "blockId": "7fb7fb",
+    "requirements": [
+      "OID4VCI-1FINAL-8.3.1"
+    ],
+    "expected": [
+      "error_uri",
+      "error",
+      "error_description"
+    ],
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIValidateNoUnknownKeysInCredentialErrorResponse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772970
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-T5aHA9VIYefrNJdp12QUgaUYk07FkZjc",
+    "msg": "Credential error response is not an encrypted JWE",
+    "result": "SUCCESS",
+    "blockId": "7fb7fb",
+    "requirements": [
+      "OID4VCI-1FINAL-8.3.1.2"
+    ],
+    "body_preview": "{\"error\":\"invalid_nonce\",\"error_description\":\"c_nonce is invalid or expired\"}",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIEnsureCredentialResponseIsNotAnEncryptedJwe",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772972
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-044ivPyyZxp47IxoZOgn2D2ILOZL24Xb",
+    "msg": "Expected error code found in credential error response: invalid_nonce",
+    "result": "SUCCESS",
+    "blockId": "7fb7fb",
+    "requirements": [
+      "OID4VCI-1FINAL-8.3.1"
+    ],
+    "errorDescription": "c_nonce is invalid or expired",
+    "error": "invalid_nonce",
+    "expected_error": "invalid_nonce",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "VCIValidateCredentialErrorResponse",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772976
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-S2P4s854nBe7x8erM5NEBZjAkoQqQhlI",
+    "msg": "Response to HTTP request to test instance gnBV3nHMYheLuSg",
+    "http": "outgoing",
+    "outgoing": "ModelAndView [view=\"resultCaptured\"; model={returnUrl=/log-detail.html?log=gnBV3nHMYheLuSg}]",
+    "outgoing_path": "credential_offer",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "oid4vci-1_0-issuer-fail-invalid-nonce",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772977
+  },
+  {
+    "_id": "gnBV3nHMYheLuSg-gfXYn27QIpAxB5gP3iSVF5WdkqjipRVR",
+    "msg": "Test has run to completion",
+    "result": "FINISHED",
+    "testmodule_result": "PASSED",
+    "testId": "gnBV3nHMYheLuSg",
+    "src": "oid4vci-1_0-issuer-fail-invalid-nonce",
+    "testOwner": {
+      "sub": "developer",
+      "iss": "https://developer.com"
+    },
+    "time": 1793077772979
+  }
+]

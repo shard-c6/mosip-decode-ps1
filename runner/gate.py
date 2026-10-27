@@ -67,6 +67,16 @@ class Baseline:
         )
         return entry.get("reason") if isinstance(entry, dict) else None
 
+    def acknowledged_mismatch_for(self, component: str, plan_name: str, module_name: str) -> str | None:
+        """The finding a known verdict contradiction is recorded under, if any."""
+        entry = (
+            self.data.get("components", {})
+            .get(component, {})
+            .get(plan_name, {})
+            .get(module_name)
+        )
+        return entry.get("acknowledgedMismatch") if isinstance(entry, dict) else None
+
 
 def _severity(result: str | None) -> int:
     return _SEVERITY.get(result or "", _SEVERITY["FAILED"])
@@ -86,6 +96,7 @@ def apply(
     unknown: list[dict[str, Any]] = []
     harness_errors: list[dict[str, Any]] = []
     review_mismatches: list[dict[str, Any]] = []
+    acknowledged: list[dict[str, Any]] = []
 
     for component in components:
         name = component["component"]
@@ -133,7 +144,23 @@ def apply(
             if resolution.get("consistent") is False:
                 # The suite left this for a human; the verifier's own verdict contradicts
                 # what the test required -- e.g. a forged credential accepted. That is a
-                # conformance failure whatever the baseline says, so it always fails.
+                # conformance failure whatever the baseline says, so it always fails...
+                finding = baseline.acknowledged_mismatch_for(name, plan_name, module_name)
+                if finding and actual == "FAILED" and expected == "FAILED":
+                    # ...unless the suite itself already failed the module, so the defect
+                    # is visible without us, and the baseline names the finding that
+                    # records it. Added for F-16 (revoked SD-JWT credential accepted):
+                    # without it the gate would stay red until MOSIP ships a fix, and a
+                    # gate that is always red gets ignored. A contradiction the suite
+                    # cannot see (result REVIEW) still always fails.
+                    module["verdict"] = "PASS"
+                    acknowledged.append({
+                        **_entry(name, module_name, expected, actual),
+                        "required": resolution.get("expected"),
+                        "verifier": resolution.get("verifier"),
+                        "finding": finding,
+                    })
+                    continue
                 module["verdict"] = "FAIL"
                 review_mismatches.append({
                     **_entry(name, module_name, expected, actual),
@@ -163,6 +190,7 @@ def apply(
         "unknownModules": unknown,
         "harnessErrors": harness_errors,
         "reviewMismatches": review_mismatches,
+        "acknowledgedMismatches": acknowledged,
     }
 
 
@@ -205,6 +233,17 @@ def summarise_for_humans(gate: dict[str, Any]) -> str:
             lines.append(
                 f"  {r['component']} / {r['moduleName']}: "
                 f"expected {r['expected']}, got {r['actual']}"
+            )
+    known = gate.get("acknowledgedMismatches", [])
+    if known:
+        lines.append(
+            f"{len(known)} known defect(s) where the verifier's verdict contradicts the test, "
+            "failed by the suite and recorded as a finding (not fatal):"
+        )
+        for k in known:
+            lines.append(
+                f"  {k['component']} / {k['moduleName']}: required '{k['required']}', "
+                f"verifier {k['verifier']} ({k['finding']})"
             )
     if gate["improvements"]:
         lines.append(

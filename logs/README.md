@@ -154,3 +154,21 @@ GitHub, set up from the README alone with newly generated keys, ran
 `./run-full-stack-conformance.sh --combined`. Gate passes; `python -m runner.diff` against the
 26 Oct combined run: no differences across all 26 modules. Its logs stayed in the throwaway
 clone and are not copied here; the result is reproduced, not new evidence.
+
+### 2026-10-27 — the latest suite (27 Oct build, now pinned)
+
+- GitHub Actions run 6, plans `RVpJfDDO5I4BZ` (Inji Verify, 12 modules) and `6MKy3R9t4SDQH`
+  (Inji Certify, 14 modules): the first full run on CI. It pulled the suite's `latest`, a newer
+  build than ours, whose plans differ (three verifier modules added, three modules dropped).
+  Logs are in the run's artifact, not here.
+- Plans `dk7WTeEpVfDCW` and `9soA2jgYi4lki`: the same suite build, pinned by digest, run
+  locally. `runner.diff` against CI run 6: no differences across 26 modules.
+  **Source of the current baseline**: its logs are in `2026-10-27/` (the new modules' evidence
+  is `present-revoked-credential-r1i7jlHHrzwZDTc`, `present-credential-without-status-Y9R2Ru9ZNOgZx6U`,
+  `wrong-vct-oRYhmanHgNGolE0`).
+- Plans `tsEPVoEXK87hL` (Inji Verify) and `kQsIvua57Vdib` (Inji Certify): after moving the
+  baseline. Gate passes with no module lacking a baseline; F-16 reported as a known defect.
+  Logs not kept; results identical to the run above.
+- Plans `QpHhlq7hq6TLz` (Inji Verify, 13 of 13) and `pygcrOj5sEs4Q` (Inji Certify, 15 of 15):
+  the api-testrig classes, rebuilt on the forks merged with upstream `release-1.0.x`, running
+  the runner themselves.

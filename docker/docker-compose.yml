@@ -43,7 +43,10 @@ services:
         max-file: "5"
 
   server:
-    image: registry.gitlab.com/openid/conformance-suite:${SUITE_IMAGE_TAG:-latest}
+    # Pinned by digest: "latest" moves whenever the suite publishes, and the baseline only
+    # means something against a known suite. This is the 27 Oct 2026 build. To move to a
+    # newer suite, see docs/TROUBLESHOOTING.md, "Updating the conformance suite".
+    image: registry.gitlab.com/openid/conformance-suite@${SUITE_DIGEST:-sha256:72c05c08950810de931c50c880862609e4bcb519e74f58645bb414c049301b76}
     environment:
       BASE_URL: https://localhost.emobix.co.uk:8443
       BASE_MTLS_URL: https://localhost.emobix.co.uk:8444
@@ -61,7 +64,7 @@ services:
     logging: *logging
 
   nginx:
-    image: registry.gitlab.com/openid/conformance-suite/nginx:${SUITE_IMAGE_TAG:-latest}
+    image: registry.gitlab.com/openid/conformance-suite/nginx@${SUITE_NGINX_DIGEST:-sha256:aa7b872505bf1ba061d24a8c4a06c6649075baad1936025ea3f5fdada7ca09f1}
     ports:
       - "8443:8443"
       - "8444:8444"

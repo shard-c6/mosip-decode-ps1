@@ -62,3 +62,42 @@ def test_unavailable_verdict_is_unknown_not_assumed():
 def test_modules_not_in_review_are_not_resolved():
     m = {"moduleName": "x", "result": "PASSED", "checks": []}
     assert normalise.resolve_review(m) is None
+
+
+def _failed_by_suite(verdict, name="present-revoked-credential"):
+    m = module(REJECT_MSG, verdict, name)
+    m["result"] = "FAILED"  # the suite saw the defect itself (here: status list never fetched)
+    return m
+
+
+def _gate_with_entry(mod, entry):
+    comps = [{"component": "inji-verify", "plan": {"planName": PLAN}, "modules": [mod]}]
+    return gate.apply(comps, gate.Baseline({"components": {"inji-verify": {PLAN: {mod["moduleName"]: entry}}}}))
+
+
+def test_acknowledged_mismatch_failed_by_the_suite_passes_but_is_reported():
+    """F-16: a revoked credential accepted, already FAILED by the suite, recorded as a finding."""
+    m = _failed_by_suite({"httpStatus": 200, "allChecksSuccessful": True})
+    result = _gate_with_entry(m, {"expected": "FAILED", "acknowledgedMismatch": "F-16"})
+    assert result["passed"] is True
+    assert m["verdict"] == "PASS"
+    assert result["acknowledgedMismatches"][0]["finding"] == "F-16"
+    assert "F-16" in gate.summarise_for_humans(result)
+
+
+def test_acknowledgement_does_not_cover_a_contradiction_the_suite_cannot_see():
+    """The reason the rule exists: REVIEW with a forged credential accepted always fails."""
+    m = module(REJECT_MSG, {"httpStatus": 200, "allChecksSuccessful": True})
+    result = _gate_with_entry(m, {"expected": "REVIEW", "acknowledgedMismatch": "F-16"})
+    assert result["passed"] is False
+    assert m["verdict"] == "FAIL"
+
+
+def test_acknowledgement_needs_the_baseline_to_expect_failure():
+    m = _failed_by_suite({"httpStatus": 200, "allChecksSuccessful": True})
+    assert _gate_with_entry(m, {"expected": "PASSED", "acknowledgedMismatch": "F-16"})["passed"] is False
+
+
+def test_mismatch_failed_by_the_suite_without_acknowledgement_still_fails():
+    m = _failed_by_suite({"httpStatus": 200, "allChecksSuccessful": True})
+    assert _gate_with_entry(m, {"expected": "FAILED"})["passed"] is False

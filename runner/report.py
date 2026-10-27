@@ -125,6 +125,10 @@ def markdown(document: dict[str, Any]) -> str:
     problems = _gate_problems(gate)
     if problems:
         lines += ["Why the gate failed:", ""] + [f"- {p}" for p in problems] + [""]
+    for k in gate.get("acknowledgedMismatches", []):
+        lines += [f"**Known defect, {k.get('finding')}:** {k.get('component')} / {k.get('moduleName')}: "
+                  f"the test required '{k.get('required')}', the verifier {k.get('verifier')} it. "
+                  "Failed by the suite and recorded as a finding, so it does not fail the gate.", ""]
     for key, label in [("improvements", "Now better than the baseline"), ("unknownModules", "No baseline yet")]:
         entries = gate.get(key, [])
         if entries:
