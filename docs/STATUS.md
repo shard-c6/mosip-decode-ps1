@@ -161,6 +161,9 @@ exercised, all consistent with conformance; baseline recorded.
   26 modules. F-16 re-checked in the shipped `vc-verifier` 1.10.0-SNAPSHOT bytecode: SD-JWT
   status checking still throws "not supported", and Verify still reads that as not revoked.
   Baseline evidence moved to the new build; testrig classes 13/13 and 15/15 on it.
+- Full CI run on the new build (run 40472405298): passed, identical to the local run.
+- Deck updated (results, findings with F-16, testrig counts); video script rewritten with the
+  exact words and commands; submission checklist written.
 - Fixed the result summary's `skipped` count, which counted modules missing from the baseline
   instead of modules the suite skipped (Certify's 2 skips showed as 0).
 
@@ -171,11 +174,15 @@ Commits: this repository's `git log`; forks: `ab3feb4`, `e591115` (inji-verify) 
 
 ## What is left, in order
 
-1. **Review the deck** and **record the video** (2–5 min) following [DEMO-SCRIPT.md](DEMO-SCRIPT.md).
-2. **Contribution record**: make the team split in the docs match the history.
-3. **College IDs, cloud folder, submission email** to decode@mosip.io by 1 November. The
-   signed exports in `evidence/` go in the cloud folder.
-4. Optional: file F-10 upstream (needs the team's decision).
+Everything technical is done; the rest is Shardul's, step by step, in
+[SUBMISSION-CHECKLIST.md](SUBMISSION-CHECKLIST.md):
+
+1. **Review the deck** (updated 27 Oct with the final numbers and F-16).
+2. **Record the video** (2–5 min) following [DEMO-SCRIPT.md](DEMO-SCRIPT.md).
+3. **Contribution record**: decide how the team split is described; the docs then follow.
+4. **College IDs, cloud folder, submission email** to decode@mosip.io by 1 November. The
+   signed exports in `evidence/` go in the cloud folder; replace the test keys after sharing.
+5. Optional: report F-10 and F-16 upstream (needs the team's decision).
 
 **On the signed exports.** `evidence/` (gitignored) holds the suite's signed export of each
 evidence plan: `uzQR679oonrne` and `q4RAMcjJWpAhF` (the combined run), `2WXPDhBNMwyCL`
