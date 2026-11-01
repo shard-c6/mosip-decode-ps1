@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-10-27T08:30:00Z",
+  "updatedAt": "2026-11-01T07:40:00Z",
   "componentVersions": {
     "inji-verify": "1.0.x (MOSIP QA build of release-1.0.x, commit 429293f, digest sha256:5e10da40)",
     "inji-certify": "release-1.0.x (MOSIP QA image, digest sha256:2c72a78c)"
   },
-  "note": "Inji Verify 1.0.0-alpha.1 baseline (the target version), from the full plan run of 2 October. All 11 modules the plan contains for this variant: 4 PASSED; 7 REVIEW, each resolved by the harness against Verify's own verdict and consistent with what the test required. Two of the 11 (request-uri-*) are not applicable to the url_query variant and are marked exercised:false. invalid-session-transcript is mdoc-only and not in this plan. Inji Certify (added 26 October): all 15 modules the OID4VCI 1.0 Final issuer plan has for the pre-authorized / SD-JWT / DPoP / private_key_jwt variant, through the gateway metadata shim for F-12. 3 PASSED, each checked against Certify's log to be rejected for the right reason; 3 SKIPPED; 1 WARNING; 8 FAILED, each traced to F-13, F-14 or F-15, or to an optional feature Certify does not offer. Moved to the 27 Oct 2026 suite build (pinned in docker/docker-compose.yml): the verifier plan dropped request-uri-fetched-twice and request-uri-method-post and added present-revoked-credential, present-credential-without-status and wrong-vct; the issuer plan dropped fail-unsupported-encryption-algorithm. Every module common to both suites gave the same result. The earlier baseline is in git history. Moved Inji Verify from the published 1.0.0-alpha.1 to MOSIP's QA build of release-1.0.x (commit 429293f, 15 Oct 2026; vc-verifier 1.10.0-SNAPSHOT), pinned in docker/docker-compose.yml: all 12 modules gave the same result and the same checks as on alpha.1, and the evidence now points at the run on the new build. F-10 and F-16 are both still present on it.",
+  "note": "Inji Verify 1.0.0-alpha.1 baseline (the target version), from the full plan run of 2 October. All 11 modules the plan contains for this variant: 4 PASSED; 7 REVIEW, each resolved by the harness against Verify's own verdict and consistent with what the test required. Two of the 11 (request-uri-*) are not applicable to the url_query variant and are marked exercised:false. invalid-session-transcript is mdoc-only and not in this plan. Inji Certify (added 26 October): all 15 modules the OID4VCI 1.0 Final issuer plan has for the pre-authorized / SD-JWT / DPoP / private_key_jwt variant, through the gateway metadata shim for F-12. 3 PASSED, each checked against Certify's log to be rejected for the right reason; 3 SKIPPED; 1 WARNING; 8 FAILED, each traced to F-13, F-14 or F-15, or to an optional feature Certify does not offer. Moved to the 27 Oct 2026 suite build (pinned in docker/docker-compose.yml): the verifier plan dropped request-uri-fetched-twice and request-uri-method-post and added present-revoked-credential, present-credential-without-status and wrong-vct; the issuer plan dropped fail-unsupported-encryption-algorithm. Every module common to both suites gave the same result. The earlier baseline is in git history. Moved Inji Verify from the published 1.0.0-alpha.1 to MOSIP's QA build of release-1.0.x (commit 429293f, 15 Oct 2026; vc-verifier 1.10.0-SNAPSHOT), pinned in docker/docker-compose.yml: all 12 modules gave the same result and the same checks as on alpha.1, and the evidence now points at the run on the new build. F-10 and F-16 are both still present on it. On 1 Nov 2026 the 27 Oct suite build had been deleted from GitLab's registry, so the pin moved to the 1 Nov build: GitHub Actions run 41283845879 ran it against this baseline with no differences across 26 modules.",
   "components": {
     "inji-verify": {
       "oid4vp-1final-verifier-test-plan": {
@@ -210,7 +210,7 @@
     }
   },
   "suite": {
-    "image": "registry.gitlab.com/openid/conformance-suite@sha256:72c05c08950810de931c50c880862609e4bcb519e74f58645bb414c049301b76",
-    "built": "2026-10-27"
+    "image": "registry.gitlab.com/openid/conformance-suite@sha256:e0955e7e8d049824181061d71bafe3f4d581ed5e1ead7cfd923395cb85ba25c1",
+    "built": "2026-11-01"
   }
 }

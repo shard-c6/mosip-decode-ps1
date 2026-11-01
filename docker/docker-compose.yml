@@ -44,9 +44,9 @@ services:
 
   server:
     # Pinned by digest: "latest" moves whenever the suite publishes, and the baseline only
-    # means something against a known suite. This is the 27 Oct 2026 build. To move to a
+    # means something against a known suite. This is the 1 Nov 2026 build (the 27 Oct one was deleted from the registry). To move to a
     # newer suite, see docs/TROUBLESHOOTING.md, "Updating the conformance suite".
-    image: registry.gitlab.com/openid/conformance-suite@${SUITE_DIGEST:-sha256:72c05c08950810de931c50c880862609e4bcb519e74f58645bb414c049301b76}
+    image: registry.gitlab.com/openid/conformance-suite@${SUITE_DIGEST:-sha256:e0955e7e8d049824181061d71bafe3f4d581ed5e1ead7cfd923395cb85ba25c1}
     environment:
       BASE_URL: https://localhost.emobix.co.uk:8443
       BASE_MTLS_URL: https://localhost.emobix.co.uk:8444
@@ -64,7 +64,7 @@ services:
     logging: *logging
 
   nginx:
-    image: registry.gitlab.com/openid/conformance-suite/nginx@${SUITE_NGINX_DIGEST:-sha256:aa7b872505bf1ba061d24a8c4a06c6649075baad1936025ea3f5fdada7ca09f1}
+    image: registry.gitlab.com/openid/conformance-suite/nginx@${SUITE_NGINX_DIGEST:-sha256:d015b2a06c118e577641cf27c7382449d574a5688c3193e1e51e3c30dda43552}
     ports:
       - "8443:8443"
       - "8444:8444"
